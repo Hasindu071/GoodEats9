@@ -19,6 +19,6 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference myRef = database.getReference("message");
 
         // Write a message to the database
-        myRef.setValue("Hello, World!");
+        myRef.setValue("Hello, firebase!");
     }
 }
