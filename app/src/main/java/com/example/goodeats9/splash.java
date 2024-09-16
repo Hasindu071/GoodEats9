@@ -1,26 +1,38 @@
 package com.example.goodeats9;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.graphics.Insets;
 
 public class splash extends AppCompatActivity {
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+
+        // Ensure the splash screen layout is set to fullscreen by hiding system bars
+        View splashScreenView = findViewById(R.id.main);  // Check if this ID exists in activity_splash.xml
+        ViewCompat.setOnApplyWindowInsetsListener(splashScreenView, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Delay for 3 seconds before transitioning to MainActivity
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            // Navigate to MainActivity
+            Intent intent = new Intent(splash.this, MainActivity.class);
+            startActivity(intent);
+            // Finish splash activity to prevent the user from returning to it
+            finish();
+        }, 2000);  // 3000 milliseconds = 3 seconds
     }
 }
