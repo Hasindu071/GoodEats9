@@ -14,8 +14,8 @@
         android:layout_height="1120dp"
         app:srcCompat="@drawable/_11"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="-56dp"
-        tools:layout_editor_absoluteY="-279dp" />
+        tools:layout_editor_absoluteX="-55dp"
+        tools:layout_editor_absoluteY="-283dp" />
 
     <EditText
         android:id="@+id/username_input"
@@ -39,7 +39,7 @@
         android:layout_height="50dp"
         android:src="@drawable/baseline_arrow_forward_24"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="278dp"
+        tools:layout_editor_absoluteX="280dp"
         tools:layout_editor_absoluteY="618dp" />
 
 
