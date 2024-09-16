@@ -28,11 +28,12 @@ public class splash extends AppCompatActivity {
 
         // Delay for 3 seconds before transitioning to MainActivity
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            // Navigate to MainActivity
-            Intent intent = new Intent(splash.this, MainActivity.class);
+            // Navigate to activity_start
+            Intent intent = new Intent(splash.this, start.class);
             startActivity(intent);
             // Finish splash activity to prevent the user from returning to it
             finish();
-        }, 2000);  // 3000 milliseconds = 3 seconds
+        }, 2000);  // Delay for 2 seconds
+
     }
 }
