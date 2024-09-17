@@ -74,8 +74,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="My recipes"
+            android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:backgroundTint="#129575"
+            android:background="@drawable/rounded_button"
             android:layout_gravity="left"
             android:layout_marginTop="8dp"
             android:padding="8dp"/>
