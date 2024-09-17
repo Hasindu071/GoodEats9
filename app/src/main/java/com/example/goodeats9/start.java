@@ -28,5 +28,6 @@ public class start extends AppCompatActivity {
                 startActivity(intent);  // Start the new activity
             }
         });
+
     }
 }
