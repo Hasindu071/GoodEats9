@@ -14,7 +14,7 @@
     <item
         android:id = "@+id/save"
         android:title="save"
-        android:icon="@drawable/ic_saved"/>
+        android:icon="@drawable/ic_search"/>
 
     <!-- add Add new floating action button-->
     <item
@@ -26,7 +26,7 @@
     <item
         android:id = "@+id/notification"
         android:title="notification"
-        android:icon="@drawable/ic_notification"/>
+        android:icon="@drawable/ic_saved"/>
 
     <!-- Add profile icon-->
     <item
