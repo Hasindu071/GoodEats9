@@ -24,7 +24,7 @@ public class start extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Create an Intent to navigate to the sign-up activity
-                Intent intent = new Intent(start.this, sign_up.class);
+                Intent intent = new Intent(start.this, login.class);
                 startActivity(intent);  // Start the new activity
             }
         });
