@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1061011943126",
+    "firebase_url": "https://goodeats9-a949d-default-rtdb.firebaseio.com",
+    "project_id": "goodeats9-a949d",
+    "storage_bucket": "goodeats9-a949d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061011943126:android:ffb2d88949e7888a53a377",
+        "android_client_info": {
+          "package_name": "com.example.goodeats9"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPD0YGKFk-j_Lz4leTVRmLOIvoH6P4vlQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
