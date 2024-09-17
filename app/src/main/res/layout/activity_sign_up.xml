@@ -11,8 +11,8 @@
 
     <ImageButton
         android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/baseline_arrow_back_ios_24"
         android:contentDescription="Back"
         android:layout_gravity="start"
@@ -112,7 +112,7 @@
     <CheckBox
         android:id="@+id/termsCheckBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:text="Accept terms and Conditions"
         android:layout_marginTop="12dp"
         android:textColor="#808080" />
@@ -122,12 +122,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#129575"
+        android:textAllCaps="false"
+        android:background="@drawable/rounded_button"
         android:drawableEnd="@drawable/baseline_arrow_forward_24"
         android:drawablePadding="8dp"
         android:elevation="5dp"
         android:padding="14dp"
         android:text="Sign Up"
+        android:textSize="18dp"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
 
