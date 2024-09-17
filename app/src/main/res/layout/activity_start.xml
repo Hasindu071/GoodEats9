@@ -26,8 +26,8 @@
 
     <Button
         android:id="@+id/username_input"
-        android:layout_width="288dp"
-        android:layout_height="62dp"
+        android:layout_width="312dp"
+        android:layout_height="69dp"
         android:background="@drawable/rounded_coner"
         android:inputType="none"
         android:padding="18dp"
@@ -49,10 +49,10 @@
         android:layout_height="22dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.672"
+        app:layout_constraintHorizontal_bias="0.739"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.834"
+        app:layout_constraintVertical_bias="0.826"
         app:layout_constraintWidth_percent="0.6"
         app:srcCompat="@drawable/baseline_arrow_forward_24" />
 
