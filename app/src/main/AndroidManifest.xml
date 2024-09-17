@@ -25,6 +25,9 @@
             android:name=".sign_up"
             android:exported="false" />
         <activity
+            android:name=".AddNew"
+            android:exported="false" />
+        <activity
             android:name=".menu_bar_main"
             android:exported="false" />
         <activity
