@@ -60,6 +60,7 @@
             android:background="@drawable/rounded_button"
             android:textColor="@color/white"
             android:textAllCaps="false"
+            android:padding="10dp"
             android:text="Recommended for you"
             app:layout_constraintHorizontal_bias="0.099"
             app:layout_constraintLeft_toLeftOf="parent"
