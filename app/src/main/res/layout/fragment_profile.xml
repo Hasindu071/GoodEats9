@@ -1,19 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profileFragment">
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="16dp">
 
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#E49292"
-        android:backgroundTint="#53C2E4"
-        android:text="profile"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-</FrameLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Profile"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/editProfileButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/edit"
+                android:layout_margin="4dp"
+                android:contentDescription="Edit profile"
+                />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/circle_background"/>
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="Chandra Kumara"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/userBio"
+            android:layout_width="344dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="left"
+            android:text="Hi!..I'm Chandra Kumara. I'm from England. I work in the Shangrila Hotel in England. I'm a food lover."
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+
+
+        <Button
+            android:id="@+id/myRecipesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My recipes"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#129575"
+            android:layout_gravity="left"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"/>
+    </LinearLayout>
+
+    <!-- Recipe List Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vegetable Oats Pancake"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"/>
+
+
+</LinearLayout>
