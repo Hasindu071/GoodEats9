@@ -12,7 +12,7 @@
 
     <!-- Add save icon-->
     <item
-        android:id = "@+id/save"
+        android:id = "@+id/search"
         android:title="save"
         android:icon="@drawable/ic_search"/>
 
@@ -24,7 +24,7 @@
 
     <!-- Add notification icon-->
     <item
-        android:id = "@+id/notification"
+        android:id = "@+id/save"
         android:title="notification"
         android:icon="@drawable/ic_saved"/>
 
