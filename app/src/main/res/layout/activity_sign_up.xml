@@ -76,6 +76,24 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="User Name"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp" />
+
+    <EditText
+        android:id="@+id/inputUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/rounded_textbox"
+        android:hint="User Name"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Password"
         android:textStyle="bold"
         android:layout_marginTop="15dp" />
@@ -98,6 +116,7 @@
         android:textStyle="bold"
         android:layout_marginTop="15dp" />
 
+
     <EditText
         android:id="@+id/inputConfirmPassword"
         android:layout_width="match_parent"
@@ -108,14 +127,6 @@
         android:inputType="textPassword"
         android:padding="12dp"
         android:textColor="@color/black" />
-
-    <CheckBox
-        android:id="@+id/termsCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:text="Accept terms and Conditions"
-        android:layout_marginTop="12dp"
-        android:textColor="#808080" />
 
     <Button
         android:id="@+id/signUpButton"
