@@ -28,7 +28,7 @@
         android:id="@+id/username_input"
         android:layout_width="312dp"
         android:layout_height="69dp"
-        android:background="@drawable/rounded_coner"
+        android:backgroundTint="@android:color/transparent"
         android:inputType="none"
         android:onClick="login"
         android:padding="18dp"
@@ -36,12 +36,14 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="15dp"
+        app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.85"
-        app:layout_constraintWidth_percent="0.6"
+        app:strokeColor="#FFFFFF"
+        app:strokeWidth="2dp"
         tools:ignore="TextSizeCheck" />
 
     <!-- Forward Button Icon -->
