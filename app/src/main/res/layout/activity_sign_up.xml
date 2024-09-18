@@ -133,6 +133,8 @@
         android:layout_width="268dp"
         android:layout_height="60dp"
         android:layout_marginStart="68dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="35dp"
         android:backgroundTint="#129575"
         android:text="Sign Up"
         android:textAllCaps="false"
