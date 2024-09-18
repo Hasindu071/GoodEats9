@@ -7,4 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".AddNew">
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="34dp"
+        android:layout_height="28dp"
+        app:srcCompat="@drawable/_66_2660273_expand_slideshow_white_back_icon_png"
+        tools:ignore="Missing,MissingConstraints"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
