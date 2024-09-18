@@ -132,9 +132,8 @@
         android:id="@+id/buttonSignUp"
         android:layout_width="268dp"
         android:layout_height="60dp"
-        android:layout_marginStart="68dp"
         android:layout_marginTop="15dp"
-        android:layout_marginRight="35dp"
+        android:layout_gravity="center"
         android:backgroundTint="#129575"
         android:text="Sign Up"
         android:textAllCaps="false"
@@ -143,7 +142,6 @@
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.667" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </LinearLayout>
