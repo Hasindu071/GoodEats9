@@ -35,5 +35,16 @@ public class login extends AppCompatActivity {
             Intent intent = new Intent(login.this, menu_bar_main.class);
             startActivity(intent);
         });
+
+        //Get the text of sign up by its ID
+        TextView forgotpassword = findViewById(R.id.textViewForgotPassword);
+        //Make the "sign up" text look like a link
+        forgotpassword.setPaintFlags(forgotpassword.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        // Handle Sign Up TextView click
+        forgotpassword.setOnClickListener(v -> {
+            // Navigate to SignUpActivity when the Sign Up TextView is clicked
+            Intent intent = new Intent(login.this, Forget_Password.class);
+            startActivity(intent);
+        });
     }
 }
