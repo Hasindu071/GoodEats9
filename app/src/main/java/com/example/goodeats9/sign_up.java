@@ -34,7 +34,7 @@ public class sign_up extends AppCompatActivity {
         signUpUserName = findViewById(R.id.inputUserName);
         signUpPassword= findViewById(R.id.inputPassword);
         signUpName = findViewById(R.id.inputConfirmPassword);
-        signUpButton = findViewById(R.id.signUpButton);
+        signUpButton = findViewById(R.id.buttonSignUp);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
