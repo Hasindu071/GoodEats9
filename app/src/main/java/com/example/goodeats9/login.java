@@ -32,7 +32,7 @@ public class login extends AppCompatActivity {
         // Handle Sign Up TextView click
         findViewById(R.id.buttonSignIN).setOnClickListener(v -> {
             // Navigate to SignUpActivity when the Sign Up TextView is clicked
-            Intent intent = new Intent(login.this, homeFragment.class);
+            Intent intent = new Intent(login.this, menu_bar_main.class);
             startActivity(intent);
         });
     }
