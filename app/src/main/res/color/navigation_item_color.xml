@@ -3,5 +3,6 @@
 <!-- to change the item coloue of the navigation bar when it selected and not selected-->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/colorSelected" android:state_checked="true" />
     <item android:color="#A0A0A0" android:state_checked="false" />
 </selector>
