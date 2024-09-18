@@ -5,5 +5,4 @@
     <color name="colorSelected">#129575</color> <!-- Example color for selected state -->
     <color name="colorUnselected">#757575</color> <!-- Example color for unselected state -->
     <color name="green">#129575</color>
-
 </resources>
