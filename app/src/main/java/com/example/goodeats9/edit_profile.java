@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class edit_profile extends AppCompatActivity {
@@ -13,18 +13,16 @@ public class edit_profile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_profile);
 
-        // Back button to go to Login page
-        ImageButton backButton = findViewById(R.id.backButton);
+        // Initialize the back button
+        ImageView backButton = findViewById(R.id.backButton);
+
+        // Set the click listener
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate to Login Activity
-                Intent intent = new Intent(edit_profile.this, profileFragment.class);
-                startActivity(intent);
-                finish();  // Optional: To close the Forget_Password activity
+                finish();  // This will close the current activity and go back to the previous one (profileFragment)
             }
         });
     }
