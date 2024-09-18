@@ -23,5 +23,12 @@ public class login extends AppCompatActivity {
             Intent intent = new Intent(login.this, sign_up.class);
             startActivity(intent);
         });
+
+        // Handle Sign Up TextView click
+        findViewById(R.id.buttonSignIN).setOnClickListener(v -> {
+            // Navigate to SignUpActivity when the Sign Up TextView is clicked
+            Intent intent = new Intent(login.this, homeFragment.class);
+            startActivity(intent);
+        });
     }
 }
