@@ -22,7 +22,22 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/_11" />
 
+    <!-- Subtitle Text -->
+
     <!-- Button / Text Input -->
+
+    <TextView
+        android:id="@+id/subText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Simple way to find Tasty Recipe"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="490dp"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/username_input"
