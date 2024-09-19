@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -22,10 +23,11 @@ public class sign_up extends AppCompatActivity
 
     EditText signUpName , signUpEmail , signUpPassword , signUpConfirmPassword , signUpDescription;
     Button signUpButton;
+    ImageButton backButton;
     FirebaseDatabase database;
     DatabaseReference reference;
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,13 @@ public class sign_up extends AppCompatActivity
         signUpConfirmPassword = findViewById(R.id.inputConfirmPassword);
         signUpButton          = findViewById(R.id.buttonSignUp);
         signUpDescription     = findViewById(R.id.inputDescription);
+        backButton            = findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(v -> {
+            // Navigate to SignUpActivity when the Sign Up TextView is clicked
+            Intent intent = new Intent(sign_up.this, login.class);
+            startActivity(intent);
+        });
 
         signUpButton.setOnClickListener(view ->
         {
