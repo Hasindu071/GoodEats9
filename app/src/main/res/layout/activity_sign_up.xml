@@ -16,6 +16,7 @@
         android:background="@drawable/baseline_arrow_back_ios_24"
         android:contentDescription="Back"
         android:layout_gravity="start"
+        android:clickable="true"
         android:padding="10dp" />
 
     <TextView
@@ -76,24 +77,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Name"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp" />
-
-    <EditText
-        android:id="@+id/inputUserName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:background="@drawable/rounded_textbox"
-        android:hint="User Name"
-        android:inputType="textPassword"
-        android:padding="12dp"
-        android:textColor="@color/black" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Password"
         android:textStyle="bold"
         android:layout_marginTop="15dp" />
@@ -116,7 +99,6 @@
         android:textStyle="bold"
         android:layout_marginTop="15dp" />
 
-
     <EditText
         android:id="@+id/inputConfirmPassword"
         android:layout_width="match_parent"
@@ -125,6 +107,24 @@
         android:background="@drawable/rounded_textbox"
         android:hint="Confirm Password"
         android:inputType="textPassword"
+        android:padding="12dp"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp" />
+
+    <EditText
+        android:id="@+id/inputDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/rounded_textbox"
+        android:hint="Tell us who are you?"
+        android:inputType="text"
         android:padding="12dp"
         android:textColor="@color/black" />
 

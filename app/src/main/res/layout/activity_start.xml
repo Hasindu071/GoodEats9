@@ -22,10 +22,44 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/_11" />
 
-    <!-- Button / Text Input -->
+    <!-- Subtitle Text -->
+
+    <!-- Title Text -->
+
+    <!-- Subtitle Text -->
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="450dp"
+        android:gravity="center"
+        android:text="The greatest
+                      wealth is health"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@id/subText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/subText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Simple way to find Tasty Recipe"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/startButton"/>
+
 
     <Button
-        android:id="@+id/username_input"
+        android:id="@+id/startButton"
         android:layout_width="312dp"
         android:layout_height="69dp"
         android:backgroundTint="@android:color/transparent"
