@@ -34,13 +34,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="450dp"
         android:gravity="center"
-        android:text="The greatest wealth is health"
+        android:text="The greatest
+                      wealth is health"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="24sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@id/subText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
