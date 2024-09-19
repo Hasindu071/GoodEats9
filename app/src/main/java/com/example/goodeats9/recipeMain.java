@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class recipeMain extends AppCompatActivity {
 
     private Button procedureButton;
     private Button ingredientsButton;
@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_recipe_main);
 
         // Find buttons by their ID
         procedureButton = findViewById(R.id.procedureButton);
