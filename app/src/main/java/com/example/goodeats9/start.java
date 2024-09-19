@@ -17,7 +17,7 @@ public class start extends AppCompatActivity {
         setContentView(R.layout.activity_start);  // Ensure this is the correct layout file
 
         // Find the button by ID
-        Button startCookingButton = findViewById(R.id.username_input);
+        Button startCookingButton = findViewById(R.id.startButton);
 
         // Set an OnClickListener for the button
         startCookingButton.setOnClickListener(new View.OnClickListener() {
