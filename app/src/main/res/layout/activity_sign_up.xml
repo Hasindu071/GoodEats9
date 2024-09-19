@@ -123,7 +123,7 @@
         android:layout_marginTop="1dp"
         android:background="@drawable/rounded_textbox"
         android:hint="Tell us who are you?"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:padding="12dp"
         android:textColor="@color/black" />
 
