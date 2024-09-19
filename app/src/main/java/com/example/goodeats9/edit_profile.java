@@ -3,7 +3,6 @@ package com.example.goodeats9;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -54,31 +53,23 @@ public class edit_profile extends AppCompatActivity {
 
         nameUser = intent.getStringExtra("name");
         emailUser = intent.getStringExtra("email");
-        phoneNumberUser = intent.getStringExtra("Phone Number");
-        currentPasswordUser = intent.getStringExtra("Current password");
-        newPasswordUser = intent.getStringExtra("New password");
+        //phoneNumberUser = intent.getStringExtra("Phone Number");
+        currentPasswordUser = intent.getStringExtra("password");
+        //newPasswordUser = intent.getStringExtra("New password");
         descriptionUser = intent.getStringExtra("description");
 
         editName.setText(nameUser);
         editEmail.setText(emailUser);
-        editPhoneNumber.setText(phoneNumberUser);
-        editCurrentPassword.setText(currentPasswordUser); // Show current password (optional)
+        //editPhoneNumber.setText(phoneNumberUser);
+        //editCurrentPassword.setText(currentPasswordUser); // Show current password (optional)
         editDescription.setText(descriptionUser);
     }
 
     // Check if the name has changed
     private boolean isNameChanged() {
         if (!nameUser.equals(editName.getText().toString())) {
-            reference.child(nameUser).child("name").setValue(editName.getText().toString())
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            nameUser = editName.getText().toString(); // Update local variable
-                            Toast.makeText(edit_profile.this, "Name updated successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(edit_profile.this, "Failed to update name", Toast.LENGTH_SHORT).show();
-                            Log.e("FirebaseUpdate", "Error updating name", task.getException());
-                        }
-                    });
+            reference.child(nameUser).child("name").setValue(editName.getText().toString());
+            nameUser = editName.getText().toString(); // Update local variable
             return true;
         } else {
             return false;
@@ -88,16 +79,8 @@ public class edit_profile extends AppCompatActivity {
     // Check if the email has changed
     private boolean isEmailChanged() {
         if (!emailUser.equals(editEmail.getText().toString())) {
-            reference.child(nameUser).child("email").setValue(editEmail.getText().toString())
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            emailUser = editEmail.getText().toString(); // Update local variable
-                            Toast.makeText(edit_profile.this, "Email updated successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(edit_profile.this, "Failed to update email", Toast.LENGTH_SHORT).show();
-                            Log.e("FirebaseUpdate", "Error updating email", task.getException());
-                        }
-                    });
+            reference.child(nameUser).child("email").setValue(editEmail.getText().toString());
+            emailUser = editEmail.getText().toString(); // Update local variable
             return true;
         } else {
             return false;
@@ -116,17 +99,10 @@ public class edit_profile extends AppCompatActivity {
                 return false;
             }
 
-            // If the current password matches, update to the new password
-            reference.child(nameUser).child("password").setValue(editNewPassword.getText().toString())
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            currentPasswordUser = editNewPassword.getText().toString(); // Update local variable
-                            Toast.makeText(edit_profile.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(edit_profile.this, "Failed to update password", Toast.LENGTH_SHORT).show();
-                            Log.e("FirebaseUpdate", "Error updating password", task.getException());
-                        }
-                    });
+// If the current password matches, update to the new password
+            reference.child(nameUser).child("password").setValue(editNewPassword.getText().toString());
+            currentPasswordUser = editNewPassword.getText().toString(); // Update local variable
+            Toast.makeText(edit_profile.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
             return true;
 
         } else {
