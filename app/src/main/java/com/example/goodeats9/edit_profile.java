@@ -12,9 +12,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class edit_profile extends AppCompatActivity {
 
-    EditText editName, editEmail, editPhoneNumber, editCurrentPassword, editNewPassword, editDescription;
+    EditText editName, editEmail, editCurrentPassword, editNewPassword, editDescription;
     Button saveButton;
-    String nameUser, emailUser, phoneNumberUser, currentPasswordUser, newPasswordUser, descriptionUser;
+    String nameUser, emailUser,  currentPasswordUser, newPasswordUser, descriptionUser;
     DatabaseReference reference;
 
     @Override
@@ -28,7 +28,6 @@ public class edit_profile extends AppCompatActivity {
         // Initialize EditTexts and Button
         editName = findViewById(R.id.editName);
         editEmail = findViewById(R.id.editEmail);
-        editPhoneNumber = findViewById(R.id.editPhone);
         editCurrentPassword = findViewById(R.id.editCurrentPassword);
         editNewPassword = findViewById(R.id.editNewPassword);
         editDescription = findViewById(R.id.editDescription);
