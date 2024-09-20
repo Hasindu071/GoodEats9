@@ -53,7 +53,7 @@ public class recipeMain extends AppCompatActivity {
     @SuppressLint("ResourceAsColor")
     private void setButtonInactive(Button button) {
         button.setBackgroundTintList(getResources().getColorStateList(R.color.white));
-        button.setTextColor(R.color.green);
+        button.setTextColor(getResources().getColor(R.color.green));
     }
 
     // Method to load the selected fragment

@@ -71,45 +71,10 @@
         <!-- Profile Name -->
 
 
-
-        <TextView
-            android:id="@+id/profileName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:text="Profile Name"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/profileImage"
-            app:layout_constraintTop_toTopOf="@+id/profileImage" />
-
         <!-- Location -->
-        <TextView
-            android:id="@+id/profileLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="Location"
-            app:layout_constraintStart_toEndOf="@+id/profileImage"
-            app:layout_constraintTop_toBottomOf="@+id/profileName" />
     </LinearLayout>
 
     <!-- Follow Button -->
-
-    <Button
-        android:id="@+id/followButton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="28dp"
-        android:text="Follow"
-        android:backgroundTint="#129575"
-        app:cornerRadius="12dp"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipeName" />
 
     <!-- Procedure Button -->
     <Button
@@ -154,6 +119,18 @@
         app:layout_constraintTop_toBottomOf="@+id/procedureButton"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/profileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="28dp"
+        android:text="Profile Name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/profileImage"
+        app:layout_constraintTop_toTopOf="@+id/profileImage" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
