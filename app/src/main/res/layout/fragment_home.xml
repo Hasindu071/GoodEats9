@@ -1,35 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".homeFragment">
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="16dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/text_hello"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="50dp"
-            android:fontFamily="@font/poppins"
-            android:text="Hello!"
-            android:textColor="#000000"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/profile_pic"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/circle_background"
+                android:scaleType="centerCrop"
+                android:contentDescription="Profile picture"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Hello Text -->
+            <TextView
+                android:id="@+id/text_hello"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/profile_pic"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/poppins"
+                android:text="Hello!"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/text_hello"
+                android:layout_marginStart="8dp"
+                android:layout_alignBaseline="@id/text_hello"
+                android:fontFamily="@font/poppins"
+                android:text="chandra"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/editProfileButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_notification"
+                android:contentDescription="Edit profile"
+                />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/text_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
             android:text="What are you cooking today?"
             android:textColor="#A9A9A9"
             android:textSize="16sp"
@@ -39,7 +83,7 @@
             app:layout_constraintTop_toBottomOf="@id/text_hello" />
 
         <EditText
-            android:layout_width="374dp"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
             android:id="@+id/search_bar"
             android:background="@drawable/rounded_textbox"
@@ -52,23 +96,23 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 
+
         <Button
             android:id="@+id/buttonRecomended"
             android:layout_width="227dp"
-            android:layout_height="62dp"
-            android:layout_marginStart="12dp"
+            android:layout_height="55dp"
             android:backgroundTint="#129575"
             android:text="Recommended for you"
+            android:layout_marginTop="10dp"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="15dp"
+            android:textSize="16dp"
             app:cornerRadius="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.285" />
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 
+    <!-- Recipe List Section -->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</FrameLayout>
+</LinearLayout>
