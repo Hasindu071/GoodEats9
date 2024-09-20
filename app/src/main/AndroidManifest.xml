@@ -16,6 +16,9 @@
             android:name=".recipeMain"
             android:exported="false" />
         <activity
+            android:name=".forget_password_2"
+            android:exported="false" />
+        <activity
             android:name=".edit_profile"
             android:exported="false" />
         <activity
