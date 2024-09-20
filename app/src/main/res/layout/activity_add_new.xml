@@ -46,11 +46,10 @@
         tools:layout_editor_absoluteY="53dp" />
 
 
-
     <Button
         android:id="@+id/button"
-        android:layout_width="328dp"
-        android:layout_height="87dp"
+        android:layout_width="181dp"
+        android:layout_height="89dp"
         android:backgroundTint="#129575"
         android:drawableRight="newc"
         android:fontFamily="@font/poppins"
@@ -61,10 +60,29 @@
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.65"
+        app:layout_constraintHorizontal_bias="0.105"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintVertical_bias="0.134" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="181dp"
+        android:layout_height="89dp"
+        android:backgroundTint="#129575"
+        android:drawableRight="newc"
+        android:fontFamily="@font/poppins"
+        android:text="Upload vedio"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        app:cornerRadious="45dp"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.943"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.133" />
 
     <EditText
         android:id="@+id/editTextText8"
@@ -128,23 +146,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.827" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:text="Title"
-        android:textColor="@color/black"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.081"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintVertical_bias="0.0" />
+   <TextView
+       android:id="@+id/textView3"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:fontFamily="@font/poppins"
+       android:text="Title"
+       android:textColor="@color/black"
+       android:textSize="15dp"
+       android:textStyle="bold"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.081"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@+id/button"
+       app:layout_constraintVertical_bias="0.013" />
 
-    <EditText
+   <EditText
         android:id="@+id/editTextText3"
         android:layout_width="95dp"
         android:layout_height="41dp"
@@ -161,24 +179,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.473" />
 
-   <EditText
-       android:id="@+id/editTextText"
-       android:layout_width="353dp"
-       android:layout_height="41dp"
-       android:background="@drawable/round_texbox"
-       android:ems="10"
-       android:hint="Enter Name"
-       android:paddingLeft="10dp"
-       android:inputType="text"
-       android:textSize="15dp"
-       app:layout_constraintBottom_toBottomOf="parent"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintHorizontal_bias="0.534"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toTopOf="parent"
-       app:layout_constraintVertical_bias="0.302" />
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="353dp"
+        android:layout_height="41dp"
+        android:background="@drawable/round_texbox"
+        android:ems="10"
+        android:hint="Enter Name"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.534"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.291" />
 
-   <TextView
+    <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -241,7 +259,7 @@
         app:layout_constraintHorizontal_bias="0.094"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.154" />
 
     <EditText
         android:id="@+id/editTextText5"
