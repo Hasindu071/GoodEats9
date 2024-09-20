@@ -35,7 +35,7 @@ public class Forget_Password extends AppCompatActivity {
 
                 // Reset button to go to forget password 2 page
                 Button ResetButton = findViewById(R.id.buttonRsetpassword);
-                backButton.setOnClickListener(new View.OnClickListener() {
+                ResetButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(com.example.goodeats9.Forget_Password.this, forget_password_2.class);
