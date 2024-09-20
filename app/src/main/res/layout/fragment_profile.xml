@@ -101,17 +101,9 @@
     <Button
         android:layout_width="wrap_content"
         android:id="@+id/viewRecipeButton"
-        android:clickable="true"
         android:layout_height="wrap_content"
         android:text="view recipe"
         android:layout_marginTop="10dp"/>
-
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"/>
 
 
 </LinearLayout>
