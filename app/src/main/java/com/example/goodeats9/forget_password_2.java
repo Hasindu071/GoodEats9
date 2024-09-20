@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class forget_password_2 extends AppCompatActivity {
 
     public ImageButton extBtn;
+    public Button verify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,5 +39,26 @@ public class forget_password_2 extends AppCompatActivity {
                 finish(); // Close the current activity
             }
         });
+
+        verify = findViewById(R.id.buttonVerify);
+        verify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to the LoginActivity
+                Intent intent = new Intent(forget_password_2.this, forget_password_3.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack
+                startActivity(intent);
+                finish(); // Close the current activity
+            }
+
+        });
+
     }
+
+
+
+
 }
+
+
+
