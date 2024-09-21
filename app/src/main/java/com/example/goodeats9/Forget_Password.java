@@ -27,9 +27,6 @@ public class Forget_Password extends AppCompatActivity {
                 startActivity(intent);
                 finish();  // Optional: To close the Forget_Password activity
             }
-
-
-
         });
 
 
