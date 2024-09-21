@@ -34,7 +34,6 @@
 
     <!-- Recipe Name TextView (Below the video) -->
 
-
     <TextView
         android:id="@+id/recipeName"
         android:layout_width="wrap_content"
@@ -55,11 +54,11 @@
         android:layout_height="80dp"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
-        android:src="@drawable/baseline_co_present_24"
+        android:src="@drawable/circle_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipeName" />
 
-    <!-- Profile Name and Location (TextViews, aligned vertically) -->
+    <!-- Profile Name (TextViews, aligned vertically) -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -70,55 +69,17 @@
 
         <!-- Profile Name -->
 
-
-
-        <TextView
-            android:id="@+id/profileName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:text="Profile Name"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/profileImage"
-            app:layout_constraintTop_toTopOf="@+id/profileImage" />
-
-        <!-- Location -->
-        <TextView
-            android:id="@+id/profileLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="Location"
-            app:layout_constraintStart_toEndOf="@+id/profileImage"
-            app:layout_constraintTop_toBottomOf="@+id/profileName" />
     </LinearLayout>
-
-    <!-- Follow Button -->
-
-    <Button
-        android:id="@+id/followButton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="28dp"
-        android:text="Follow"
-        android:backgroundTint="#129575"
-        app:cornerRadius="12dp"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipeName" />
-
     <!-- Procedure Button -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/procedureButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Procedure"
-        android:backgroundTint="#129575"
+        android:backgroundTint="@color/white"
         app:cornerRadius="12dp"
+        app:strokeColor="@color/green"
+        app:strokeWidth="2dp"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileImage"
@@ -129,12 +90,14 @@
         app:layout_constraintWidth_percent="0.4" />
 
     <!-- Ingredients Button (Next to Procedure) -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/ingredientsButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Ingredients"
-        android:backgroundTint="#129575"
+        app:strokeColor="@color/green"
+        app:strokeWidth="2dp"
+        android:backgroundTint="@color/white"
         app:cornerRadius="12dp"
         android:textAllCaps="false"
         app:layout_constraintStart_toEndOf="@+id/procedureButton"
@@ -155,5 +118,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="16dp" />
 
+    <TextView
+        android:id="@+id/profileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="28dp"
+        android:text="Profile Name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/profileImage"
+        app:layout_constraintTop_toTopOf="@+id/profileImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
