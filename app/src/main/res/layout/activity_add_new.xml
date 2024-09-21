@@ -158,12 +158,12 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintHorizontal_bias="0.065"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.023" />
 
-   <EditText
+    <EditText
        android:id="@+id/editTextText3"
        android:layout_width="95dp"
        android:layout_height="41dp"
@@ -246,6 +246,7 @@
        app:layout_constraintTop_toTopOf="parent"
        app:layout_constraintVertical_bias="0.398" />
 
+
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
@@ -257,12 +258,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintHorizontal_bias="0.076"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintVertical_bias="0.121" />
-
-
+        app:layout_constraintVertical_bias="0.149" />
 
     <TextView
         android:id="@+id/textView9"
@@ -295,13 +294,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.589" />
 
+
     <EditText
         android:id="@+id/editTextText7"
         android:layout_width="101dp"
         android:layout_height="35dp"
         android:background="@drawable/round_texbox"
         android:ems="10"
-        android:hint="flour"
+        android:hint="Sugar"
         android:inputType="text"
         android:paddingLeft="10dp"
         android:textSize="15dp"
@@ -310,9 +310,41 @@
         app:layout_constraintHorizontal_bias="0.174"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.665" />
+        app:layout_constraintVertical_bias="0.655" />
 
+    <EditText
+        android:id="@+id/editTextText13"
+        android:layout_width="101dp"
+        android:layout_height="35dp"
+        android:background="@drawable/round_texbox"
+        android:ems="10"
+        android:hint="500g"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.619"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.589" />
 
+    <EditText
+        android:id="@+id/editTextText14"
+        android:layout_width="101dp"
+        android:layout_height="35dp"
+        android:background="@drawable/round_texbox"
+        android:ems="10"
+        android:hint="2 Spoons"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.619"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.655" />
 
     <EditText
         android:id="@+id/editTextText4"
@@ -320,7 +352,7 @@
         android:layout_height="41dp"
         android:background="@drawable/round_texbox"
         android:ems="10"
-        android:hint="2 People"
+        android:hint="30 min"
         android:inputType="text"
         android:paddingLeft="10dp"
         android:textSize="15dp"
