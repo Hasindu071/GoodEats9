@@ -1,9 +1,13 @@
 package com.example.goodeats9;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,6 +22,18 @@ public class recipeMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_main);
+
+        //Get the text of reviews by its ID
+        TextView textViewReviews = findViewById(R.id.reviews);
+        //Make the "reviews" text look like a link
+        textViewReviews.setPaintFlags(textViewReviews.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        // Handle Reviews TextView click
+        textViewReviews.setOnClickListener(v -> {
+            // Navigate to SignUpActivity when the Sign Up TextView is clicked
+            Intent intent = new Intent(recipeMain.this, Reviews.class);
+            startActivity(intent);
+
+        });
 
         // Find buttons by their ID
         procedureButton = findViewById(R.id.procedureButton);
