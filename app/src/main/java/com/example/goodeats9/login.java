@@ -28,7 +28,7 @@ public class login extends AppCompatActivity {
 
     EditText loginEmail, loginPassword;
     Button signupButton;
-    TextView signupRedirectText;
+    TextView signupRedirectText, forgotPasswordText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +61,15 @@ public class login extends AppCompatActivity {
             }
         });
 
-        //Get the text of sign up by its ID
-        TextView forgotpassword = findViewById(R.id.textViewForgotPassword);
-        //Make the "sign up" text look like a link
-        forgotpassword.setPaintFlags(forgotpassword.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        // Handle Sign Up TextView click
-        forgotpassword.setOnClickListener(v -> {
-            // Navigate to SignUpActivity when the Sign Up TextView is clicked
-            Intent intent = new Intent(login.this, Forget_Password.class);
-            startActivity(intent);
+        forgotPasswordText.setPaintFlags(forgotPasswordText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(login.this, Forget_Password.class);
+                startActivity(intent);
+            }
         });
+
     }
 
     public boolean validateEmail(){
