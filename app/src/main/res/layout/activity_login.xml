@@ -75,7 +75,7 @@
         <EditText
             android:id="@+id/Email"
             android:layout_width="331dp"
-            android:layout_height="54dp"
+            android:layout_height="56dp"
             android:layout_marginStart="36dp"
             android:background="@drawable/rounded_textbox"
             android:hint="Enter email"
@@ -83,6 +83,7 @@
             android:padding="12dp"
             android:fontFamily="@font/poppins"
             android:inputType="textEmailAddress"
+            android:textColorHint="#D9D9D9"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -104,23 +105,31 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.42" />
 
-        <EditText
-            android:id="@+id/Password"
+        <!-- Wrap the Password EditText in a TextInputLayout for the password toggle feature -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="331dp"
-            android:layout_height="54dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
-            android:background="@drawable/rounded_textbox"
             android:hint="Enter password"
-            android:textSize="15dp"
-            android:padding="12dp"
-            android:textColor="#AFAFAF"
-            android:inputType="textPassword"
-            android:fontFamily="@font/poppins"
+            app:passwordToggleEnabled="true"
+            app:boxBackgroundMode="none"
+            android:textColorHint="#D9D9D9"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.475"
-            tools:ignore="MissingConstraints,TextSizeCheck" />
+            app:layout_constraintVertical_bias="0.475">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/Password"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/rounded_textbox"
+                android:fontFamily="@font/poppins"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:textSize="15dp"
+                tools:ignore="TextSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textViewForgotPassword"
