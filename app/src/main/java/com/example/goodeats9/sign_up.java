@@ -1,8 +1,10 @@
 package com.example.goodeats9;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -12,6 +14,8 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.goodeats9.databinding.ActivitySignUpBinding;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class sign_up extends AppCompatActivity
+
 {
 
     EditText signUpName , signUpEmail , signUpPassword , signUpConfirmPassword , signUpDescription;
@@ -33,6 +38,7 @@ public class sign_up extends AppCompatActivity
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
+
 
         //Call the names of the text boxes
         signUpName            = findViewById(R.id.inputName);
