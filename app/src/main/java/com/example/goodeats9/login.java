@@ -116,17 +116,18 @@ public class login extends AppCompatActivity {
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                         String passwordFromDB = userSnapshot.child("password").getValue(String.class);
                         String nameFromDB = userSnapshot.child("name").getValue(String.class);  // Fetch the user's name
-                        //String emailFromDB = userSnapshot.child("email").getValue(String.class); // Fetch the email because it is unique
+                        String emailFromDB = userSnapshot.child("email").getValue(String.class); // Fetch the email because it is unique
                         String descFromDB = userSnapshot.child("description").getValue(String.class);//Fetch the description
 
                         if (Objects.equals(passwordFromDB, userPassword)) {
                             loginPassword.setError(null);
+
                             // Save user's name in SharedPreferences
                             SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("UserName", nameFromDB);  // Store the username
-                            //editor.putString("UserEmail", emailFromDB);  // Store the email
-                            editor.putString("description", descFromDB);  // Store the username
+                            editor.putString("UserEmail", emailFromDB);  // Store the email
+                            editor.putString("UserDescription", descFromDB);  // Store the username
                             editor.apply();
 
                             // Successful login, redirect to MainActivity

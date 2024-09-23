@@ -27,6 +27,15 @@ public class profileFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_profile, container, false); // Inflate the layout for this fragment
         ImageButton profileIcon = view.findViewById(R.id.editProfileButton);    // Find the icon by ID
+
+        // Access SharedPreferences to get the data
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("loginDetails", MODE_PRIVATE);
+
+        String username = sharedPreferences.getString("UserName", "User");
+        String email = sharedPreferences.getString("UserEmail", "Email"); // Use the correct key for email
+        String description = sharedPreferences.getString("UserDescription", "Description");
+
+        // Handle the click event (show recipe activity)
         profileIcon.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -34,15 +43,16 @@ public class profileFragment extends Fragment
             {
                 // Handle the click event (show edit profile activity)
                 Intent intent = new Intent(getActivity(), edit_profile.class);
+
+                // Put the data into the intent
+                intent.putExtra("name", username);
+                intent.putExtra("email", email);
+                intent.putExtra("description", description);
+
                 startActivity(intent);
 
             }
         });
-
-        // Access SharedPreferences
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("loginDetails", MODE_PRIVATE);
-        String username = sharedPreferences.getString("UserName", "User"); //If no name is found type user
-        String description = sharedPreferences.getString("description", "Description"); //If no name is found type user
 
         TextView UserNameText = view.findViewById(R.id.userName); // get the username textview ID
         UserNameText.setText(username);//Set the name
@@ -58,7 +68,6 @@ public class profileFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                // Handle the click event (show recipe activity)
                 Intent intent = new Intent(getActivity(), recipeMain.class);
                 startActivity(intent);
             }

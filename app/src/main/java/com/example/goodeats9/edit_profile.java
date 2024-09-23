@@ -14,7 +14,7 @@ public class edit_profile extends AppCompatActivity {
 
     EditText editName, editEmail, editCurrentPassword, editNewPassword, editDescription;
     Button saveButton;
-    String nameUser, emailUser,  currentPasswordUser, newPasswordUser, descriptionUser;
+    String nameUser, emailUser,  currentPasswordUser, descriptionUser;
     DatabaseReference reference;
 
     @Override
@@ -52,15 +52,10 @@ public class edit_profile extends AppCompatActivity {
 
         nameUser = intent.getStringExtra("name");
         emailUser = intent.getStringExtra("email");
-        //phoneNumberUser = intent.getStringExtra("Phone Number");
-        currentPasswordUser = intent.getStringExtra("password");
-        //newPasswordUser = intent.getStringExtra("New password");
         descriptionUser = intent.getStringExtra("description");
 
         editName.setText(nameUser);
         editEmail.setText(emailUser);
-        //editPhoneNumber.setText(phoneNumberUser);
-        //editCurrentPassword.setText(currentPasswordUser); // Show current password (optional)
         editDescription.setText(descriptionUser);
     }
 
