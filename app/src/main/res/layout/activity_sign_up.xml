@@ -53,7 +53,7 @@
         android:background="@drawable/rounded_textbox"
         android:hint="Name"
         android:inputType="textPersonName"
-        android:padding="12dp"
+         android:padding="12dp"
         android:textColor="@color/black" />
 
     <TextView
