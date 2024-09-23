@@ -1,6 +1,7 @@
 package com.example.goodeats9;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
@@ -113,14 +114,25 @@ public class login extends AppCompatActivity {
                     // Assuming the "email" field is unique and you get one result.
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                         String passwordFromDB = userSnapshot.child("password").getValue(String.class);
+                        String nameFromDB = userSnapshot.child("name").getValue(String.class);  // Fetch the user's name
+                        //String emailFromDB = userSnapshot.child("email").getValue(String.class); // Fetch the email because it is unique
+                        String descFromDB = userSnapshot.child("description").getValue(String.class);//Fetch the description
 
                         if (Objects.equals(passwordFromDB, userPassword)) {
                             loginPassword.setError(null);
+                            // Save user's name in SharedPreferences
+                            SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("UserName", nameFromDB);  // Store the username
+                            //editor.putString("UserEmail", emailFromDB);  // Store the email
+                            editor.putString("description", descFromDB);  // Store the username
+                            editor.apply();
 
                             // Successful login, redirect to MainActivity
                             Intent intent = new Intent(login.this, menu_bar_main.class);
                             startActivity(intent);
                             finish(); // Call finish to close the current login activity
+
                         } else {
                             loginPassword.setError("Invalid Credentials!");
                             loginEmail.setBackgroundResource(R.drawable.input_error);
