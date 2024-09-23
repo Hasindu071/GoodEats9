@@ -98,12 +98,5 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:id="@+id/viewRecipeButton"
-        android:layout_height="wrap_content"
-        android:text="view recipe"
-        android:layout_marginTop="10dp"/>
-
 
 </LinearLayout>
