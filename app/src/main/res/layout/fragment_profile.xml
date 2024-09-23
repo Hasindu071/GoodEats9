@@ -53,7 +53,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:text="Chandra Kumara"
             android:textColor="@android:color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -64,8 +63,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:gravity="left"
-            android:text="Hi!..I'm Chandra Kumara. I'm from England. I work in the Shangrila Hotel in England. I'm a food lover."
-            android:textColor="@android:color/darker_gray"
             android:textSize="14sp" />
 
 
