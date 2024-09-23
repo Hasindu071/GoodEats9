@@ -70,7 +70,7 @@
 
 
         <Button
-            android:id="@+id/myRecipesButton"
+            android:id="@+id/viewRecipeButton"
             android:layout_width="114dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
