@@ -54,13 +54,14 @@ public class Forget_Password extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) { //remove the current email
                             Toast.makeText(Forget_Password.this, "Please Check Your Email", Toast.LENGTH_SHORT).show(); //send message to the email and show the message
-                            startActivity(new Intent(Forget_Password.this, login.class)); // back to login page
+                            startActivity(new Intent(Forget_Password.this, forget_password_2.class)); // back to forget password 2 page
                         } else {
                             editTextEmailAddress.setError("No account with this email"); // show the error message
                         }
                     }
 
                     @Override
+                    // Displays the error message to the user
                     public void onCancelled(@NonNull DatabaseError error) {
                         Toast.makeText(Forget_Password.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
