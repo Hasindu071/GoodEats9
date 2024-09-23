@@ -39,6 +39,7 @@ public class login extends AppCompatActivity {
         loginEmail = findViewById(R.id.Email);
         loginPassword = findViewById(R.id.Password);
         signupRedirectText = findViewById(R.id.textViewSignUp);
+        forgotPasswordText = findViewById(R.id.textViewForgotPassword);
         signupButton = findViewById(R.id.buttonSignIN);
 
         signupButton.setOnClickListener(new View.OnClickListener() {
