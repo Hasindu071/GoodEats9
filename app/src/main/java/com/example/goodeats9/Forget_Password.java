@@ -43,6 +43,7 @@ public class Forget_Password extends AppCompatActivity {
 
         // Reset button logic
         buttonRsetpassword.setOnClickListener(v -> {
+
             //is validateEmail true
             if (validateEmail()) {
                 String userEmail = editTextEmailAddress.getText().toString().trim(); //get the data in to the email box
@@ -52,10 +53,18 @@ public class Forget_Password extends AppCompatActivity {
                 checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) { //remove the current email
+                        //if email exits then call otp to verify that it is email
+                        if (dataSnapshot.exists()) {
+                            Intent intent = new Intent(getApplicationContext(), forget_password_2.class);
+                            intent.putExtra("email",userEmail);
+                            intent.putExtra("WhatToDo", "UpdateData");
                             Toast.makeText(Forget_Password.this, "Please Check Your Email", Toast.LENGTH_SHORT).show(); //send message to the email and show the message
-                            startActivity(new Intent(Forget_Password.this, forget_password_2.class)); // forward to forget password 2 page
+                            startActivity(new Intent(Forget_Password.this, forget_password_2.class));// forward to forget password 2 page
+                            finish();
+
+
                         } else {
+                            editTextEmailAddress.requestFocus();
                             editTextEmailAddress.setError("No account with this email"); // show the error message
                         }
                     }
