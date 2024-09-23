@@ -4,45 +4,78 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 public class Forget_Password extends AppCompatActivity {
+
+    //declare the variables
+    EditText editTextEmailAddress;
+    Button buttonRsetpassword;
+    ImageButton btn_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_forget_password);
 
+        editTextEmailAddress = findViewById(R.id.editTextEmailAddress);
+        buttonRsetpassword = findViewById(R.id.buttonRsetpassword);
+        btn_back = findViewById(R.id.btn_back);
+
         // Back button to go to Login page
-        ImageButton backButton = findViewById(R.id.btn_back);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Navigate to Login Activity
-                Intent intent = new Intent(Forget_Password.this, login.class);
-                startActivity(intent);
-                finish();  // Optional: To close the Forget_Password activity
-            }
+        btn_back.setOnClickListener(v -> {
+            Intent intent = new Intent(Forget_Password.this, login.class);
+            startActivity(intent);
+            finish();
         });
 
+        // Reset button logic
+        buttonRsetpassword.setOnClickListener(v -> {
+            //is validateEmail true
+            if (validateEmail()) {
+                String userEmail = editTextEmailAddress.getText().toString().trim(); //get the data in to the email box
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users"); //connect to the database
+                Query checkUserDatabase = reference.orderByChild("email").equalTo(userEmail); // check the current email is equal to the new enter data
 
-                // Reset button to go to forget password 2 page
-                Button ResetButton = findViewById(R.id.buttonRsetpassword);
-                ResetButton.setOnClickListener(new View.OnClickListener() {
+                checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(com.example.goodeats9.Forget_Password.this, forget_password_2.class);
-                        startActivity(intent);
-                        finish();
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) { //remove the current email
+                            Toast.makeText(Forget_Password.this, "Please Check Your Email", Toast.LENGTH_SHORT).show(); //send message to the email and show the message
+                            startActivity(new Intent(Forget_Password.this, login.class)); // back to login page
+                        } else {
+                            editTextEmailAddress.setError("No account with this email"); // show the error message
+                        }
                     }
-                    });
-                }
-    }// Optional: To close the Forget_Password activity
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(Forget_Password.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
 
-
-
+    // Email validation
+    public boolean validateEmail() {
+        String val = editTextEmailAddress.getText().toString();
+        if (val.isEmpty()) {
+            editTextEmailAddress.setError("Email cannot be empty!");
+            return false;
+        }
+        return true;
+    }
+}
