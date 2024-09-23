@@ -77,6 +77,7 @@ public class login extends AppCompatActivity {
         String val = loginEmail.getText().toString();
         if (val.isEmpty()){
             loginEmail.setError("Email cannot be empty!");
+            loginEmail.setBackgroundResource(R.drawable.input_error);
             return false;
         }else {
             loginEmail.setError(null);
@@ -88,6 +89,7 @@ public class login extends AppCompatActivity {
         String val = loginPassword.getText().toString();
         if (val.isEmpty()){
             loginPassword.setError("Password cannot be empty!");
+            loginPassword.setBackgroundResource(R.drawable.input_error);
             return false;
         }else {
             loginPassword.setError(null);
@@ -121,11 +123,13 @@ public class login extends AppCompatActivity {
                             finish(); // Call finish to close the current login activity
                         } else {
                             loginPassword.setError("Invalid Credentials!");
+                            loginEmail.setBackgroundResource(R.drawable.input_error);
                             loginPassword.requestFocus();
                         }
                     }
                 } else {
                     loginEmail.setError("Email does not exist!");
+                    loginEmail.setBackgroundResource(R.drawable.input_error);
                     loginEmail.requestFocus();
                 }
             }
