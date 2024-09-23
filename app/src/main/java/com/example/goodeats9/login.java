@@ -52,15 +52,13 @@ public class login extends AppCompatActivity {
             }
         });  // Make sure to use the correct layout file
 
-        //Get the text of sign up by its ID
-        TextView textViewSignUp = findViewById(R.id.textViewSignUp);
-        //Make the "sign up" text look like a link
-        textViewSignUp.setPaintFlags(textViewSignUp.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        // Handle Sign Up TextView click
-        textViewSignUp.setOnClickListener(v -> {
-            // Navigate to SignUpActivity when the Sign Up TextView is clicked
-            Intent intent = new Intent(login.this, sign_up.class);
-            startActivity(intent);
+        signupRedirectText.setPaintFlags(signupRedirectText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        signupRedirectText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(login.this, sign_up.class);
+                startActivity(intent);
+            }
         });
 
         //Get the text of sign up by its ID
