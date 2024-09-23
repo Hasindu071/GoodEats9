@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#129575"
+    tools:context=".Add_photo">
+
+    <!-- Profile Image Placeholder -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="202dp"
+        android:layout_height="175dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/circle_background"
+        tools:layout_editor_absoluteY="75dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="135dp"
+        android:layout_height="56dp"
+        android:text="Cancel"
+        tools:layout_editor_absoluteX="59dp"
+        tools:layout_editor_absoluteY="273dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="135dp"
+        android:layout_height="56dp"
+        android:text="Save"
+        tools:layout_editor_absoluteX="220dp"
+        tools:layout_editor_absoluteY="273dp"
+        tools:ignore="MissingConstraints" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
