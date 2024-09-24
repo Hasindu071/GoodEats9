@@ -43,6 +43,14 @@ public class edit_profile extends AppCompatActivity {
             //startActivity(intent);
         });
 
+        // Initialize camera icon and set click listener
+        ImageView cameraIcon = findViewById(R.id.camera_icon);
+        cameraIcon.setOnClickListener(v -> {
+            // Start activity_photo when the camera icon is clicked
+            Intent intent = new Intent(edit_profile.this, Add_photo.class);
+            startActivity(intent);
+        });
+
         // Load data into fields
         showData();
 
