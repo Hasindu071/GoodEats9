@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -16,21 +17,24 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Add_photo extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    private ImageView imageView;
+    private ImageView profilePhoto;
     private Button buttonSave;
     private Button buttonCancel;
+    private TextView hint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_photo); // Update to your actual layout name
 
-        imageView = findViewById(R.id.imageView);
+        profilePhoto = findViewById(R.id.profile_pic);
         buttonSave = findViewById(R.id.buttonSave);
         buttonCancel = findViewById(R.id.buttonCancel);
+        hint = findViewById(R.id.hintText);
+
 
         // Set onClickListener for the image view to select an image
-        imageView.setOnClickListener(v -> openFileChooser());
+        profilePhoto.setOnClickListener(v -> openFileChooser());
 
         // Set onClickListener for the Cancel button
         buttonCancel.setOnClickListener(v -> finish());
@@ -49,7 +53,8 @@ public class Add_photo extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
-            imageView.setImageURI(imageUri);
+            hint.setVisibility(View.GONE);
+            profilePhoto.setImageURI(imageUri);
             // You can save the URI for further processing
         }
     }
