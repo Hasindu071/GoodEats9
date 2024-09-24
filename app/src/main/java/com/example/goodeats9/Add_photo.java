@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ public class Add_photo extends AppCompatActivity {
     private ImageView profilePhoto;
     private Button buttonSave;
     private Button buttonCancel;
+    private TextView hint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,8 @@ public class Add_photo extends AppCompatActivity {
         profilePhoto = findViewById(R.id.profile_pic);
         buttonSave = findViewById(R.id.buttonSave);
         buttonCancel = findViewById(R.id.buttonCancel);
+        hint = findViewById(R.id.hintText);
+
 
         // Set onClickListener for the image view to select an image
         profilePhoto.setOnClickListener(v -> openFileChooser());
@@ -49,6 +53,7 @@ public class Add_photo extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
+            hint.setVisibility(View.GONE);
             profilePhoto.setImageURI(imageUri);
             // You can save the URI for further processing
         }
