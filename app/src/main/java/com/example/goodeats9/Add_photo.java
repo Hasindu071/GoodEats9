@@ -1,7 +1,6 @@
-package com.example.goodeats9; // Update with your actual package name
+package com.example.goodeats9;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,6 +13,19 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.goodeats9.databinding.ActivityAddPhotoBinding;  // Ensure your XML name matches here
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 public class Add_photo extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -21,6 +33,10 @@ public class Add_photo extends AppCompatActivity {
     private Button buttonSave;
     private Button buttonCancel;
     private TextView hint;
+    private Uri imageUri;
+
+    // Firebase Storage reference
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +48,8 @@ public class Add_photo extends AppCompatActivity {
         buttonCancel = findViewById(R.id.buttonCancel);
         hint = findViewById(R.id.hintText);
 
+        // Initialize Firebase Storage reference
+        storageReference = FirebaseStorage.getInstance().getReference("profile_pictures");
 
         // Set onClickListener for the image view to select an image
         profilePhoto.setOnClickListener(v -> openFileChooser());
@@ -52,18 +70,35 @@ public class Add_photo extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
+            imageUri = data.getData();
             hint.setVisibility(View.GONE);
             profilePhoto.setImageURI(imageUri);
-            // You can save the URI for further processing
         }
     }
 
     private void savePhoto() {
-        // Implement your save logic here
-        // For example, upload the image to a server or save to local storage
-        Toast.makeText(this, "Photo saved!", Toast.LENGTH_SHORT).show();
-        // Optionally, you can finish the activity or navigate elsewhere
-        finish();
+        if (imageUri != null) {
+            // Define a unique name for the uploaded image
+            StorageReference fileReference = storageReference.child(System.currentTimeMillis() + ".jpg");
+
+            // Upload the file
+            fileReference.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(Add_photo.this, "Photo uploaded successfully!", Toast.LENGTH_SHORT).show();
+                            // Optionally, you can finish the activity after upload
+                            finish();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(Exception e) {
+                            Toast.makeText(Add_photo.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+        }
     }
 }
