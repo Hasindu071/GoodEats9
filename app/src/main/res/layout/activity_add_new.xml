@@ -92,22 +92,7 @@
             app:layout_constraintTop_toBottomOf="@+id/photobtn"
             app:layout_constraintVertical_bias="0.0" />
 
-        <EditText
-            android:id="@+id/enterserves"
-            android:layout_width="95dp"
-            android:layout_height="41dp"
-            android:background="@drawable/round_texbox"
-            android:ems="10"
-            android:hint="2 People"
-            android:inputType="text"
-            android:paddingLeft="10dp"
-            android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.256"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.485" />
+
 
         <EditText
             android:id="@+id/entername"
@@ -124,57 +109,91 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title" />
 
-        <TextView
-            android:id="@+id/coocktime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins"
-            android:text="Cook Time"
-            android:textColor="@color/black"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.624"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/photobtn"
-            app:layout_constraintVertical_bias="0.286" />
 
-
-        <EditText
-            android:id="@+id/entertime"
-            android:layout_width="95dp"
-            android:layout_height="41dp"
-            android:background="@drawable/round_texbox"
-            android:ems="10"
-            android:hint="30 min"
-            android:inputType="text"
-            android:paddingLeft="10dp"
-            android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <LinearLayout
+            android:layout_width="367dp"
+            android:layout_height="43dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/addrecipebtn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.927"
+            app:layout_constraintHorizontal_bias="0.522"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.485" />
+            app:layout_constraintVertical_bias="0.488">
 
-        <TextView
-        android:id="@+id/servers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:text="Serves"
-        android:textColor="@color/black"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.063"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/photobtn"
-        app:layout_constraintVertical_bias="0.286" />
+            <TextView
+                android:id="@+id/servers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/poppins"
+                android:text="Serves"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.063"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/photobtn"
+                app:layout_constraintVertical_bias="0.286" />
 
-    <EditText
+            <EditText
+                android:id="@+id/enterserves"
+                android:layout_width="95dp"
+                android:layout_height="41dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/round_texbox"
+                android:ems="10"
+                android:hint="2 People"
+                android:inputType="text"
+                android:paddingLeft="10dp"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.256"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.485" />
+
+            <TextView
+                android:id="@+id/coocktime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/poppins"
+                android:text="Cook Time"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.624"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/photobtn"
+                app:layout_constraintVertical_bias="0.286" />
+
+
+            <EditText
+                android:id="@+id/entertime"
+                android:layout_width="95dp"
+                android:layout_height="41dp"
+                android:background="@drawable/round_texbox"
+                android:ems="10"
+                android:hint="30 min"
+                android:inputType="text"
+                android:paddingLeft="10dp"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.927"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.485" />
+
+        </LinearLayout>
+
+        <EditText
        android:id="@+id/enterdiscription"
        android:layout_width="364dp"
        android:layout_height="41dp"
