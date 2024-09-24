@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -14,7 +15,7 @@ public class edit_profile extends AppCompatActivity {
 
     EditText editName, editEmail, editCurrentPassword, editNewPassword, editDescription;
     Button saveButton;
-    String nameUser, emailUser,  currentPasswordUser, descriptionUser;
+    String nameUser, emailUser, currentPasswordUser, descriptionUser;
     DatabaseReference reference;
 
     @Override
@@ -32,6 +33,15 @@ public class edit_profile extends AppCompatActivity {
         editNewPassword = findViewById(R.id.editNewPassword);
         editDescription = findViewById(R.id.editDescription);
         saveButton = findViewById(R.id.buttonUpdate);
+
+        // Initialize back button and set click listener
+        ImageView back = findViewById(R.id.backButton);
+        back.setOnClickListener(v -> {
+            // Navigate to AddNew activity when back button is clicked
+            Intent intent = new Intent(edit_profile.this, profileFragment.class);
+            this.finish();
+            //startActivity(intent);
+        });
 
         // Load data into fields
         showData();
@@ -93,7 +103,7 @@ public class edit_profile extends AppCompatActivity {
                 return false;
             }
 
-// If the current password matches, update to the new password
+            // If the current password matches, update to the new password
             reference.child(nameUser).child("password").setValue(editNewPassword.getText().toString());
             currentPasswordUser = editNewPassword.getText().toString(); // Update local variable
             Toast.makeText(edit_profile.this, "Password updated successfully", Toast.LENGTH_SHORT).show();

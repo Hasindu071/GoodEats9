@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".edit_profile">
 
-    <!-- Back Button -->
+    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar"
         android:layout_width="0dp"
@@ -18,9 +18,6 @@
         app:layout_constraintHeight_default="wrap" />
 
     <!-- Back Button Icon -->
-
-    <!-- Edit Profile Title -->
-
     <ImageView
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
@@ -31,6 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Edit Profile Title -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -47,7 +45,7 @@
 
     <!-- Profile Image Placeholder -->
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/propic"
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:layout_marginTop="-55dp"
@@ -56,15 +54,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Camera Icon Overlay -->
+    <ImageView
+        android:id="@+id/camera_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/baseline_camera_alt_24"
+        app:layout_constraintBottom_toBottomOf="@+id/propic"
+        app:layout_constraintEnd_toEndOf="@+id/propic"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:contentDescription="Camera Icon" />
+
+    <!-- Constraint Layout for Input Fields -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="220dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/propic"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialToolbar"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <!-- Name TextView -->
         <TextView
@@ -74,12 +84,13 @@
             android:layout_marginStart="16dp"
             android:text="Name"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Name EditText -->
         <EditText
             android:id="@+id/editName"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
@@ -103,7 +114,6 @@
             app:layout_constraintTop_toBottomOf="@+id/editName" />
 
         <!-- Email EditText -->
-
         <EditText
             android:id="@+id/editEmail"
             android:layout_width="0dp"
@@ -118,8 +128,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email" />
 
-
-        <!-- Password TextView -->
+        <!-- Current Password TextView -->
         <TextView
             android:id="@+id/Currentpassword"
             android:layout_width="wrap_content"
@@ -131,7 +140,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editEmail" />
 
-        <!-- Password EditText -->
+        <!-- Current Password EditText -->
         <EditText
             android:id="@+id/editCurrentPassword"
             android:layout_width="0dp"
@@ -146,39 +155,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Currentpassword" />
 
-
-        <!-- Description EditText -->
-
-        <!-- Description EditText -->
-
-        <!-- Update Button -->
-
-
+        <!-- New Password TextView -->
         <TextView
             android:id="@+id/Newpassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
-            android:text="New password"
+            android:text="New Password"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editCurrentPassword" />
 
+        <!-- New Password EditText -->
         <EditText
             android:id="@+id/editNewPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
-            android:layout_marginTop="80dp"
             android:layout_marginRight="12dp"
             android:background="@drawable/rounded_textbox"
             android:hint="New Password"
+            android:inputType="textPassword"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Currentpassword" />
+            app:layout_constraintTop_toBottomOf="@+id/Newpassword" />
 
+        <!-- Description TextView -->
         <TextView
             android:id="@+id/Description"
             android:layout_width="wrap_content"
@@ -190,46 +194,40 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editNewPassword" />
 
+        <!-- Description EditText -->
         <EditText
             android:id="@+id/editDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
-            android:layout_marginTop="80dp"
             android:layout_marginRight="12dp"
             android:background="@drawable/rounded_textbox"
             android:hint="Description"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.333"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Newpassword" />
+            app:layout_constraintTop_toBottomOf="@+id/Description" />
 
+        <!-- Update Button -->
         <Button
             android:id="@+id/buttonUpdate"
             android:layout_width="268dp"
             android:layout_height="60dp"
-            android:layout_marginStart="60dp"
             android:backgroundTint="#129575"
             android:text="Update"
             android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="18dp"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
             app:cornerRadius="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/editDescription"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.911" />
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="39dp"
-        android:layout_height="35dp"
-        app:srcCompat="@drawable/baseline_camera_alt_24"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="232dp"
-        tools:layout_editor_absoluteY="184dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
