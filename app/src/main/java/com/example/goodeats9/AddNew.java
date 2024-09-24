@@ -15,6 +15,7 @@ public class AddNew extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_new);
 
+
         // Initialize back button and set click listener inside onCreate
         ImageView back = findViewById(R.id.backbtn);
         back.setOnClickListener(v -> {
