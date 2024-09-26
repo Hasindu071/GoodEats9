@@ -3,7 +3,6 @@ package com.example.goodeats9;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -44,7 +43,7 @@ public class Add_photo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_photo); // Update to your actual layout name
+        setContentView(R.layout.activity_add_photo);
 
         profilePhoto = findViewById(R.id.profile_pic);
         buttonSave = findViewById(R.id.buttonSave);
@@ -92,7 +91,7 @@ public class Add_photo extends AppCompatActivity {
                 // Replace special characters in the email (e.g., '.', '@') to avoid issues with Firebase paths
                 String sanitizedEmail = userEmail.replace(".", "_").replace("@", "_");
 
-                // First, check if the user already has a photo stored in Firebase
+                // Check if the user already has a photo stored in Firebase
                 databaseReference.child(sanitizedEmail).child("profilePhotoUrl").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
@@ -101,18 +100,10 @@ public class Add_photo extends AppCompatActivity {
                             String oldPhotoUrl = snapshot.getValue(String.class);
                             if (oldPhotoUrl != null) {
                                 StorageReference oldPhotoRef = FirebaseStorage.getInstance().getReferenceFromUrl(oldPhotoUrl);
-                                oldPhotoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        // Successfully deleted old photo, now upload new one
-                                        uploadNewPhoto(sanitizedEmail);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(Exception e) {
-                                        Toast.makeText(Add_photo.this, "Failed to delete old photo: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                oldPhotoRef.delete().addOnSuccessListener(aVoid -> {
+                                    // Successfully deleted old photo, now upload new one
+                                    uploadNewPhoto(sanitizedEmail);
+                                }).addOnFailureListener(e -> Toast.makeText(Add_photo.this, "Failed to delete old photo: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                             } else {
                                 // No old photo URL, just upload the new one
                                 uploadNewPhoto(sanitizedEmail);
@@ -142,27 +133,13 @@ public class Add_photo extends AppCompatActivity {
 
         // Upload the file
         mailImage.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get the download URL of the uploaded photo
-                        mailImage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri downloadUri) {
-                                // Save the new photo URL in the database
-                                databaseReference.child(sanitizedEmail).child("profilePhotoUrl").setValue(downloadUri.toString());
-                                Toast.makeText(Add_photo.this, "Photo uploaded successfully!", Toast.LENGTH_SHORT).show();
-                                // Optionally, you can finish the activity after upload
-                                finish();
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(Exception e) {
-                        Toast.makeText(Add_photo.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                .addOnSuccessListener(taskSnapshot -> mailImage.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                    // Save the new photo URL in the database
+                    databaseReference.child(sanitizedEmail).child("profilePhotoUrl").setValue(downloadUri.toString());
+                    Toast.makeText(Add_photo.this, "Photo uploaded successfully!", Toast.LENGTH_SHORT).show();
+                    // Optionally, you can finish the activity after upload
+                    finish();
+                }))
+                .addOnFailureListener(e -> Toast.makeText(Add_photo.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }

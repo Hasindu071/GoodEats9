@@ -8,16 +8,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class edit_profile extends AppCompatActivity {
 
     EditText editName, editEmail, editCurrentPassword, editNewPassword, editDescription;
     Button saveButton;
-    String nameUser, emailUser,  currentPasswordUser, descriptionUser;
+    String nameUser, emailUser, currentPasswordUser, descriptionUser;
     DatabaseReference reference;
+    ImageView profilePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +54,14 @@ public class edit_profile extends AppCompatActivity {
         editDescription = findViewById(R.id.editDescription);
         saveButton = findViewById(R.id.buttonUpdate);
 
+        // Initialize ImageView for profile photo
+        profilePhoto = findViewById(R.id.propic);
+
         // Load data into fields
         showData();
+
+        // Load profile photo from Firebase
+        loadProfilePhoto();
 
         // Handle save button click
         saveButton.setOnClickListener(view -> {
@@ -73,6 +84,37 @@ public class edit_profile extends AppCompatActivity {
         editName.setText(nameUser);
         editEmail.setText(emailUser);
         editDescription.setText(descriptionUser);
+    }
+
+    // Method to load profile photo from Firebase
+    private void loadProfilePhoto() {
+        // Use the user's email to retrieve the profile photo URL from Firebase Realtime Database
+        String sanitizedEmail = emailUser.replace(".", "_").replace("@", "_");
+
+        reference.child(sanitizedEmail).child("profilePhotoUrl").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String profilePhotoUrl = snapshot.getValue(String.class);
+
+                    if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
+                        // Use Glide to load the profile photo into the ImageView
+                        Glide.with(edit_profile.this)
+                                .load(profilePhotoUrl)
+                                .placeholder(R.drawable.placeholder_image)  // optional placeholder while loading
+                                .error(R.drawable.error_image)              // optional error if failed
+                                .into(profilePhoto);
+                    }
+                } else {
+                    Toast.makeText(edit_profile.this, "Profile photo not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(edit_profile.this, "Failed to load profile photo", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // Check if the name has changed
@@ -109,7 +151,7 @@ public class edit_profile extends AppCompatActivity {
                 return false;
             }
 
-// If the current password matches, update to the new password
+            // If the current password matches, update to the new password
             reference.child(nameUser).child("password").setValue(editNewPassword.getText().toString());
             currentPasswordUser = editNewPassword.getText().toString(); // Update local variable
             Toast.makeText(edit_profile.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
