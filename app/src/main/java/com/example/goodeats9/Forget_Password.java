@@ -2,90 +2,86 @@ package com.example.goodeats9;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Forget_Password extends AppCompatActivity {
 
-    //declare the variables
-    EditText editTextEmailAddress;
-    Button buttonRsetpassword;
-    ImageButton btn_back;
+    private EditText editTextEmailAddress;
+    private Button resetButton;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
 
-        editTextEmailAddress = findViewById(R.id.editTextEmailAddress);
-        buttonRsetpassword = findViewById(R.id.buttonRsetpassword);
-        btn_back = findViewById(R.id.btn_back);
-
-        // Back button to go to Login page
-        btn_back.setOnClickListener(v -> {
-            Intent intent = new Intent(Forget_Password.this, login.class);
-            startActivity(intent);
-            finish();
+        // Set system bars padding
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
         });
 
-        // Reset button logic
-        buttonRsetpassword.setOnClickListener(v -> {
+        // Initialize Firebase Auth
+        auth = FirebaseAuth.getInstance();
 
-            //is validateEmail true
-            if (validateEmail()) {
-                String userEmail = editTextEmailAddress.getText().toString().trim(); //get the data in to the email box
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users"); //connect to the database
-                Query checkUserDatabase = reference.orderByChild("email").equalTo(userEmail); // check the current email is equal to the new enter data
+        // Initialize UI elements
+        ImageButton backButton = findViewById(R.id.btn_back);
+        resetButton = findViewById(R.id.buttonRsetpassword);
+        editTextEmailAddress = findViewById(R.id.editTextEmailAddress);
 
-                checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        //if email exits then call otp to verify that it is email
-                        if (dataSnapshot.exists()) {
-                            Intent intent = new Intent(getApplicationContext(), forget_password_2.class);
-                            intent.putExtra("email",userEmail);
-                            intent.putExtra("WhatToDo", "UpdateData");
-                            Toast.makeText(Forget_Password.this, "Please Check Your Email", Toast.LENGTH_SHORT).show(); //send message to the email and show the message
-                            startActivity(new Intent(Forget_Password.this, forget_password_2.class));// forward to forget password 2 page
-                            finish();
-
-
-                        } else {
-                            editTextEmailAddress.requestFocus();
-                            editTextEmailAddress.setError("No account with this email"); // show the error message
-                        }
-                    }
-
-                    @Override
-                    // Displays the error message to the user
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(Forget_Password.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        // Back button action to go back to login screen
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Forget_Password.this, login.class);
+                startActivity(intent);
             }
         });
-    }
 
-    // Email validation
-    public boolean validateEmail() {
-        String val = editTextEmailAddress.getText().toString();
-        if (val.isEmpty()) {
-            editTextEmailAddress.setError("Email cannot be empty!");
-            return false;
-        }
-        return true;
+        // Reset password button action
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = editTextEmailAddress.getText().toString().trim();
+
+                if (TextUtils.isEmpty(email)) {
+                    Toast.makeText(getApplicationContext(), "Enter your email!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Send reset password email
+                auth.sendPasswordResetEmail(email)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(Forget_Password.this, "Password reset email sent!", Toast.LENGTH_SHORT).show();
+                                    // Move to forget_password_3 page after email is sent
+                                    Intent intent = new Intent(Forget_Password.this, forget_password_3.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(Forget_Password.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
     }
 }
