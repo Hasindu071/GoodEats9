@@ -103,6 +103,7 @@ public class edit_profile extends AppCompatActivity {
                                 .load(profilePhotoUrl)
                                 .placeholder(R.drawable.placeholder_image)  // optional placeholder while loading
                                 .error(R.drawable.error_image)              // optional error if failed
+                                .circleCrop()
                                 .into(profilePhoto);
                     }
                 } else {
