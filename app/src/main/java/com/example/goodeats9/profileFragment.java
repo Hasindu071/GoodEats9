@@ -1,12 +1,15 @@
 package com.example.goodeats9;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +28,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class profileFragment extends Fragment {
 
+    private static final int PICK_IMAGE_REQUEST = 1;
     private String userId;
+    private ImageView profileImage;
+    private Uri imageUri;
+    private DatabaseReference reference;  // Reference to Firebase Database
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,7 +48,7 @@ public class profileFragment extends Fragment {
 
         // Find the views by ID
         ImageButton editProfileButton = view.findViewById(R.id.editProfileButton);
-        ImageView profileImage = view.findViewById(R.id.profileImage);
+        profileImage = view.findViewById(R.id.profileImage);
         TextView userNameText = view.findViewById(R.id.userName);
         TextView userBioText = view.findViewById(R.id.userBio);
 
@@ -58,8 +68,11 @@ public class profileFragment extends Fragment {
             userId = currentUser.getUid();
             Log.d("ProfileFragment", "Current User ID: " + userId);
 
+            // Initialize Firebase database reference for the user
+            reference = FirebaseDatabase.getInstance().getReference("users").child(userId);
+
             // Fetch the profile image URL from Firebase Realtime Database
-            loadProfileImage(userId, profileImage);
+            loadProfileImage();
         } else {
             Log.e("ProfileFragment", "User is not authenticated");
             Toast.makeText(getActivity(), "User is not authenticated", Toast.LENGTH_SHORT).show();
@@ -75,6 +88,9 @@ public class profileFragment extends Fragment {
             startActivity(intent);
         });
 
+        // Handle profile image click to upload a new one
+        profileImage.setOnClickListener(v -> openImageChooser());
+
         // Handle the click event for the View Recipe button
         Button viewRecipeButton = view.findViewById(R.id.viewRecipeButton);
         viewRecipeButton.setOnClickListener(v -> {
@@ -85,21 +101,61 @@ public class profileFragment extends Fragment {
         return view;
     }
 
+    // Open the image chooser to select a profile image
+    private void openImageChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            profileImage.setImageURI(imageUri); // Show the selected image
+
+            // Now upload the selected image
+            uploadProfileImage(imageUri, userId);
+        }
+    }
+
+    /**
+     * Uploads the profile image to Firebase Storage and saves the image URL to Firebase Realtime Database.
+     *
+     * @param imageUri The URI of the selected image.
+     * @param userId   The unique ID of the current user.
+     */
+    private void uploadProfileImage(Uri imageUri, String userId) {
+        if (imageUri != null) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference("profile_images").child(userId + ".jpg");
+
+            storageReference.putFile(imageUri).addOnSuccessListener(taskSnapshot ->
+                    storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        // Save the image URL to Firebase Realtime Database
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+                        userRef.child("profilePhotoUrl").setValue(uri.toString());
+
+                        Toast.makeText(getActivity(), "Profile image uploaded successfully", Toast.LENGTH_SHORT).show();
+                    })
+            ).addOnFailureListener(e -> {
+                // Handle the failure case
+                Toast.makeText(getActivity(), "Profile image upload failed", Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
     /**
      * Loads the profile image from Firebase Realtime Database.
-     *
-     * @param userId The unique ID of the current user.
-     * @param profileImage The ImageView where the profile image will be loaded.
      */
-    private void loadProfileImage(String userId, ImageView profileImage) {
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
-        userRef.child("profilePhotoUrl").addListenerForSingleValueEvent(new ValueEventListener() {
+    private void loadProfileImage() {
+        reference.child("profilePhotoUrl").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String profilePhotoUrl = snapshot.getValue(String.class);
                 Log.d("ProfileFragment", "Profile Photo URL: " + profilePhotoUrl);  // Log the URL for debugging
 
-                // Check if the URL is valid and not empty
                 if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
                     // Load the profile image into the ImageView using Glide
                     Glide.with(profileFragment.this)

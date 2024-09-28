@@ -130,14 +130,16 @@ public class Add_photo extends AppCompatActivity {
         // Define the path using the user's email
         StorageReference mailImage = storageReference.child(sanitizedEmail + "/" + System.currentTimeMillis() + ".jpg");
 
-        // Upload the file
+        // Upload the file to Firebase Storage
         mailImage.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> mailImage.getDownloadUrl().addOnSuccessListener(downloadUri -> {
                     // Save the new photo URL in the database
-                    databaseReference.child(sanitizedEmail).child("profilePhotoUrl").setValue(downloadUri.toString());
-                    Toast.makeText(Add_photo.this, "Photo uploaded successfully!", Toast.LENGTH_SHORT).show();
-                    // Optionally, you can finish the activity after upload
-                    finish();
+                    databaseReference.child(sanitizedEmail).child("profilePhotoUrl").setValue(downloadUri.toString())
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(Add_photo.this, "Photo uploaded and URL saved successfully!", Toast.LENGTH_SHORT).show();
+                                finish();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(Add_photo.this, "Failed to save URL: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                 }))
                 .addOnFailureListener(e -> Toast.makeText(Add_photo.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }

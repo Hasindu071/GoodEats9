@@ -29,24 +29,23 @@ import java.util.HashMap;
 
 public class AddNew extends AppCompatActivity {
 
-    // Firebase authentication and database reference
+    // Firebase references
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser currentUser = auth.getCurrentUser();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("recipes");
 
-    // Firebase storage reference for image and video
+    // Firebase storage reference for image
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
 
     // UI elements
     final int PICK_IMAGE_REQUEST = 1;
-    final int PICK_VIDEO_REQUEST = 2;
-    Uri imageUri, videoUri;
+    Uri imageUri;
 
     String email;
-    EditText ingredientText, amountText, methodText;
-    ImageView addI, addM, selectImg, selectVid;
+    EditText ingredientText, amountText, methodText, titleText, descriptionText, servesText, cookTimeText;
+    ImageView addI, addM, selectImg;
     Button saveRecipe;
     RecyclerView ingredientList, methodList;
 
@@ -67,6 +66,8 @@ public class AddNew extends AppCompatActivity {
         }
 
         // Initialize UI elements
+        titleText = findViewById(R.id.entername);
+        descriptionText = findViewById(R.id.enterdiscription);
         ingredientText = findViewById(R.id.ingrediant);
         amountText = findViewById(R.id.quantity);
         addI = findViewById(R.id.addI);
@@ -77,8 +78,9 @@ public class AddNew extends AppCompatActivity {
         methodList = findViewById(R.id.methodList);
 
         selectImg = findViewById(R.id.addPic);
-        selectVid = findViewById(R.id.addVid);
         saveRecipe = findViewById(R.id.addrecipebtn);
+        servesText = findViewById(R.id.enterserves); // Use EditText for serves
+        cookTimeText = findViewById(R.id.entertime); // Use EditText for cook time
 
         listI = new ArrayList<>();
         adapterI = new SimpleAdapter(listI);
@@ -92,8 +94,8 @@ public class AddNew extends AppCompatActivity {
 
         // Add ingredients to the list
         addI.setOnClickListener(v -> {
-            String ingredients = String.valueOf(ingredientText.getText());
-            String quantity = String.valueOf(amountText.getText());
+            String ingredients = ingredientText.getText().toString();
+            String quantity = amountText.getText().toString();
 
             if (!ingredients.isEmpty() && !quantity.isEmpty()) {
                 listI.add(ingredients + " - " + quantity);
@@ -126,22 +128,12 @@ public class AddNew extends AppCompatActivity {
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         });
 
-        // Select video from gallery
-        selectVid.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setType("video/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(intent, PICK_VIDEO_REQUEST);
-        });
-
         // Save recipe and upload it to Firebase
         saveRecipe.setOnClickListener(v -> saveRecipe());
 
         // Back button functionality
         ImageView back = findViewById(R.id.backbtn);
-        back.setOnClickListener(v -> {
-            this.finish(); // Close the current activity
-        });
+        back.setOnClickListener(v -> this.finish());
     }
 
     @Override
@@ -151,10 +143,45 @@ public class AddNew extends AppCompatActivity {
         if (resultCode == RESULT_OK && data != null && data.getData() != null) {
             if (requestCode == PICK_IMAGE_REQUEST) {
                 imageUri = data.getData(); // Get the image URI
-            } else if (requestCode == PICK_VIDEO_REQUEST) {
-                videoUri = data.getData(); // Get the video URI
             }
         }
+    }
+
+    private void saveRecipe() {
+        if (validateInputs()) { // Validate all inputs before saving
+            uploadImage(imageUrl -> {
+                // Save the recipe with the image URL
+                saveRecipeToDatabase(imageUrl);
+            });
+        }
+    }
+
+    private boolean validateInputs() {
+        if (titleText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please enter a title", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (descriptionText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please enter a description", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (servesText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please enter serves", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (cookTimeText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please enter cook time", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (listI.isEmpty()) {
+            Toast.makeText(this, "Please add at least one ingredient", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (listM.isEmpty()) {
+            Toast.makeText(this, "Please add at least one method", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     // Upload image to Firebase Storage
@@ -162,59 +189,40 @@ public class AddNew extends AppCompatActivity {
         if (imageUri != null) {
             StorageReference imageRef = storageRef.child("images/" + System.currentTimeMillis() + ".jpg");
             imageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot ->
-                    imageRef.getDownloadUrl().addOnSuccessListener(callback::onImageUploaded)
-            ).addOnFailureListener(e ->
-                    Toast.makeText(AddNew.this, "Failed to upload image", Toast.LENGTH_SHORT).show()
-            );
+                    imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String imageUrl = uri.toString();
+                        callback.onImageUploaded(imageUrl); // Trigger callback after image upload
+                    })).addOnFailureListener(e -> {
+                Toast.makeText(AddNew.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
         } else {
             callback.onImageUploaded(null); // Ensure callback is triggered even when there's no image
         }
     }
 
-    // Upload video to Firebase Storage
-    private void uploadVideo(final RecipeCallback callback) {
-        if (videoUri != null) {
-            StorageReference videoRef = storageRef.child("videos/" + System.currentTimeMillis() + ".mp4");
-            videoRef.putFile(videoUri).addOnSuccessListener(taskSnapshot ->
-                    videoRef.getDownloadUrl().addOnSuccessListener(callback::onVideoUploaded)
-            ).addOnFailureListener(e ->
-                    Toast.makeText(AddNew.this, "Failed to upload video", Toast.LENGTH_SHORT).show()
-            );
-        } else {
-            callback.onVideoUploaded(null); // Ensure callback is triggered even when there's no video
-        }
-    }
-
-    // Save the recipe data to Firebase
-    private void saveRecipe() {
-        uploadImage(imageUrl -> {
-            uploadVideo(videoUrl -> {
-                saveRecipeToDatabase(imageUrl, videoUrl); // Save after both uploads finish
-            });
-        });
-    }
-
-
-    // Save recipe data including image and video URLs to Firebase Realtime Database
-    private void saveRecipeToDatabase(Object imageUrl, Object videoUrl) {
+    // Save recipe data including image URLs to Firebase Realtime Database
+    private void saveRecipeToDatabase(String imageUrl) {
         if (currentUser != null) {
             String userEmailKey = currentUser.getEmail().replace(".", "_");
             DatabaseReference userRef = ref.child(userEmailKey).push();
 
             // Collect recipe details
             HashMap<String, Object> recipeData = new HashMap<>();
+            recipeData.put("title", titleText.getText().toString()); // Add title
+            recipeData.put("description", descriptionText.getText().toString()); // Add description
+            recipeData.put("serves", servesText.getText().toString()); // Add serves
+            recipeData.put("cookTime", cookTimeText.getText().toString()); // Add cook time
             recipeData.put("ingredients", listI);
             recipeData.put("methods", listM);
 
             if (imageUrl != null) recipeData.put("imageUrl", imageUrl);
-            if (videoUrl != null) recipeData.put("videoUrl", videoUrl);
 
             // Save to Firebase
             userRef.setValue(recipeData).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(AddNew.this, "Recipe saved successfully!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(AddNew.this, "Failed to save recipe", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddNew.this, "Failed to save recipe: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -223,7 +231,6 @@ public class AddNew extends AppCompatActivity {
     // Callback interface for handling uploads
     private interface RecipeCallback {
         void onImageUploaded(String imageUrl);
-        void onVideoUploaded(String videoUrl);
     }
 
     // Inner adapter class for the RecyclerView
