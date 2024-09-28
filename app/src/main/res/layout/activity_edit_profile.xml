@@ -129,72 +129,28 @@
             app:layout_constraintTop_toBottomOf="@+id/email" />
 
         <!-- Current Password TextView -->
-        <TextView
-            android:id="@+id/Currentpassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:text="Current Password"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editEmail" />
 
         <!-- Current Password EditText -->
-        <EditText
-            android:id="@+id/editCurrentPassword"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/rounded_textbox"
-            android:hint="Current Password"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Currentpassword" />
 
         <!-- New Password TextView -->
-        <TextView
-            android:id="@+id/Newpassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:text="New Password"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editCurrentPassword" />
 
         <!-- New Password EditText -->
-        <EditText
-            android:id="@+id/editNewPassword"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/rounded_textbox"
-            android:hint="New Password"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Newpassword" />
 
         <!-- Description TextView -->
+
+        <!-- Description EditText -->
+
         <TextView
             android:id="@+id/Description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="12dp"
             android:text="Description"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editNewPassword" />
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteY="150dp" />
 
-        <!-- Description EditText -->
         <EditText
             android:id="@+id/editDescription"
             android:layout_width="0dp"
