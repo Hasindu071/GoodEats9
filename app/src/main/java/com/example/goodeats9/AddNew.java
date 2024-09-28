@@ -224,6 +224,13 @@ public class AddNew extends AppCompatActivity {
                 } else {
                     Toast.makeText(AddNew.this, "Failed to save recipe: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
+
+                titleText.setText("");
+                descriptionText.setText("");
+                servesText.setText("");
+                cookTimeText.setText("");
+                listI.clear();
+                listM.clear();
             });
         }
     }
