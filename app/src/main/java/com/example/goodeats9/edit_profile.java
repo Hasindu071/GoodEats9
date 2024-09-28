@@ -62,7 +62,7 @@ public class edit_profile extends AppCompatActivity {
 
         // Handle save button click
         saveButton.setOnClickListener(view -> {
-            if (isNameChanged() || isEmailChanged() || isDescriptionChanged()) {
+            if (isNameChanged() || isEmailChanged() || isPasswordChanged() || isDescriptionChanged()) {
                 Toast.makeText(edit_profile.this, "Profile Updated", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(edit_profile.this, "No Changes Found", Toast.LENGTH_SHORT).show();
@@ -143,6 +143,29 @@ public class edit_profile extends AppCompatActivity {
         }
         return false;
     }
+
+    // Check if the password has changed
+    private boolean isPasswordChanged() {
+        if (!editNewPassword.getText().toString().isEmpty() && !editCurrentPassword.getText().toString().isEmpty()) {
+            // Validate the current password
+            if (!currentPasswordUser.equals(editCurrentPassword.getText().toString())) {
+                Toast.makeText(this, "Current password is incorrect", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            // Update the password in Firebase Authentication and Database
+            currentUser.updatePassword(editNewPassword.getText().toString()).addOnSuccessListener(aVoid -> {
+                reference.child("password").setValue(editNewPassword.getText().toString());
+                currentPasswordUser = editNewPassword.getText().toString();  // Update local variable
+                Toast.makeText(edit_profile.this, "Password updated", Toast.LENGTH_SHORT).show();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(edit_profile.this, "Password update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+            return true;
+        }
+        return false;
+    }
+
     // Check if the description has changed
     private boolean isDescriptionChanged() {
         if (!descriptionUser.equals(editDescription.getText().toString())) {
