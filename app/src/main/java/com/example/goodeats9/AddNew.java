@@ -227,6 +227,8 @@ public class AddNew extends AppCompatActivity {
                     cookTimeText.setText("");
                     listI.clear();
                     listM.clear();
+                    adapterI.notifyDataSetChanged();
+                    adapterM.notifyDataSetChanged();
                 } else {
                     Toast.makeText(AddNew.this, "Failed to save recipe: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
