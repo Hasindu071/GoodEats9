@@ -54,6 +54,21 @@ public class edit_profile extends AppCompatActivity {
         // Initialize ImageView for profile photo
         profilePhoto = findViewById(R.id.propic);
 
+        // Initialize Back Button
+        ImageView backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> {
+            // Finish the current activity, or navigate to another screen
+            finish();  // This will close the current activity and return to the previous one
+        });
+
+        // Initialize Camera Icon Button
+        ImageView cameraIcon = findViewById(R.id.camera_icon);
+        cameraIcon.setOnClickListener(v -> {
+            // Open Add_photo activity
+            Intent intent = new Intent(edit_profile.this, Add_photo.class);
+            startActivity(intent);
+        });
+
         // Load data into fields
         showData();
 
