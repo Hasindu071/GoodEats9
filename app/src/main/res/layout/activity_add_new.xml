@@ -41,38 +41,37 @@
             app:layout_constraintTop_toBottomOf="@id/backbtn"
             app:layout_constraintVertical_bias="0.061" />
 
-        <Button
-            android:id="@+id/photobtn"
-            android:layout_width="167dp"
-            android:layout_height="119dp"
-            android:backgroundTint="#129575"
-            android:fontFamily="@font/poppins"
-            android:text="Add your recipe photo"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            app:cornerRadius="20dp"
+        <!-- Add appropriate video icon -->
+
+        <LinearLayout
+            android:id="@+id/servTab"
+            android:layout_width="367dp"
+            android:layout_height="wrap_contentdp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.09"
+            app:layout_constraintHorizontal_bias="0.522"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headline"
-            app:layout_constraintVertical_bias="0.125" />
+            app:layout_constraintVertical_bias="0.488">
+        <ImageView
+            android:id="@+id/addPic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_background"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="88dp"
+            />
 
-        <Button
-            android:id="@+id/vediobtn"
-            android:layout_width="167dp"
-            android:layout_height="119dp"
-            android:backgroundTint="#129575"
-            android:fontFamily="@font/poppins"
-            android:text="Upload vedio"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            app:cornerRadius="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.901"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headline"
-            app:layout_constraintVertical_bias="0.125" />
-
+        <ImageView
+            android:id="@+id/addVid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/circle_background"
+            tools:layout_editor_absoluteX="208dp"
+            tools:layout_editor_absoluteY="96dp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/title"
@@ -83,11 +82,10 @@
             android:textColor="@color/black"
             android:textSize="15dp"
             android:textStyle="bold"
-            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.065"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/photobtn"/>
+            tools:layout_editor_absoluteY="218dp" />
 
 
         <EditText
