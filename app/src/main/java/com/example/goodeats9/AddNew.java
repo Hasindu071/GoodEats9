@@ -1,280 +1,153 @@
 package com.example.goodeats9;
 
-import android.annotation.SuppressLint;
+import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.circleCrop;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class AddNew extends AppCompatActivity {
 
-    // Firebase references
-    FirebaseAuth auth = FirebaseAuth.getInstance();
-    FirebaseUser currentUser = auth.getCurrentUser();
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference ref = database.getReference("recipes");
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int PICK_VIDEO_REQUEST = 2;
 
-    // Firebase storage reference for image
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReference();
+    private ImageView addPic, addI, addM, backbtn;
+    private VideoView videoView;
+    private TextView headline, hintText, hintText2;
+    private EditText entername, enterdiscription, enterserves, entertime, ingrediant, quantity, method;
+    private Button addrecipebtn, view_video_button;
 
-    // UI elements
-    final int PICK_IMAGE_REQUEST = 1;
-    Uri imageUri;
+    private Uri imageUri;
+    private Uri videoUri;
 
-    String email;
-    EditText ingredientText, amountText, methodText, titleText, descriptionText, servesText, cookTimeText;
-    ImageView addI, addM, selectImg;
-    Button saveRecipe;
-    RecyclerView ingredientList, methodList;
-
-    ArrayList<String> listI, listM;
-    SimpleAdapter adapterI, adapterM;
-
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new);
 
-        // Check if the user is logged in
-        if (currentUser != null) {
-            email = currentUser.getEmail();
-        } else {
-            email = "No user logged in";
-        }
-
-        // Initialize UI elements
-        titleText = findViewById(R.id.entername);
-        descriptionText = findViewById(R.id.enterdiscription);
-        ingredientText = findViewById(R.id.ingrediant);
-        amountText = findViewById(R.id.quantity);
-        addI = findViewById(R.id.addI);
-        ingredientList = findViewById(R.id.ingredientsList);
-
-        methodText = findViewById(R.id.method);
-        addM = findViewById(R.id.addM);
-        methodList = findViewById(R.id.methodList);
-
-        selectImg = findViewById(R.id.addPic);
-        saveRecipe = findViewById(R.id.addrecipebtn);
-        servesText = findViewById(R.id.enterserves); // Use EditText for serves
-        cookTimeText = findViewById(R.id.entertime); // Use EditText for cook time
-
-        listI = new ArrayList<>();
-        adapterI = new SimpleAdapter(listI);
-        ingredientList.setLayoutManager(new LinearLayoutManager(this));
-        ingredientList.setAdapter(adapterI);
-
-        listM = new ArrayList<>();
-        adapterM = new SimpleAdapter(listM);
-        methodList.setLayoutManager(new LinearLayoutManager(this));
-        methodList.setAdapter(adapterM);
-
-        // Add ingredients to the list
-        addI.setOnClickListener(v -> {
-            String ingredients = ingredientText.getText().toString();
-            String quantity = amountText.getText().toString();
-
-            if (!ingredients.isEmpty() && !quantity.isEmpty()) {
-                listI.add(ingredients + " - " + quantity);
-                adapterI.notifyDataSetChanged();
-                ingredientText.setText("");
-                amountText.setText("");
-            } else {
-                Toast.makeText(this, "Please enter both ingredient and quantity", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Add methods to the list
-        addM.setOnClickListener(v -> {
-            String method = methodText.getText().toString();
-
-            if (!method.isEmpty()) {
-                listM.add(method);
-                adapterM.notifyDataSetChanged();
-                methodText.setText("");
-            } else {
-                Toast.makeText(this, "Please enter the method", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Select image from gallery
-        selectImg.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(intent, PICK_IMAGE_REQUEST);
-        });
-
-        // Save recipe and upload it to Firebase
-        saveRecipe.setOnClickListener(v -> saveRecipe());
+        // Initialize views
+        addPic = findViewById(R.id.addPic);
+        videoView = findViewById(R.id.videoView);
+        entername = findViewById(R.id.entername);
+        enterdiscription = findViewById(R.id.enterdiscription);
+        enterserves = findViewById(R.id.enterserves);
+        entertime = findViewById(R.id.entertime);
+        ingrediant = findViewById(R.id.ingrediant);
+        quantity = findViewById(R.id.quantity);
+        method = findViewById(R.id.method);
+        addrecipebtn = findViewById(R.id.addrecipebtn);
+        view_video_button = findViewById(R.id.view_video_button);
+        hintText = findViewById(R.id.hintText);
+        hintText2 = findViewById(R.id.hintText2);
 
         // Back button functionality
-        ImageView back = findViewById(R.id.backbtn);
-        back.setOnClickListener(v -> this.finish());
+        backbtn = findViewById(R.id.backbtn);
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        // Select image for the recipe
+        addPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openImageChooser();
+            }
+        });
+
+        // Select video for the recipe
+        view_video_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openVideoChooser();
+            }
+        });
+
+        // Handle adding recipe button click
+        addrecipebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addRecipe();
+            }
+        });
     }
 
+    // Function to open the image chooser
+    private void openImageChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    // Function to open the video chooser
+    private void openVideoChooser() {
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_VIDEO_REQUEST);
+    }
+
+    // Handle the result of image/video picker
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && data != null && data.getData() != null) {
-            if (requestCode == PICK_IMAGE_REQUEST) {
-                imageUri = data.getData(); // Get the image URI
-            }
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            addPic.setImageURI(imageUri);
+            hintText.setVisibility(View.GONE);
+        } else if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            videoUri = data.getData();
+            videoView.setVideoURI(videoUri);
+            videoView.start();
+            hintText2.setVisibility(View.GONE);
         }
     }
 
-    private void saveRecipe() {
-        if (validateInputs()) { // Validate all inputs before saving
-            uploadImage(imageUrl -> {
-                // Save the recipe with the image URL
-                saveRecipeToDatabase(imageUrl);
-            });
-        }
-    }
 
-    private boolean validateInputs() {
-        if (titleText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Please enter a title", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (descriptionText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Please enter a description", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (servesText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Please enter serves", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (cookTimeText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Please enter cook time", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (listI.isEmpty()) {
-            Toast.makeText(this, "Please add at least one ingredient", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (listM.isEmpty()) {
-            Toast.makeText(this, "Please add at least one method", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
-    }
+    // Handle adding the recipe logic
+    private void addRecipe() {
+        String name = entername.getText().toString().trim();
+        String description = enterdiscription.getText().toString().trim();
+        String serves = enterserves.getText().toString().trim();
+        String cookTime = entertime.getText().toString().trim();
+        String ingredientName = ingrediant.getText().toString().trim();
+        String ingredientQuantity = quantity.getText().toString().trim();
+        String methodDescription = method.getText().toString().trim();
 
-    // Upload image to Firebase Storage
-    private void uploadImage(final RecipeCallback callback) {
-        if (imageUri != null) {
-            StorageReference imageRef = storageRef.child("images/" + System.currentTimeMillis() + ".jpg");
-            imageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot ->
-                    imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        String imageUrl = uri.toString();
-                        callback.onImageUploaded(imageUrl); // Trigger callback after image upload
-                    })).addOnFailureListener(e -> {
-                Toast.makeText(AddNew.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            });
-        } else {
-            callback.onImageUploaded(null); // Ensure callback is triggered even when there's no image
-        }
-    }
-
-    // Save recipe data including image URLs to Firebase Realtime Database
-    private void saveRecipeToDatabase(String imageUrl) {
-        if (currentUser != null) {
-            String userEmailKey = currentUser.getEmail().replace(".", "_");
-            DatabaseReference userRef = ref.child(userEmailKey).push();
-
-            // Collect recipe details
-            HashMap<String, Object> recipeData = new HashMap<>();
-            recipeData.put("title", titleText.getText().toString()); // Add title
-            recipeData.put("description", descriptionText.getText().toString()); // Add description
-            recipeData.put("serves", servesText.getText().toString()); // Add serves
-            recipeData.put("cookTime", cookTimeText.getText().toString()); // Add cook time
-            recipeData.put("ingredients", listI);
-            recipeData.put("methods", listM);
-
-            if (imageUrl != null) recipeData.put("imageUrl", imageUrl);
-
-            // Save to Firebase
-            userRef.setValue(recipeData).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Toast.makeText(AddNew.this, "Recipe saved successfully!", Toast.LENGTH_SHORT).show();
-                    titleText.setText("");
-                    descriptionText.setText("");
-                    servesText.setText("");
-                    cookTimeText.setText("");
-                    listI.clear();
-                    listM.clear();
-                    adapterI.notifyDataSetChanged();
-                    adapterM.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(AddNew.this, "Failed to save recipe: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
-
-
-            });
-        }
-    }
-
-    // Callback interface for handling uploads
-    private interface RecipeCallback {
-        void onImageUploaded(String imageUrl);
-    }
-
-    // Inner adapter class for the RecyclerView
-    public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder> {
-
-        private ArrayList<String> itemList;
-
-        public SimpleAdapter(ArrayList<String> itemList) {
-            this.itemList = itemList;
+        // Validate input
+        if (name.isEmpty() || description.isEmpty() || serves.isEmpty() || cookTime.isEmpty() || ingredientName.isEmpty() || ingredientQuantity.isEmpty() || methodDescription.isEmpty()) {
+            Toast.makeText(AddNew.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(android.R.layout.simple_list_item_1, parent, false);
-            return new ViewHolder(view);
-        }
+        // TODO: Save recipe details to Firebase or other storage
 
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.itemText.setText(itemList.get(position));
-        }
+        Toast.makeText(AddNew.this, "Recipe added successfully!", Toast.LENGTH_SHORT).show();
 
-        @Override
-        public int getItemCount() {
-            return itemList.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView itemText;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                itemText = itemView.findViewById(android.R.id.text1);
-            }
-        }
+        // Clear fields
+        entername.setText("");
+        enterdiscription.setText("");
+        enterserves.setText("");
+        entertime.setText("");
+        ingrediant.setText("");
+        quantity.setText("");
+        method.setText("");
+        addPic.setImageResource(R.drawable.placeholder_image); // Placeholder image
+        videoView.stopPlayback();
+        videoView.setVideoURI(null);
     }
 }

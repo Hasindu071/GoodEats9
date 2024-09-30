@@ -46,6 +46,7 @@
         <LinearLayout
             android:id="@+id/imagetab"
             android:layout_width="367dp"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
@@ -59,19 +60,17 @@
             android:id="@+id/addPic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
             android:background="@drawable/circle_background"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="88dp"
             />
 
-            <ImageView
-            android:id="@+id/addVid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:background="@drawable/circle_background"
-            tools:layout_editor_absoluteX="208dp"
-            tools:layout_editor_absoluteY="96dp" />
+            <VideoView
+                android:id="@+id/videoView"
+                android:layout_width="198dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10" />
         </LinearLayout>
 
         <TextView
@@ -415,10 +414,40 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.069"
+            app:layout_constraintHorizontal_bias="0.256"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.233" />
+            app:layout_constraintVertical_bias="0.238" />
+
+
+        <Button
+            android:id="@+id/view_video_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="View Video"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.757"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.237"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/hintText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="choose a Vedio"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.725"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="DuplicateIds" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
