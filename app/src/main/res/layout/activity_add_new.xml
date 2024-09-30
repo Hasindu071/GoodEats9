@@ -447,22 +447,6 @@
             app:layout_constraintStart_toStartOf="parent" />
 
 
-        <TextView
-            android:id="@+id/hintText2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:text="choose a Vedio"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.725"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="DuplicateIds" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
