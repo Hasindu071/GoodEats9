@@ -144,3 +144,4 @@ public class Add_photo extends AppCompatActivity {
                 .addOnFailureListener(e -> Toast.makeText(Add_photo.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }
+
