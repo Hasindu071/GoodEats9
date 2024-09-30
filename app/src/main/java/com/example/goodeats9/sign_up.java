@@ -115,7 +115,7 @@ public class sign_up extends AppCompatActivity {
                                 database = FirebaseDatabase.getInstance();
                                 reference = database.getReference("users");
 
-                                helperClass helperClass = new helperClass(name, email, password, description);
+                                helperClass helperClass = new helperClass(name,description);
                                 reference.child(userId).setValue(helperClass)
                                         .addOnCompleteListener(databaseTask ->
                                         {

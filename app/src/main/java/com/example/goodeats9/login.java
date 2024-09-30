@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -17,6 +18,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -103,55 +106,60 @@ public class login extends AppCompatActivity {
         String userEmail = loginEmail.getText().toString().trim();
         String userPassword = loginPassword.getText().toString().trim();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        Query checkUserDatabase = reference.orderByChild("email").equalTo(userEmail);
+        // Firebase Authentication instance
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    loginEmail.setError(null);
+        // Authenticate the user using Firebase Authentication
+        mAuth.signInWithEmailAndPassword(userEmail, userPassword)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Get the currently logged-in user's UID
+                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                        if (currentUser != null) {
+                            String userID = currentUser.getUid();
 
-                    // Assuming the "email" field is unique and you get one result.
-                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        String passwordFromDB = userSnapshot.child("password").getValue(String.class);
-                        String nameFromDB = userSnapshot.child("name").getValue(String.class);  // Fetch the user's name
-                        String emailFromDB = userSnapshot.child("email").getValue(String.class); // Fetch the email because it is unique
-                        String descFromDB = userSnapshot.child("description").getValue(String.class);//Fetch the description
+                            // Now fetch the user's data from the Firebase Realtime Database
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child(userID);
+                            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()) {
+                                        String nameFromDB = snapshot.child("name").getValue(String.class);
+                                        String descFromDB = snapshot.child("description").getValue(String.class);
 
-                        if (Objects.equals(passwordFromDB, userPassword)) {
-                            loginPassword.setError(null);
+                                        // Save user's name and description in SharedPreferences
+                                        SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("UserName", nameFromDB);  // Store the username
+                                        editor.putString("UserDescription", descFromDB);  // Store the description
+                                        editor.apply();
 
-                            // Save user's name in SharedPreferences
-                            SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("UserName", nameFromDB);  // Store the username
-                            editor.putString("UserEmail", emailFromDB);  // Store the email
-                            editor.putString("UserDescription", descFromDB);  // Store the username
-                            editor.apply();
+                                        // Successful login, redirect to MainActivity
+                                        Intent intent = new Intent(login.this, menu_bar_main.class);
+                                        startActivity(intent);
+                                        finish(); // Close the login activity
+                                    } else {
+                                        // Handle case where user data does not exist in Realtime Database
+                                        loginEmail.setError("User data not found!");
+                                        loginEmail.setBackgroundResource(R.drawable.input_error);
+                                        loginEmail.requestFocus();
+                                    }
+                                }
 
-                            // Successful login, redirect to MainActivity
-                            Intent intent = new Intent(login.this, menu_bar_main.class);
-                            startActivity(intent);
-                            finish(); // Call finish to close the current login activity
-
-                        } else {
-                            loginPassword.setError("Invalid Credentials!");
-                            loginEmail.setBackgroundResource(R.drawable.input_error);
-                            loginPassword.requestFocus();
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    // Handle possible errors from Firebase
+                                    Toast.makeText(login.this, "Database error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
+                    } else {
+                        // Handle authentication failure
+                        loginPassword.setError("Invalid Credentials!");
+                        loginEmail.setBackgroundResource(R.drawable.input_error);
+                        loginPassword.requestFocus();
                     }
-                } else {
-                    loginEmail.setError("Email does not exist!");
-                    loginEmail.setBackgroundResource(R.drawable.input_error);
-                    loginEmail.requestFocus();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle possible errors here
-            }
-        });
+                });
     }
-}
+    }
+
