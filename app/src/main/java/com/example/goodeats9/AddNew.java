@@ -1,8 +1,8 @@
 package com.example.goodeats9;
 
-import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.circleCrop;
-
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -21,9 +21,8 @@ public class AddNew extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int PICK_VIDEO_REQUEST = 2;
 
-    private ImageView addPic, addI, addM, backbtn;
+    private ImageView addPic, backbtn;
     private VideoView videoView;
-    private TextView headline, hintText, hintText2;
     private EditText entername, enterdiscription, enterserves, entertime, ingrediant, quantity, method;
     private Button addrecipebtn, view_video_button;
 
@@ -47,41 +46,21 @@ public class AddNew extends AppCompatActivity {
         method = findViewById(R.id.method);
         addrecipebtn = findViewById(R.id.addrecipebtn);
         view_video_button = findViewById(R.id.view_video_button);
-        hintText = findViewById(R.id.hintText);
-        hintText2 = findViewById(R.id.hintText2);
+        TextView hintText = findViewById(R.id.hintText);
+        TextView hintText2 = findViewById(R.id.hintText2);
 
         // Back button functionality
         backbtn = findViewById(R.id.backbtn);
-        backbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        backbtn.setOnClickListener(v -> finish());
 
         // Select image for the recipe
-        addPic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openImageChooser();
-            }
-        });
+        addPic.setOnClickListener(v -> openImageChooser());
 
         // Select video for the recipe
-        view_video_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openVideoChooser();
-            }
-        });
+        view_video_button.setOnClickListener(v -> openVideoChooser());
 
         // Handle adding recipe button click
-        addrecipebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addRecipe();
-            }
-        });
+        addrecipebtn.setOnClickListener(v -> addRecipe());
     }
 
     // Function to open the image chooser
@@ -107,16 +86,24 @@ public class AddNew extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-            addPic.setImageURI(imageUri);
-            hintText.setVisibility(View.GONE);
+            addPic.setImageBitmap(getResizedImage(imageUri, 141, 141)); // Resize to ~5x5 cm
         } else if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             videoUri = data.getData();
             videoView.setVideoURI(videoUri);
             videoView.start();
-            hintText2.setVisibility(View.GONE);
         }
     }
 
+    // Method to resize the selected image
+    private Bitmap getResizedImage(Uri uri, int width, int height) {
+        try {
+            Bitmap originalBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+            return Bitmap.createScaledBitmap(originalBitmap, width, height, false);
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    }
 
     // Handle adding the recipe logic
     private void addRecipe() {
@@ -129,16 +116,27 @@ public class AddNew extends AppCompatActivity {
         String methodDescription = method.getText().toString().trim();
 
         // Validate input
-        if (name.isEmpty() || description.isEmpty() || serves.isEmpty() || cookTime.isEmpty() || ingredientName.isEmpty() || ingredientQuantity.isEmpty() || methodDescription.isEmpty()) {
+        if (isInputValid(name, description, serves, cookTime, ingredientName, ingredientQuantity, methodDescription)) {
+            // TODO: Save recipe details to Firebase or other storage
+            Toast.makeText(AddNew.this, "Recipe added successfully!", Toast.LENGTH_SHORT).show();
+            clearFields();
+        } else {
             Toast.makeText(AddNew.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-            return;
         }
+    }
 
-        // TODO: Save recipe details to Firebase or other storage
+    // Validate input fields
+    private boolean isInputValid(String... inputs) {
+        for (String input : inputs) {
+            if (input.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-        Toast.makeText(AddNew.this, "Recipe added successfully!", Toast.LENGTH_SHORT).show();
-
-        // Clear fields
+    // Clear input fields and reset views
+    private void clearFields() {
         entername.setText("");
         enterdiscription.setText("");
         enterserves.setText("");
