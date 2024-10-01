@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -166,7 +165,8 @@ public class AddNew extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             addPic.setImageBitmap(getResizedImage(imageUri, 141, 141)); // Resize to ~5x5 cm
-        } else if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        }
+        if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             videoUri = data.getData();
             videoView.setVideoURI(videoUri);
             videoView.start();
@@ -202,7 +202,7 @@ public class AddNew extends AppCompatActivity {
             String userEmailKey = currentUser.getEmail().replace(".", "_");
 
 
-// Create a unique recipe ID for each recipe
+            // Create a unique recipe ID for each recipe
             DatabaseReference userRef = ref.child(userEmailKey).push();
             String recipeId = userRef.getKey();
 

@@ -63,11 +63,11 @@ public class AdaptorSearch extends BaseAdapter {
         }
 
         // Set caption
-        holder.gridCaption.setText(dataList.get(position).getCaption());
+        holder.gridCaption.setText(dataList.get(position).getName());
 
         // Use Glide to load images with error handling and placeholders
         Glide.with(context)
-                .load(dataList.get(position).getImageURL())
+                .load(dataList.get(position).getImageUri())
                 .apply(new RequestOptions()
                         .placeholder(R.drawable.placeholder_image) // Placeholder image while loading
                         .error(R.drawable.error_image))     // Error image if URL fails

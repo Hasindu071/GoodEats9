@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.Toast; // Import Toast for error handling
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,24 +40,31 @@ public class searchFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference("recipes");
 
         // Fetch data from Firebase
-        fetchImageData();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userEmail = currentUser.getEmail();
+        String formattedEmail = userEmail.replace(".", "_");
+        fetchImageData(formattedEmail);
 
         return view;
     }
 
-    private void fetchImageData() {
-        // Listen for changes in the "imageUri" node of Firebase
-        databaseReference.addValueEventListener(new ValueEventListener() {
+    private void fetchImageData(String formattedEmail) {
+        // Reference the user's recipes node in Firebase
+        DatabaseReference userRecipesRef = databaseReference.child(formattedEmail).child("recipes");
+
+        // Listen for changes in the user's "recipes" node
+        userRecipesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // Clear the list to avoid duplicate entries
                 dataList.clear();
 
-                // Iterate through all images in the database
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    DataClass dataClass = dataSnapshot.getValue(DataClass.class);
+                // Iterate through each recipe in the user's recipes node
+                for (DataSnapshot recipeSnapshot : snapshot.getChildren()) {
+                    DataClass dataClass = recipeSnapshot.getValue(DataClass.class);
                     if (dataClass != null) {
-                        dataList.add(dataClass);  // Add data to the list
+                        dataList.add(dataClass);  // Add the recipe data to the list
                     }
                 }
 

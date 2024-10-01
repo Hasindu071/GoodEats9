@@ -2,30 +2,30 @@ package com.example.goodeats9;
 
 
 public class DataClass {
-    private String imageURL, caption;
+    private String imageUri, name;
 
     public DataClass(){
 
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUri() {
+        return imageUri;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUri(String imageURL) {
+        this.imageUri = imageURL;
     }
 
-    public String getCaption() {
-        return caption;
+    public String getName() {
+        return name;
     }
 
-    public void setCaption(String caption) {
-        this.caption = caption;
+    public void setName(String caption) {
+        this.name = caption;
     }
 
-    public DataClass(String imageURL, String caption) {
-        this.imageURL = imageURL;
-        this.caption = caption;
+    public DataClass(String imageUri, String caption) {
+        this.imageUri = imageUri;
+        this.name = caption;
     }
 }
