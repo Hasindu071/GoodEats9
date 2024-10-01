@@ -31,7 +31,7 @@ public class homeFragment extends Fragment {
         // Access SharedPreferences to get user data
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("loginDetails", MODE_PRIVATE);
         String username = sharedPreferences.getString("UserName", "User"); // If no name is found, default to "User"
-        String profilePhotoUrl = sharedPreferences.getString("ProfilePhotoUrl", ""); // Profile image URL
+        String profilePhotoUrl = sharedPreferences.getString("imageUrl", ""); // Profile image URL
 
         // Set the welcome text with the username
         TextView welcomeTextView = view.findViewById(R.id.text_name);
