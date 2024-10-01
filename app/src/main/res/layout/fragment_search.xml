@@ -1,31 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".homeFragment">
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:padding="16dp">
 
+    <!-- Search Bar -->
+
+    <!-- Recent Search Title -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/baseline_arrow_back_ios_24"
+            tools:ignore="MissingConstraints" />
 
         <TextView
-            android:id="@+id/text_hello"
-            android:layout_width="match_parent"
+            android:id="@+id/recentSearch"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
-            android:fontFamily="@font/poppins"
-            android:gravity="center_horizontal"
-            android:text="Search Recipies"
+            android:gravity="center"
+            android:text="Search recipes"
             android:textColor="#000000"
-            android:textSize="25sp"
+            android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/backButton" />
+
+
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="312dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_textbox"
+            android:drawableLeft="@drawable/ic_search"
+            android:hint="Search recipe"
+            android:padding="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/recentSearch"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="33dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/recentSearchTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Recent Search"
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
+    <!-- RecyclerView for Recent Searches -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/gridView"
+            android:numColumns="2"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
