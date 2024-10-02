@@ -14,6 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import static android.content.Context.MODE_PRIVATE;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class homeFragment extends Fragment {
 
@@ -65,6 +71,9 @@ public class homeFragment extends Fragment {
 
         // Load profile photo from Firebase
         loadProfilePhoto(profileImageView);
+
+        // Configure the ImageSlider
+        configureImageSlider(view);
     }
 
     // Method to load profile photo from Firebase using UID
@@ -98,5 +107,24 @@ public class homeFragment extends Fragment {
                 Toast.makeText(requireContext(), "Failed to load profile photo: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // Method to configure ImageSlider and add images
+    private void configureImageSlider(View view) {
+        ImageSlider imageSlider = view.findViewById(R.id.imageSlider); // Use the view to find the ImageSlider
+
+        // Create a list for slide models
+        ArrayList<SlideModel> slideModels = new ArrayList<>();
+
+        // Adding local drawable images
+        slideModels.add(new SlideModel(R.drawable.image1, ScaleTypes.FIT));
+        slideModels.add(new SlideModel(R.drawable.image2, ScaleTypes.FIT));
+        slideModels.add(new SlideModel(R.drawable.image3, ScaleTypes.FIT));
+        slideModels.add(new SlideModel(R.drawable.image4, ScaleTypes.FIT));
+        slideModels.add(new SlideModel(R.drawable.image5, ScaleTypes.FIT));
+        slideModels.add(new SlideModel(R.drawable.image6, ScaleTypes.FIT));
+
+        // Set the image list to the slider
+        imageSlider.setImageList(slideModels,ScaleTypes.FIT);
     }
 }
