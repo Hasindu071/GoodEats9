@@ -241,18 +241,33 @@ public class AddNew extends AppCompatActivity {
         });
     }
 
-    // Method to upload video to Firebase Storage
     private void uploadVideo(DatabaseReference userRef, Map<String, Object> recipeData) {
+        if (videoUri == null) {
+            Toast.makeText(AddNew.this, "No video selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         StorageReference videoRef = storageReference.child("Recipivideos/" + System.currentTimeMillis() + ".mp4");
         UploadTask uploadTask = videoRef.putFile(videoUri);
 
-        uploadTask.addOnSuccessListener(taskSnapshot -> videoRef.getDownloadUrl().addOnSuccessListener(uri -> {
-            recipeData.put("videoUri", uri.toString());
-            saveRecipeData(userRef, recipeData);
-        })).addOnFailureListener(e -> {
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            videoRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                recipeData.put("videoUri", uri.toString());
+                saveRecipeData(userRef, recipeData);
+                Toast.makeText(AddNew.this, "Video uploaded successfully", Toast.LENGTH_SHORT).show();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(AddNew.this, "Failed to get video download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+        }).addOnFailureListener(e -> {
             Toast.makeText(AddNew.this, "Video upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
+
+        uploadTask.addOnProgressListener(taskSnapshot -> {
+            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+            Toast.makeText(AddNew.this, "Upload progress: " + (int) progress + "%", Toast.LENGTH_SHORT).show();
+        });
     }
+
 
     // Method to save recipe data to Firebase Realtime Database
     private void saveRecipeData(DatabaseReference userRef, Map<String, Object> recipeData) {
