@@ -1,14 +1,14 @@
 package com.example.goodeats9;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -26,6 +26,7 @@ public class recipeMain extends AppCompatActivity {
     private Button procedureButton;
     private Button ingredientsButton;
     private TextView recipeNameText, descriptionText, userNameText;
+    private VideoView recipeVideoView;
     private DatabaseReference recipeDatabaseReference;
 
     @Override
@@ -46,9 +47,11 @@ public class recipeMain extends AppCompatActivity {
         ImageView shareImage = findViewById(R.id.share);
         TextView textViewReviews = findViewById(R.id.reviews);
 
+        // Initialize VideoView
+        recipeVideoView = findViewById(R.id.videoView2);
+
         // Handle star ImageView click
         starImage.setOnClickListener(v -> {
-            // Navigate to the RatingActivity when the star is clicked
             Intent intent = new Intent(recipeMain.this, rating.class);
             startActivity(intent);
         });
@@ -66,7 +69,6 @@ public class recipeMain extends AppCompatActivity {
 
         // Make the "reviews" text look like a link
         textViewReviews.setPaintFlags(textViewReviews.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        // Handle Reviews TextView click
         textViewReviews.setOnClickListener(v -> {
             Intent intent = new Intent(recipeMain.this, Reviews.class);
             startActivity(intent);
@@ -79,14 +81,12 @@ public class recipeMain extends AppCompatActivity {
         // Load the Procedure fragment by default
         loadFragment(new ProcedureFragment());
 
-        // Procedure Button Click Listener
         procedureButton.setOnClickListener(view -> {
             setButtonActive(procedureButton);
             setButtonInactive(ingredientsButton);
             loadFragment(new ProcedureFragment());
         });
 
-        // Ingredients Button Click Listener
         ingredientsButton.setOnClickListener(view -> {
             setButtonActive(ingredientsButton);
             setButtonInactive(procedureButton);
@@ -95,35 +95,30 @@ public class recipeMain extends AppCompatActivity {
 
         // Set click listener for shareImage
         shareImage.setOnClickListener(v -> fetchAndShareRecipe());
+
+        // Load video from Firebase
+        loadRecipeVideo();
     }
 
-    // Fetch recipe details from Firebase and share them
-    private void fetchAndShareRecipe() {
-        String userId = "tharushikahirushani@gmail_com";  // User's ID
-        String recipeId = "-O81PlObeCLLFiYCY8oH"; // Recipe ID
+    // Fetch and load the video from Firebase Storage
+    private void loadRecipeVideo() {
+        String userId = "jagath@gmail_com";  // User's ID
+        String recipeId = "-O8C8BCQipBiXFRF6MFf"; // Recipe ID
 
-        // Fetch data from Firebase
         recipeDatabaseReference.child(userId).child(recipeId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Retrieve the recipe details from the snapshot
-                    String cookTime = dataSnapshot.child("cookTime").getValue(String.class);
-                    String recipeDescription = dataSnapshot.child("description").getValue(String.class);
-                    String ingredients = dataSnapshot.child("ingredients/0").getValue(String.class); // Assuming there's a list
-                    String methodName = dataSnapshot.child("methods/name").getValue(String.class);
-                    String serves = dataSnapshot.child("methods/serves").getValue(String.class);
-
-                    // Create the shareable text
-                    String recipeDetails = "Check out this amazing recipe!\n\n" +
-                            "Recipe: " + recipeDescription + "\n" +
-                            "Cook Time: " + cookTime + "\n" +
-                            "Serves: " + serves + "\n" +
-                            "Ingredients:\n" + ingredients + "\n" +
-                            "Instructions: " + methodName;
-
-                    // Share the recipe using an Intent
-                    shareRecipe(recipeDetails);
+                    // Fetch the video URL from Firebase
+                    String videoUrl = dataSnapshot.child("videoUri").getValue(String.class);
+                    if (videoUrl != null) {
+                        // Load and play the video
+                        Uri videoUri = Uri.parse(videoUrl);
+                        recipeVideoView.setVideoURI(videoUri);
+                        recipeVideoView.start();
+                    } else {
+                        Toast.makeText(recipeMain.this, "No video available for this recipe.", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(recipeMain.this, "Recipe not found!", Toast.LENGTH_SHORT).show();
                 }
@@ -131,35 +126,54 @@ public class recipeMain extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Handle possible errors
-                Toast.makeText(recipeMain.this, "Failed to load recipe", Toast.LENGTH_SHORT).show();
+                Toast.makeText(recipeMain.this, "Failed to load video", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     // Share recipe details via an Intent
-    private void shareRecipe(String recipeDetails) {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, recipeDetails);  // Use the fetched recipe details
-        sendIntent.setType("text/plain");
+    private void fetchAndShareRecipe() {
+        String userId = "jagath@gmail_com";  // User's ID
+        String recipeId = "-O8C8BCQipBiXFRF6MFf"; // Recipe ID
 
-        Intent shareIntent = Intent.createChooser(sendIntent, "Share recipe via");
-        startActivity(shareIntent);
+        recipeDatabaseReference.child(userId).child(recipeId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Fetch recipe details
+                    String recipeName = dataSnapshot.child("name").getValue(String.class);
+                    String description = dataSnapshot.child("description").getValue(String.class);
+
+                    // Create sharing intent
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Check out this recipe!");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, "Recipe Name: " + recipeName + "\nDescription: " + description);
+                    startActivity(Intent.createChooser(shareIntent, "Share via"));
+                } else {
+                    Toast.makeText(recipeMain.this, "Recipe not found!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(recipeMain.this, "Failed to fetch recipe", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
+    // Helper methods to set button states
     private void setButtonActive(Button button) {
         button.setBackgroundTintList(getResources().getColorStateList(R.color.green));
-        button.setTextColor(Color.WHITE);
+        button.setTextColor(getResources().getColor(R.color.white));
     }
 
-    @SuppressLint("ResourceAsColor")
     private void setButtonInactive(Button button) {
         button.setBackgroundTintList(getResources().getColorStateList(R.color.white));
         button.setTextColor(getResources().getColor(R.color.green));
     }
 
-    // Method to load the selected fragment
+    // Load fragment into container
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

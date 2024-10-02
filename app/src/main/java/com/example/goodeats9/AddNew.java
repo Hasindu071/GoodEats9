@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,6 @@ import java.util.Map;
 public class AddNew extends AppCompatActivity {
 
     private DatabaseReference ref;
-
     private FirebaseAuth mAuth;
     private StorageReference storageReference;
 
@@ -53,7 +53,6 @@ public class AddNew extends AppCompatActivity {
     Uri imageUri;
     Uri videoUri;
 
-    // Lists to hold ingredients and methods
     ArrayList<String> ListI, ListM;
     SimpleAdapter adapterI, adapterM;
 
@@ -67,7 +66,6 @@ public class AddNew extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        // Initialize views
         addPic = findViewById(R.id.addPic);
         videoView = findViewById(R.id.videoView);
         view_video_button = findViewById(R.id.view_video_button);
@@ -88,39 +86,31 @@ public class AddNew extends AppCompatActivity {
         methodList = findViewById(R.id.methodList);
         addrecipebtn = findViewById(R.id.addrecipebtn);
 
-        // Back button functionality
         backbtn = findViewById(R.id.backbtn);
         backbtn.setOnClickListener(v -> finish());
 
-        // Select image for the recipe
         addImage_button.setOnClickListener(v -> openImageChooser());
-
-        // Select video for the recipe
         view_video_button.setOnClickListener(v -> openVideoChooser());
 
-        // Handle adding recipe button click
         addrecipebtn.setOnClickListener(v -> addRecipe());
 
-        // Initialize the list and adapter for ingredients
         ListI = new ArrayList<>();
         adapterI = new SimpleAdapter(ListI);
         ingredientsList.setLayoutManager(new LinearLayoutManager(this));
         ingredientsList.setAdapter(adapterI);
 
-// Initialize the list and adapter for methods
         ListM = new ArrayList<>();
         adapterM = new SimpleAdapter(ListM);
         methodList.setLayoutManager(new LinearLayoutManager(this));
         methodList.setAdapter(adapterM);
 
-        // Add ingredient and quantity to the ingredients list
         addI.setOnClickListener(v -> {
             String ingredientName = ingrediant.getText().toString();
             String ingredientQuantity = quantity.getText().toString();
 
-            if (!ingredientName.isEmpty() && !ingredientQuantity.isEmpty()) {
+            if (!TextUtils.isEmpty(ingredientName) && !TextUtils.isEmpty(ingredientQuantity)) {
                 ListI.add(ingredientName + " - " + ingredientQuantity);
-                adapterI.notifyDataSetChanged(); // Notify RecyclerView to refresh
+                adapterI.notifyDataSetChanged();
                 ingrediant.setText("");
                 quantity.setText("");
             } else {
@@ -128,13 +118,12 @@ public class AddNew extends AppCompatActivity {
             }
         });
 
-        // Add method to the methods list
         addM.setOnClickListener(v -> {
             String methodName = method.getText().toString();
 
-            if (!methodName.isEmpty()) {
+            if (!TextUtils.isEmpty(methodName)) {
                 ListM.add(methodName);
-                adapterM.notifyDataSetChanged(); // Notify RecyclerView to refresh
+                adapterM.notifyDataSetChanged();
                 method.setText("");
             } else {
                 Toast.makeText(this, "Please enter the method", Toast.LENGTH_SHORT).show();
@@ -142,7 +131,6 @@ public class AddNew extends AppCompatActivity {
         });
     }
 
-    // Function to open the image chooser
     private void openImageChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -150,7 +138,6 @@ public class AddNew extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
-    // Function to open the video chooser
     private void openVideoChooser() {
         Intent intent = new Intent();
         intent.setType("video/*");
@@ -158,14 +145,13 @@ public class AddNew extends AppCompatActivity {
         startActivityForResult(intent, PICK_VIDEO_REQUEST);
     }
 
-    // Handle the result of image/video picker
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-            addPic.setImageBitmap(getResizedImage(imageUri, 141, 141)); // Resize to ~5x5 cm
+            addPic.setImageBitmap(getResizedImage(imageUri, 141, 141));
         }
         if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             videoUri = data.getData();
@@ -174,7 +160,6 @@ public class AddNew extends AppCompatActivity {
         }
     }
 
-    // Method to resize the selected image
     private Bitmap getResizedImage(Uri uri, int width, int height) {
         try {
             Bitmap originalBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
@@ -185,54 +170,43 @@ public class AddNew extends AppCompatActivity {
         }
     }
 
-    // Handle adding the recipe logic and storing data to Firebase
-    @SuppressLint("NotifyDataSetChanged")
     private void addRecipe() {
         String name = entername.getText().toString().trim();
         String description = enterdiscription.getText().toString().trim();
         String serves = enterserves.getText().toString().trim();
         String cookTime = entertime.getText().toString().trim();
 
-        // Get current authenticated user
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        // Validate input
         if (isInputValid(name, description, serves, cookTime) && currentUser != null) {
-
-            // Get a unique key using the user's email and replace "." with "_"
             String userEmailKey = currentUser.getEmail().replace(".", "_");
             SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
-            String username = sharedPreferences.getString("UserName", "User"); // Default to "User"
+            String username = sharedPreferences.getString("UserName", "User");
 
-
-            // Create a unique recipe ID for each recipe
             DatabaseReference userRef = ref.child(userEmailKey).push();
             String recipeId = userRef.getKey();
 
-            // Create a map to hold the recipe details
             Map<String, Object> recipeData = new HashMap<>();
             recipeData.put("name", name);
-            recipeData.put("username", username); // Save the username
+            recipeData.put("username", username);
             recipeData.put("description", description);
             recipeData.put("serves", serves);
             recipeData.put("cookTime", cookTime);
-            recipeData.put("ingredients", ListI);  // Store ingredients list
-            recipeData.put("methods", ListM);      // Store methods list
+            recipeData.put("ingredients", ListI);
+            recipeData.put("methods", ListM);
 
-            // Check if there is an image or video to upload
             if (imageUri != null) {
                 uploadImage(userRef, recipeData);
             } else if (videoUri != null) {
                 uploadVideo(userRef, recipeData);
             } else {
-                saveRecipeData(userRef, recipeData); // If no image/video, save data directly
+                saveRecipeData(userRef, recipeData);
             }
         } else {
             Toast.makeText(AddNew.this, "Please fill all fields or log in", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Method to upload image to Firebase Storage
     private void uploadImage(DatabaseReference userRef, Map<String, Object> recipeData) {
         StorageReference imageRef = storageReference.child("Recipiimages/" + System.currentTimeMillis() + ".jpg");
         UploadTask uploadTask = imageRef.putFile(imageUri);
@@ -240,40 +214,31 @@ public class AddNew extends AppCompatActivity {
         uploadTask.addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
             recipeData.put("imageUri", uri.toString());
             saveRecipeData(userRef, recipeData);
+            Toast.makeText(AddNew.this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
         })).addOnFailureListener(e -> {
             Toast.makeText(AddNew.this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }).addOnProgressListener(snapshot -> {
+            double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
+            Toast.makeText(AddNew.this, "Upload is " + progress + "% done", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void uploadVideo(DatabaseReference userRef, Map<String, Object> recipeData) {
-        if (videoUri == null) {
-            Toast.makeText(AddNew.this, "No video selected", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        StorageReference videoRef = storageReference.child("Recipivideos/" + System.currentTimeMillis() + ".mp4");
+        StorageReference videoRef = storageReference.child("RecipeVideos/" + System.currentTimeMillis() + ".mp4");
         UploadTask uploadTask = videoRef.putFile(videoUri);
 
-        uploadTask.addOnSuccessListener(taskSnapshot -> {
-            videoRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                recipeData.put("videoUri", uri.toString());
-                saveRecipeData(userRef, recipeData);
-                Toast.makeText(AddNew.this, "Video uploaded successfully", Toast.LENGTH_SHORT).show();
-            }).addOnFailureListener(e -> {
-                Toast.makeText(AddNew.this, "Failed to get video download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            });
-        }).addOnFailureListener(e -> {
+        uploadTask.addOnSuccessListener(taskSnapshot -> videoRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            recipeData.put("videoUri", uri.toString());
+            saveRecipeData(userRef, recipeData);
+            Toast.makeText(AddNew.this, "Video uploaded successfully", Toast.LENGTH_SHORT).show();
+        })).addOnFailureListener(e -> {
             Toast.makeText(AddNew.this, "Video upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        });
-
-        uploadTask.addOnProgressListener(taskSnapshot -> {
-            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-            Toast.makeText(AddNew.this, "Upload progress: " + (int) progress + "%", Toast.LENGTH_SHORT).show();
+        }).addOnProgressListener(snapshot -> {
+            double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
+            Toast.makeText(AddNew.this, "Upload is " + progress + "% done", Toast.LENGTH_SHORT).show();
         });
     }
 
-
-    // Method to save recipe data to Firebase Realtime Database
     private void saveRecipeData(DatabaseReference userRef, Map<String, Object> recipeData) {
         userRef.setValue(recipeData).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -285,17 +250,15 @@ public class AddNew extends AppCompatActivity {
         });
     }
 
-    // Validate input fields (without ingredient and method checks since they are already lists)
     private boolean isInputValid(String... inputs) {
         for (String input : inputs) {
-            if (input.isEmpty()) {
+            if (TextUtils.isEmpty(input)) {
                 return false;
             }
         }
         return true;
     }
 
-    // Method to reset all input fields
     private void resetFields() {
         entername.setText("");
         enterdiscription.setText("");
@@ -313,9 +276,7 @@ public class AddNew extends AppCompatActivity {
         videoView.setVideoURI(null);
     }
 
-    // RecyclerView Adapter for displaying ingredients and methods
     public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder> {
-
         private ArrayList<String> itemList;
 
         public SimpleAdapter(ArrayList<String> itemList) {
@@ -324,8 +285,7 @@ public class AddNew extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(android.R.layout.simple_list_item_1, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
             return new ViewHolder(view);
         }
 
