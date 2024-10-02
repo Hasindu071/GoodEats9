@@ -51,9 +51,9 @@ public class searchFragment extends Fragment {
 
     private void fetchImageData(String formattedEmail) {
         // Reference the user's recipes node in Firebase
-        DatabaseReference userRecipesRef = databaseReference.child(formattedEmail).child("recipes");
+        DatabaseReference userRecipesRef = databaseReference.child(formattedEmail);
 
-        // Listen for changes in the user's "recipes" node
+        // Listen for changes in the user's recipes node
         userRecipesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -62,8 +62,11 @@ public class searchFragment extends Fragment {
 
                 // Iterate through each recipe in the user's recipes node
                 for (DataSnapshot recipeSnapshot : snapshot.getChildren()) {
-                    DataClass dataClass = recipeSnapshot.getValue(DataClass.class);
-                    if (dataClass != null) {
+                    String imageUri = recipeSnapshot.child("imageUri").getValue(String.class); // Get the imageUri
+                    String name = recipeSnapshot.child("name").getValue(String.class); // Get the name
+
+                    if (imageUri != null && name != null) {
+                        DataClass dataClass = new DataClass(imageUri, name); // Create a new DataClass object
                         dataList.add(dataClass);  // Add the recipe data to the list
                     }
                 }
