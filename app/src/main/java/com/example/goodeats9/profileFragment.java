@@ -91,6 +91,10 @@ public class profileFragment extends Fragment {
         Button viewRecipeButton = view.findViewById(R.id.viewRecipeButton);
         viewRecipeButton.setOnClickListener(v -> startActivity(new Intent(getActivity(), recipeMain.class)));
 
+        // View recipe button click listener
+        Button UpdateRecipeButton = view.findViewById(R.id.UpdateRecipeButton);
+        UpdateRecipeButton.setOnClickListener(v -> startActivity(new Intent(getActivity(), UpdateRecipe.class)));
+
         return view;
     }
 
