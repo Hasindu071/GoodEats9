@@ -29,8 +29,7 @@
         android:text="Captions"
         android:textSize="20sp"
         android:textColor="@color/black"
-        android:layout_gravity="left"
-        android:layout_marginLeft="9dp"
+        android:layout_gravity="center"
         android:layout_marginTop="8dp"/>
 
 </LinearLayout>
