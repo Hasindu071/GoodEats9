@@ -2,6 +2,7 @@ package com.example.goodeats9;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -200,6 +201,8 @@ public class AddNew extends AppCompatActivity {
 
             // Get a unique key using the user's email and replace "." with "_"
             String userEmailKey = currentUser.getEmail().replace(".", "_");
+            SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
+            String username = sharedPreferences.getString("UserName", "User"); // Default to "User"
 
 
             // Create a unique recipe ID for each recipe
@@ -209,6 +212,7 @@ public class AddNew extends AppCompatActivity {
             // Create a map to hold the recipe details
             Map<String, Object> recipeData = new HashMap<>();
             recipeData.put("name", name);
+            recipeData.put("username", username); // Save the username
             recipeData.put("description", description);
             recipeData.put("serves", serves);
             recipeData.put("cookTime", cookTime);

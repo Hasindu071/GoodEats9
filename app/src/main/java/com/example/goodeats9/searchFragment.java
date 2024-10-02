@@ -1,11 +1,13 @@
 package com.example.goodeats9;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -39,6 +41,26 @@ public class searchFragment extends Fragment {
 
         // Firebase database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("recipes");
+
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the selected recipe
+                DataClass selectedRecipe = (DataClass) parent.getItemAtPosition(position);
+
+                // Create an intent to open the RecipeDetailsActivity
+                Intent intent = new Intent(getActivity(), recipeMain.class);
+
+                // Pass the recipe data to the new activity
+                intent.putExtra("imageUri", selectedRecipe.getImageUri());
+                intent.putExtra("name", selectedRecipe.getName());
+                //intent.putExtra("description", selectedRecipe.getDescription()); // If you have the description as well
+
+                // Start the new activity
+                startActivity(intent);
+            }
+        });
 
         // Fetch all recipes from Firebase
         fetchAllRecipes();
@@ -76,6 +98,8 @@ public class searchFragment extends Fragment {
                 // Handle any errors
                 Toast.makeText(getContext(), "Failed to load images: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
+
+
         });
     }
 }
