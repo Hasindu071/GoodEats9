@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.Toast; // Import Toast for error handling
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class searchFragment extends Fragment {
@@ -39,35 +40,30 @@ public class searchFragment extends Fragment {
         // Firebase database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("recipes");
 
-        // Fetch data from Firebase
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = auth.getCurrentUser();
-        String userEmail = currentUser.getEmail();
-        String formattedEmail = userEmail.replace(".", "_");
-        fetchImageData(formattedEmail);
+        // Fetch all recipes from Firebase
+        fetchAllRecipes();
 
         return view;
     }
 
-    private void fetchImageData(String formattedEmail) {
-        // Reference the user's recipes node in Firebase
-        DatabaseReference userRecipesRef = databaseReference.child(formattedEmail);
-
-        // Listen for changes in the user's recipes node
-        userRecipesRef.addValueEventListener(new ValueEventListener() {
+    private void fetchAllRecipes() {
+        // Listen for changes in the "recipes" node
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Clear the list to avoid duplicate entries
                 dataList.clear();
 
-                // Iterate through each recipe in the user's recipes node
-                for (DataSnapshot recipeSnapshot : snapshot.getChildren()) {
-                    String imageUri = recipeSnapshot.child("imageUri").getValue(String.class); // Get the imageUri
-                    String name = recipeSnapshot.child("name").getValue(String.class); // Get the name
+                // Iterate through all users' recipes nodes in the database
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    // For each user, get their recipes
+                    for (DataSnapshot recipeSnapshot : userSnapshot.getChildren()) {
+                        String imageUri = recipeSnapshot.child("imageUri").getValue(String.class);
+                        String name = recipeSnapshot.child("name").getValue(String.class);
 
-                    if (imageUri != null && name != null) {
-                        DataClass dataClass = new DataClass(imageUri, name); // Create a new DataClass object
-                        dataList.add(dataClass);  // Add the recipe data to the list
+                        if (imageUri != null && name != null) {
+                            DataClass dataClass = new DataClass(imageUri,name); // Create a new DataClass object
+                            dataList.add(dataClass);  // Add the recipe data to the list
+                        }
                     }
                 }
 
