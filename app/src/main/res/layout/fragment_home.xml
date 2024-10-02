@@ -66,17 +66,6 @@
             android:textStyle="bold"
             android:layout_marginTop="8dp" />
 
-        <EditText
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/rounded_textbox"
-            android:hint=" Search Recipe"
-            android:drawableStart="@drawable/ic_search"
-            android:textSize="16dp"
-            android:layout_marginTop="10dp"
-            android:paddingStart="10dp" />
-
 
     </LinearLayout>
 
