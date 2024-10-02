@@ -17,11 +17,30 @@ public class recipeMain extends AppCompatActivity {
 
     private Button procedureButton;
     private Button ingredientsButton;
+    TextView recipeNameText,DescriptionText,ServesText,CookTimeText,UserNameText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_main);
+
+        //Get the intent passed by the previous page
+        Intent intentRecipe = getIntent();
+        String imageUri = intentRecipe.getStringExtra("imageUri");
+        String name = intentRecipe.getStringExtra("name");
+        String description = intentRecipe.getStringExtra("description");
+        String serves = intentRecipe.getStringExtra("serves");
+        String cookTime = intentRecipe.getStringExtra("cookTime");
+        String userName = intentRecipe.getStringExtra("username");
+
+        recipeNameText = findViewById(R.id.recipeName);
+        recipeNameText.setText(name);
+
+        DescriptionText = findViewById(R.id.Recipedescription);
+        DescriptionText.setText(description);
+
+        UserNameText = findViewById(R.id.profileName);
+        UserNameText.setText(userName);
 
         //Get the text of reviews by its ID
         TextView textViewReviews = findViewById(R.id.reviews);
@@ -29,7 +48,6 @@ public class recipeMain extends AppCompatActivity {
         textViewReviews.setPaintFlags(textViewReviews.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         // Handle Reviews TextView click
         textViewReviews.setOnClickListener(v -> {
-            // Navigate to SignUpActivity when the Sign Up TextView is clicked
             Intent intent = new Intent(recipeMain.this, Reviews.class);
             startActivity(intent);
 

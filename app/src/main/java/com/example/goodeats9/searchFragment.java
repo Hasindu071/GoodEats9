@@ -8,12 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
-import android.text.Editable;
-import android.text.TextWatcher;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,9 +24,7 @@ import java.util.ArrayList;
 public class searchFragment extends Fragment {
 
     private GridView gridView;
-    private EditText searchBar;
     private ArrayList<DataClass> dataList;
-    private ArrayList<DataClass> filteredList; // List to hold filtered recipes
     private AdaptorSearch adapter;
     private DatabaseReference databaseReference;
 
@@ -38,17 +35,13 @@ public class searchFragment extends Fragment {
 
         // Initialize UI components
         gridView = view.findViewById(R.id.gridView);
-        searchBar = view.findViewById(R.id.searchBar);
         dataList = new ArrayList<>();
-        filteredList = new ArrayList<>();
-        adapter = new AdaptorSearch(getContext(), filteredList); // Set adapter with the context and filtered data
+        adapter = new AdaptorSearch(getContext(), dataList); // Set adapter with the context and data
         gridView.setAdapter(adapter);
 
         // Firebase database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("recipes");
 
-        // Set up search functionality
-        setupSearchFunctionality();
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -62,6 +55,10 @@ public class searchFragment extends Fragment {
                 // Pass the recipe data to the new activity
                 intent.putExtra("imageUri", selectedRecipe.getImageUri());
                 intent.putExtra("name", selectedRecipe.getName());
+                intent.putExtra("description", selectedRecipe.getDescription());
+                intent.putExtra("cookTime", selectedRecipe.getCookTime());
+                intent.putExtra("serves", selectedRecipe.getServes());
+                intent.putExtra("username", selectedRecipe.getUserName());
 
                 // Start the new activity
                 startActivity(intent);
@@ -80,7 +77,6 @@ public class searchFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 dataList.clear();
-                filteredList.clear(); // Clear the filtered list too
 
                 // Iterate through all users' recipes nodes in the database
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
@@ -88,16 +84,19 @@ public class searchFragment extends Fragment {
                     for (DataSnapshot recipeSnapshot : userSnapshot.getChildren()) {
                         String imageUri = recipeSnapshot.child("imageUri").getValue(String.class);
                         String name = recipeSnapshot.child("name").getValue(String.class);
+                        String description = recipeSnapshot.child("description").getValue(String.class);
+                        String serves = recipeSnapshot.child("serves").getValue(String.class);
+                        String cookTime = recipeSnapshot.child("cookTime").getValue(String.class);
+                        String username = recipeSnapshot.child("username").getValue(String.class);
+
 
                         if (imageUri != null && name != null) {
-                            DataClass dataClass = new DataClass(imageUri, name); // Create a new DataClass object
+                            DataClass dataClass = new DataClass(imageUri,name,cookTime,description,serves,username); // Create a new DataClass object
                             dataList.add(dataClass);  // Add the recipe data to the list
                         }
                     }
                 }
 
-                // Initially display all recipes
-                filteredList.addAll(dataList);
                 // Notify the adapter that data has changed to update the UI
                 adapter.notifyDataSetChanged();
             }
@@ -107,36 +106,8 @@ public class searchFragment extends Fragment {
                 // Handle any errors
                 Toast.makeText(getContext(), "Failed to load images: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
+
+
         });
-    }
-
-    private void setupSearchFunctionality() {
-        searchBar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterRecipes(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-    }
-
-    private void filterRecipes(String query) {
-        filteredList.clear();
-        if (query.isEmpty()) {
-            filteredList.addAll(dataList); // Show all recipes if search query is empty
-        } else {
-            String filterPattern = query.toLowerCase().trim();
-            for (DataClass recipe : dataList) {
-                if (recipe.getName().toLowerCase().contains(filterPattern)) {
-                    filteredList.add(recipe);
-                }
-            }
-        }
-        adapter.notifyDataSetChanged(); // Notify the adapter that the data set has changed
     }
 }

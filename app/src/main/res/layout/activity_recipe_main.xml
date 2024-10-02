@@ -47,6 +47,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/videoSpace" />
 
+    <TextView
+        android:id="@+id/Recipedescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Recipedescription"
+        android:textColor="#7E7C7C"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipeName" />
+
     <!-- Profile Image -->
     <ImageView
         android:id="@+id/profileImage"
@@ -56,7 +68,7 @@
         android:layout_marginStart="16dp"
         android:src="@drawable/circle_background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipeName" />
+        app:layout_constraintTop_toBottomOf="@+id/Recipedescription" />
 
     <!-- Profile Name (TextViews, aligned vertically) -->
     <LinearLayout

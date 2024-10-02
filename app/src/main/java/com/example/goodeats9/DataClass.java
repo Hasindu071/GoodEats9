@@ -2,10 +2,49 @@ package com.example.goodeats9;
 
 
 public class DataClass {
-    private String imageUri, name;
+    private String imageUri;
+    private String name;
+    private String cookTime;
+    private String description;
+    private String serves ;
+    private String UserName;
+
+    public DataClass(String imageUri, String name, String cookTime, String description, String serves , String UserName) {
+        this.imageUri = imageUri;
+        this.name = name;
+        this.cookTime = cookTime;
+        this.description = description;
+        this.serves = serves;
+        this.UserName = UserName;
+    }
+
+    public String getCookTime() {
+        return cookTime;
+    }
+
+    public void setCookTime(String cookTime) {
+        this.cookTime = cookTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getServes() {
+        return serves;
+    }
+
+    public void setServes(String serves) {
+        this.serves = serves;
+    }
+
+
 
     public DataClass(){
-
     }
 
     public String getImageUri() {
@@ -24,8 +63,15 @@ public class DataClass {
         this.name = caption;
     }
 
-    public DataClass(String imageUri, String caption) {
-        this.imageUri = imageUri;
-        this.name = caption;
+    public String getUserName() {
+        return UserName;
     }
+
+    public void setUserName(String userName) {
+        UserName = userName;
+    }
+
+
+
+
 }
