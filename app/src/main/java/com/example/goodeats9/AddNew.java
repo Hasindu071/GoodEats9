@@ -208,18 +208,18 @@ public class AddNew extends AppCompatActivity {
     }
 
     private void uploadImage(DatabaseReference userRef, Map<String, Object> recipeData) {
-        StorageReference imageRef = storageReference.child("Recipiimages/" + System.currentTimeMillis() + ".jpg");
+        StorageReference imageRef = storageReference.child("RecipeImages/" + System.currentTimeMillis() + ".jpg");
         UploadTask uploadTask = imageRef.putFile(imageUri);
 
         uploadTask.addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
             recipeData.put("imageUri", uri.toString());
-            saveRecipeData(userRef, recipeData);
-            Toast.makeText(AddNew.this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
+            if (videoUri != null) {
+                uploadVideo(userRef, recipeData);  // Upload video if present
+            } else {
+                saveRecipeData(userRef, recipeData);
+            }
         })).addOnFailureListener(e -> {
             Toast.makeText(AddNew.this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }).addOnProgressListener(snapshot -> {
-            double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
-            Toast.makeText(AddNew.this, "Upload is " + progress + "% done", Toast.LENGTH_SHORT).show();
         });
     }
 
