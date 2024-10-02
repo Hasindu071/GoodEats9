@@ -59,6 +59,7 @@ public class searchFragment extends Fragment {
                 intent.putExtra("cookTime", selectedRecipe.getCookTime());
                 intent.putExtra("serves", selectedRecipe.getServes());
                 intent.putExtra("username", selectedRecipe.getUserName());
+                intent.putExtra("videoUri", selectedRecipe.getVideoUri());
 
                 // Start the new activity
                 startActivity(intent);
@@ -80,7 +81,8 @@ public class searchFragment extends Fragment {
 
                 // Iterate through all users' recipes nodes in the database
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    // For each user, get their recipes
+
+                    // For each user, get their recipes and details
                     for (DataSnapshot recipeSnapshot : userSnapshot.getChildren()) {
                         String imageUri = recipeSnapshot.child("imageUri").getValue(String.class);
                         String name = recipeSnapshot.child("name").getValue(String.class);
@@ -88,10 +90,11 @@ public class searchFragment extends Fragment {
                         String serves = recipeSnapshot.child("serves").getValue(String.class);
                         String cookTime = recipeSnapshot.child("cookTime").getValue(String.class);
                         String username = recipeSnapshot.child("username").getValue(String.class);
+                        String videoUri = recipeSnapshot.child("videoUri").getValue(String.class);
 
 
                         if (imageUri != null && name != null) {
-                            DataClass dataClass = new DataClass(imageUri,name,cookTime,description,serves,username); // Create a new DataClass object
+                            DataClass dataClass = new DataClass(imageUri,name,cookTime,description,serves,username,videoUri); // Create a new DataClass object
                             dataList.add(dataClass);  // Add the recipe data to the list
                         }
                     }

@@ -9,13 +9,16 @@ public class DataClass {
     private String serves ;
     private String UserName;
 
-    public DataClass(String imageUri, String name, String cookTime, String description, String serves , String UserName) {
+    private String videoUri;
+
+    public DataClass(String imageUri, String name, String cookTime, String description, String serves , String UserName , String videoUri) {
         this.imageUri = imageUri;
         this.name = name;
         this.cookTime = cookTime;
         this.description = description;
         this.serves = serves;
         this.UserName = UserName;
+        this.videoUri = videoUri;
     }
 
     public String getCookTime() {
@@ -41,8 +44,6 @@ public class DataClass {
     public void setServes(String serves) {
         this.serves = serves;
     }
-
-
 
     public DataClass(){
     }
@@ -71,7 +72,7 @@ public class DataClass {
         UserName = userName;
     }
 
+    public String getVideoUri() {return videoUri;}
 
-
-
+    public void setVideoUri(String videoUri) {this.videoUri = videoUri;}
 }
