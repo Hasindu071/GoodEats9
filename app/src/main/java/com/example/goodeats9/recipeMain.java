@@ -6,56 +6,71 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class recipeMain extends AppCompatActivity {
 
     private Button procedureButton;
     private Button ingredientsButton;
-    TextView recipeNameText,DescriptionText,ServesText,CookTimeText,UserNameText;
+    private TextView recipeNameText, descriptionText, userNameText;
+    private DatabaseReference recipeDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_main);
 
-        //Get the intent passed by the previous page
+        // Initialize Firebase Database reference
+        recipeDatabaseReference = FirebaseDatabase.getInstance().getReference("recipes");
+
+        // Initialize views
+        recipeNameText = findViewById(R.id.recipeName);
+        descriptionText = findViewById(R.id.Recipedescription);
+        userNameText = findViewById(R.id.profileName);
+        procedureButton = findViewById(R.id.procedureButton);
+        ingredientsButton = findViewById(R.id.ingredientsButton);
+        ImageView starImage = findViewById(R.id.star);
+        ImageView shareImage = findViewById(R.id.share);
+        TextView textViewReviews = findViewById(R.id.reviews);
+
+        // Handle star ImageView click
+        starImage.setOnClickListener(v -> {
+            // Navigate to the RatingActivity when the star is clicked
+            Intent intent = new Intent(recipeMain.this, rating.class);
+            startActivity(intent);
+        });
+
+        // Get the intent passed by the previous page
         Intent intentRecipe = getIntent();
-        String imageUri = intentRecipe.getStringExtra("imageUri");
         String name = intentRecipe.getStringExtra("name");
         String description = intentRecipe.getStringExtra("description");
-        String serves = intentRecipe.getStringExtra("serves");
-        String cookTime = intentRecipe.getStringExtra("cookTime");
         String userName = intentRecipe.getStringExtra("username");
 
-        recipeNameText = findViewById(R.id.recipeName);
+        // Set received data to views
         recipeNameText.setText(name);
+        descriptionText.setText(description);
+        userNameText.setText(userName);
 
-        DescriptionText = findViewById(R.id.Recipedescription);
-        DescriptionText.setText(description);
-
-        UserNameText = findViewById(R.id.profileName);
-        UserNameText.setText(userName);
-
-        //Get the text of reviews by its ID
-        TextView textViewReviews = findViewById(R.id.reviews);
-        //Make the "reviews" text look like a link
+        // Make the "reviews" text look like a link
         textViewReviews.setPaintFlags(textViewReviews.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         // Handle Reviews TextView click
         textViewReviews.setOnClickListener(v -> {
             Intent intent = new Intent(recipeMain.this, Reviews.class);
             startActivity(intent);
-
         });
-
-        // Find buttons by their ID
-        procedureButton = findViewById(R.id.procedureButton);
-        ingredientsButton = findViewById(R.id.ingredientsButton);
 
         // Initially set the Procedure button as the selected one
         setButtonActive(procedureButton);
@@ -77,6 +92,60 @@ public class recipeMain extends AppCompatActivity {
             setButtonInactive(procedureButton);
             loadFragment(new IngredientsFragment());
         });
+
+        // Set click listener for shareImage
+        shareImage.setOnClickListener(v -> fetchAndShareRecipe());
+    }
+
+    // Fetch recipe details from Firebase and share them
+    private void fetchAndShareRecipe() {
+        String userId = "tharushikahirushani@gmail_com";  // User's ID
+        String recipeId = "-O81PlObeCLLFiYCY8oH"; // Recipe ID
+
+        // Fetch data from Firebase
+        recipeDatabaseReference.child(userId).child(recipeId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Retrieve the recipe details from the snapshot
+                    String cookTime = dataSnapshot.child("cookTime").getValue(String.class);
+                    String recipeDescription = dataSnapshot.child("description").getValue(String.class);
+                    String ingredients = dataSnapshot.child("ingredients/0").getValue(String.class); // Assuming there's a list
+                    String methodName = dataSnapshot.child("methods/name").getValue(String.class);
+                    String serves = dataSnapshot.child("methods/serves").getValue(String.class);
+
+                    // Create the shareable text
+                    String recipeDetails = "Check out this amazing recipe!\n\n" +
+                            "Recipe: " + recipeDescription + "\n" +
+                            "Cook Time: " + cookTime + "\n" +
+                            "Serves: " + serves + "\n" +
+                            "Ingredients:\n" + ingredients + "\n" +
+                            "Instructions: " + methodName;
+
+                    // Share the recipe using an Intent
+                    shareRecipe(recipeDetails);
+                } else {
+                    Toast.makeText(recipeMain.this, "Recipe not found!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle possible errors
+                Toast.makeText(recipeMain.this, "Failed to load recipe", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Share recipe details via an Intent
+    private void shareRecipe(String recipeDetails) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, recipeDetails);  // Use the fetched recipe details
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, "Share recipe via");
+        startActivity(shareIntent);
     }
 
     private void setButtonActive(Button button) {

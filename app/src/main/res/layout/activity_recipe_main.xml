@@ -30,7 +30,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/backButton"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp" >
+
+        <VideoView
+            android:id="@+id/videoView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="160dp">
+
+            <ImageView
+                android:id="@+id/star"
+                android:layout_width="38dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                app:srcCompat="@drawable/baseline_star_rate_24" />
+
+            <ImageView
+                android:id="@+id/share"
+                android:layout_width="37dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                app:srcCompat="@drawable/baseline_share_24"
+                />
+
+            <ImageView
+                android:id="@+id/save"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                app:srcCompat="@drawable/baseline_bookmark_24" /></LinearLayout>
+    </FrameLayout>
+
+
 
     <!-- Recipe Name TextView (Below the video) -->
 
