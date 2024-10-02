@@ -2,6 +2,7 @@ package com.example.goodeats9;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,16 +17,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class edit_profile extends AppCompatActivity {
 
     EditText editName, editEmail, editCurrentPassword, editNewPassword, editDescription;
     Button saveButton;
-    String nameUser, emailUser, currentPasswordUser, descriptionUser;
+    String nameUser, emailUser, descriptionUser;
     DatabaseReference reference;
     FirebaseUser currentUser;
     String userId;
     ImageView profilePhoto;
+
+    // Variable to hold selected image URI
+    private Uri selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +54,7 @@ public class edit_profile extends AppCompatActivity {
         // Initialize EditTexts and Button
         editName = findViewById(R.id.editName);
         editEmail = findViewById(R.id.editEmail);
-        editDescription = findViewById(R.id.editDescription);
+        editDescription = findViewById(R.id.editDescription); // Add this line
         saveButton = findViewById(R.id.buttonUpdate);
 
         // Initialize ImageView for profile photo
@@ -56,18 +62,11 @@ public class edit_profile extends AppCompatActivity {
 
         // Initialize Back Button
         ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            // Finish the current activity, or navigate to another screen
-            finish();  // This will close the current activity and return to the previous one
-        });
+        backButton.setOnClickListener(v -> finish());  // Close activity
 
         // Initialize Camera Icon Button
         ImageView cameraIcon = findViewById(R.id.camera_icon);
-        cameraIcon.setOnClickListener(v -> {
-            // Open Add_photo activity
-            Intent intent = new Intent(edit_profile.this, Add_photo.class);
-            startActivity(intent);
-        });
+        cameraIcon.setOnClickListener(v -> openImageChooser());
 
         // Load data into fields
         showData();
@@ -77,54 +76,77 @@ public class edit_profile extends AppCompatActivity {
 
         // Handle save button click
         saveButton.setOnClickListener(view -> {
-            if (isNameChanged() || isEmailChanged() || isPasswordChanged() || isDescriptionChanged()) {
+            boolean isUpdated = false;
+            if (isNameChanged()) isUpdated = true;
+            if (isEmailChanged()) isUpdated = true;
+            if (isDescriptionChanged()) isUpdated = true;
+
+            if (isUpdated) {
                 Toast.makeText(edit_profile.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+                this.finish();
+
+                if (selectedImageUri != null) {
+                    uploadProfileImage(selectedImageUri, userId); // Upload new profile image if selected
+                }
             } else {
-                Toast.makeText(edit_profile.this, "No Changes Found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(edit_profile.this, "No changes detected", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // Method to load user data into fields
-    public void showData() {
+    // Open image chooser to select a profile image
+    private void openImageChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            selectedImageUri = data.getData();  // Get the selected image URI
+            profilePhoto.setImageURI(selectedImageUri); // Set image in ImageView
+        }
+    }
+
+    // Show existing data in EditTexts
+    private void showData() {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    nameUser = snapshot.child("name").getValue(String.class);
-                    descriptionUser = snapshot.child("description").getValue(String.class);
-                    currentPasswordUser = snapshot.child("password").getValue(String.class);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    nameUser = dataSnapshot.child("name").getValue(String.class);
+                    emailUser = dataSnapshot.child("email").getValue(String.class);
+                    descriptionUser = dataSnapshot.child("description").getValue(String.class);
 
                     editName.setText(nameUser);
+                    editEmail.setText(emailUser);
                     editDescription.setText(descriptionUser);
-                    editEmail.setText(emailUser);  // Use the current email from FirebaseAuth
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                Toast.makeText(edit_profile.this, "Failed to load data", Toast.LENGTH_SHORT).show();
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(edit_profile.this, "Failed to retrieve user data.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // Method to load profile photo from Firebase
+    // Load profile photo from Firebase Database
     private void loadProfilePhoto() {
         reference.child("profilePhotoUrl").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String profilePhotoUrl = snapshot.getValue(String.class);
-                    if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
-                        Glide.with(edit_profile.this)
-                                .load(profilePhotoUrl)
-                                .placeholder(R.drawable.placeholder_image)  // Optional placeholder while loading
-                                .error(R.drawable.error_image)              // Optional error if failed
-                                .circleCrop()
-                                .into(profilePhoto);
-                    }
-                } else {
-                    Toast.makeText(edit_profile.this, "Profile photo not found", Toast.LENGTH_SHORT).show();
+                String profilePhotoUrl = snapshot.getValue(String.class);
+                if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
+                    Glide.with(edit_profile.this)
+                            .load(profilePhotoUrl)
+                            .placeholder(R.drawable.placeholder_image)
+                            .error(R.drawable.error_image)
+                            .circleCrop()
+                            .into(profilePhoto);
                 }
             }
 
@@ -135,57 +157,53 @@ public class edit_profile extends AppCompatActivity {
         });
     }
 
-    // Check if the name has changed
+    // Upload new profile image to Firebase Storage
+    private void uploadProfileImage(Uri imageUri, String userId) {
+        if (imageUri != null) {
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference("profile_images").child(userId + ".jpg");
+
+            storageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot ->
+                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        // Save image URL to Firebase Database
+                        reference.child("profilePhotoUrl").setValue(uri.toString());
+                        Toast.makeText(edit_profile.this, "Profile image updated successfully", Toast.LENGTH_SHORT).show();
+                        loadProfilePhoto(); // Reload profile image after update
+                    })
+            ).addOnFailureListener(e -> {
+                Toast.makeText(edit_profile.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
+    // Check if name has changed
     private boolean isNameChanged() {
-        if (!nameUser.equals(editName.getText().toString())) {
-            reference.child("name").setValue(editName.getText().toString());
-            nameUser = editName.getText().toString();  // Update local variable
+        String newName = editName.getText().toString().trim();
+        if (!newName.equals(nameUser)) {
+            reference.child("name").setValue(newName);
+            nameUser = newName;  // Update local variable
             return true;
         }
         return false;
     }
 
-    // Check if the email has changed (not directly in the database but through Firebase Auth)
+    // Check if email has changed
     private boolean isEmailChanged() {
-        if (!emailUser.equals(editEmail.getText().toString())) {
-            currentUser.updateEmail(editEmail.getText().toString()).addOnSuccessListener(aVoid -> {
-                reference.child("email").setValue(editEmail.getText().toString());
-                emailUser = editEmail.getText().toString();  // Update local variable
-            }).addOnFailureListener(e -> {
-                Toast.makeText(edit_profile.this, "Email update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            });
+        String newEmail = editEmail.getText().toString().trim();
+        if (!newEmail.equals(emailUser)) {
+            reference.child("email").setValue(newEmail);
+            emailUser = newEmail;  // Update local variable
             return true;
         }
         return false;
     }
 
-    // Check if the password has changed
-    private boolean isPasswordChanged() {
-        if (!editNewPassword.getText().toString().isEmpty() && !editCurrentPassword.getText().toString().isEmpty()) {
-            // Validate the current password
-            if (!currentPasswordUser.equals(editCurrentPassword.getText().toString())) {
-                Toast.makeText(this, "Current password is incorrect", Toast.LENGTH_SHORT).show();
-                return false;
-            }
 
-            // Update the password in Firebase Authentication and Database
-            currentUser.updatePassword(editNewPassword.getText().toString()).addOnSuccessListener(aVoid -> {
-                reference.child("password").setValue(editNewPassword.getText().toString());
-                currentPasswordUser = editNewPassword.getText().toString();  // Update local variable
-                Toast.makeText(edit_profile.this, "Password updated", Toast.LENGTH_SHORT).show();
-            }).addOnFailureListener(e -> {
-                Toast.makeText(edit_profile.this, "Password update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            });
-            return true;
-        }
-        return false;
-    }
-
-    // Check if the description has changed
+    // Check if description has changed
     private boolean isDescriptionChanged() {
-        if (!descriptionUser.equals(editDescription.getText().toString())) {
-            reference.child("description").setValue(editDescription.getText().toString());
-            descriptionUser = editDescription.getText().toString();  // Update local variable
+        String newDescription = editDescription.getText().toString().trim();
+        if (!newDescription.equals(descriptionUser)) {
+            reference.child("description").setValue(newDescription);
+            descriptionUser = newDescription;  // Update local variable
             return true;
         }
         return false;

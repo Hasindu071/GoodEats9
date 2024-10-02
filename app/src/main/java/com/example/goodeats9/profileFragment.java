@@ -85,8 +85,7 @@ public class profileFragment extends Fragment {
             startActivity(intent);
         });
 
-        // Profile image click listener to open image chooser
-        profileImage.setOnClickListener(v -> openImageChooser());
+
 
         // View recipe button click listener
         Button viewRecipeButton = view.findViewById(R.id.viewRecipeButton);
@@ -95,13 +94,7 @@ public class profileFragment extends Fragment {
         return view;
     }
 
-    // Open image chooser to select a profile image
-    private void openImageChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
-    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
