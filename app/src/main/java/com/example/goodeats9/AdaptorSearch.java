@@ -28,7 +28,7 @@ public class AdaptorSearch extends BaseAdapter {
     // ViewHolder pattern to improve performance
     static class ViewHolder {
         ImageView gridImage;
-        TextView gridCaption;
+        TextView RecipeName,Profile;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class AdaptorSearch extends BaseAdapter {
             holder = new ViewHolder();
 
             holder.gridImage = convertView.findViewById(R.id.gridImage);
-            holder.gridCaption = convertView.findViewById(R.id.gridCaption);
+            holder.RecipeName = convertView.findViewById(R.id.RecipeName);
 
             convertView.setTag(holder);
         } else {
@@ -63,7 +63,7 @@ public class AdaptorSearch extends BaseAdapter {
         }
 
         // Set caption
-        holder.gridCaption.setText(dataList.get(position).getName());
+        holder.RecipeName.setText(dataList.get(position).getName());
 
         // Use Glide to load images with error handling and placeholders
         Glide.with(context)
