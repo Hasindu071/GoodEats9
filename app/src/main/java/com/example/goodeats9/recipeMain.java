@@ -46,6 +46,18 @@ public class recipeMain extends AppCompatActivity {
 
 
 
+        // Find the ImageView for the back button
+        ImageView backButton = findViewById(R.id.backbtn);
+
+        // Set click listener on the back button
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Finish the activity and return to the previous screen
+                finish();
+            }
+        });
+
         // Initialize Firebase Database reference
         recipeDatabaseReference = FirebaseDatabase.getInstance().getReference("recipes");
 

@@ -22,9 +22,9 @@ import com.google.firebase.storage.StorageReference;
 
 public class edit_profile extends AppCompatActivity {
 
-    EditText editName, editEmail, editCurrentPassword, editNewPassword, editDescription;
+    EditText editName, editDescription;
     Button saveButton;
-    String nameUser, emailUser, descriptionUser;
+    String nameUser, descriptionUser;
     DatabaseReference reference;
     FirebaseUser currentUser;
     String userId;
@@ -42,7 +42,7 @@ public class edit_profile extends AppCompatActivity {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             userId = currentUser.getUid();  // Use the UID as a unique identifier for the user
-            emailUser = currentUser.getEmail();
+
         } else {
             Toast.makeText(this, "No authenticated user found", Toast.LENGTH_SHORT).show();
             finish();  // Close activity if no user is logged in
@@ -53,7 +53,6 @@ public class edit_profile extends AppCompatActivity {
 
         // Initialize EditTexts and Button
         editName = findViewById(R.id.editName);
-        editEmail = findViewById(R.id.editEmail);
         editDescription = findViewById(R.id.editDescription); // Add this line
         saveButton = findViewById(R.id.buttonUpdate);
 
@@ -78,7 +77,6 @@ public class edit_profile extends AppCompatActivity {
         saveButton.setOnClickListener(view -> {
             boolean isUpdated = false;
             if (isNameChanged()) isUpdated = true;
-            if (isEmailChanged()) isUpdated = true;
             if (isDescriptionChanged()) isUpdated = true;
 
             if (isUpdated) {
@@ -118,11 +116,9 @@ public class edit_profile extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     nameUser = dataSnapshot.child("name").getValue(String.class);
-                    emailUser = dataSnapshot.child("email").getValue(String.class);
                     descriptionUser = dataSnapshot.child("description").getValue(String.class);
 
                     editName.setText(nameUser);
-                    editEmail.setText(emailUser);
                     editDescription.setText(descriptionUser);
                 }
             }
@@ -186,16 +182,7 @@ public class edit_profile extends AppCompatActivity {
         return false;
     }
 
-    // Check if email has changed
-    private boolean isEmailChanged() {
-        String newEmail = editEmail.getText().toString().trim();
-        if (!newEmail.equals(emailUser)) {
-            reference.child("email").setValue(newEmail);
-            emailUser = newEmail;  // Update local variable
-            return true;
-        }
-        return false;
-    }
+
 
 
     // Check if description has changed

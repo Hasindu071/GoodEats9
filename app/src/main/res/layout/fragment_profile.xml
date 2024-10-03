@@ -67,24 +67,6 @@
 
 
         <Button
-            android:id="@+id/viewRecipeButton"
-            android:layout_width="114dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="#129575"
-            android:padding="8dp"
-            android:text="My recipes"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="12dp"
-            app:cornerRadius="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.667" />
-
-        <Button
             android:id="@+id/UpdateRecipeButton"
             android:layout_width="114dp"
             android:layout_height="wrap_content"

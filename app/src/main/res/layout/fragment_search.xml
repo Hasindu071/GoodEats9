@@ -17,13 +17,6 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <ImageView
-            android:id="@+id/backButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/baseline_arrow_back_ios_24"
-            tools:ignore="MissingConstraints" />
-
         <TextView
             android:id="@+id/recentSearch"
             android:layout_width="wrap_content"
@@ -35,7 +28,8 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/backButton" />
+            tools:layout_editor_absoluteY="32dp"
+            tools:ignore="MissingConstraints" />
 
 
         <EditText

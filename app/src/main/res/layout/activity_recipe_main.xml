@@ -9,17 +9,17 @@
     tools:context=".recipeMain">
 
     <!-- Back Button (Top Left Corner) -->
-    <ImageButton
-        android:id="@+id/backButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="start"
-        android:background="@drawable/baseline_arrow_back_ios_24"
-        android:contentDescription="Back"
-        android:padding="10dp"
+    <ImageView
+        android:id="@+id/backbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="8dp" />
+        app:layout_constraintVertical_bias="0.018"
+        app:srcCompat="@drawable/img" />
 
     <!-- Placeholder for Video -->
     <FrameLayout
@@ -29,7 +29,7 @@
         android:background="@android:color/darker_gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backButton"
+        app:layout_constraintTop_toBottomOf="@+id/backbtn"
         android:layout_marginTop="8dp" >
 
         <VideoView
