@@ -19,6 +19,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,11 +35,20 @@ public class recipeMain extends AppCompatActivity {
     private TextView recipeNameText, descriptionText, userNameText;
     private VideoView recipeVideoView;
     private DatabaseReference recipeDatabaseReference;
+    private ImageView save;
+    private Uri currentVideoUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_main);
+
+        // Initialize save button
+        save = findViewById(R.id.save);
+
+        // Handle click event for the save button
+        save.setOnClickListener(v -> saveRecipe());
 
         // Initialize Firebase Database reference
         recipeDatabaseReference = FirebaseDatabase.getInstance().getReference("recipes");
@@ -57,6 +68,7 @@ public class recipeMain extends AppCompatActivity {
         loadingSpinner.setVisibility(View.VISIBLE);
 
 
+
         // Initialize VideoView
         recipeVideoView = findViewById(R.id.videoView2);
 
@@ -66,11 +78,17 @@ public class recipeMain extends AppCompatActivity {
             startActivity(intent);
         });
 
+
         // Get the intent passed by the previous page
         Intent intentRecipe = getIntent();
         String name = intentRecipe.getStringExtra("name");
         String description = intentRecipe.getStringExtra("description");
         String userName = intentRecipe.getStringExtra("username");
+
+        // Get the video URL from the intent
+        String videoUri = intentRecipe.getStringExtra("videoUri");
+        currentVideoUri = Uri.parse(videoUri); // Store it in the member variable
+        recipeVideoView.setVideoURI(currentVideoUri); // Set it to the VideoView
 
         // Set received data to views
         recipeNameText.setText(name);
@@ -109,7 +127,6 @@ public class recipeMain extends AppCompatActivity {
         shareImage.setOnClickListener(v -> fetchAndShareRecipe());
 
         // Get the video URL,load and run it
-        String videoUri = intentRecipe.getStringExtra("videoUri");
         recipeVideoView.setVideoURI(Uri.parse(videoUri));
 
         // Add media controller to enable play/pause controls
@@ -130,6 +147,33 @@ public class recipeMain extends AppCompatActivity {
         });
 
     }
+    private void saveRecipe() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Toast.makeText(this, "Please log in to save recipes.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = user.getUid();
+        String recipeId = recipeDatabaseReference.child("saved_recipes").child(userId).push().getKey();
+        String name = recipeNameText.getText().toString();
+        String description = descriptionText.getText().toString();
+        String videoUri = (currentVideoUri != null) ? currentVideoUri.toString() : "";
+
+        Datacls recipe = new Datacls(videoUri, name, description, userNameText.getText().toString());
+
+        recipeDatabaseReference.child("saved_recipes").child(userId).child(recipeId).setValue(recipe)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Recipe saved successfully!", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to save recipe.", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+
+
+
 
     // Share recipe details via an Intent
     private void fetchAndShareRecipe() {
