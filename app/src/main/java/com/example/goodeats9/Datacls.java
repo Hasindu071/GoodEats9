@@ -1,17 +1,16 @@
 package com.example.goodeats9;
 
 public class Datacls {
+
     private String videoUri;
     private String name;
     private String description;
     private String userName;
     private String imageUri;
 
-    public Datacls() {
-        // Default constructor required for calls to DataSnapshot.getValue(Datacls.class)
-    }
+    // Empty constructor required for Firebase
+    public Datacls() {}
 
-    // Update the constructor to include imageUri
     public Datacls(String videoUri, String name, String description, String userName, String imageUri) {
         this.videoUri = videoUri;
         this.name = name;
@@ -20,7 +19,6 @@ public class Datacls {
         this.imageUri = imageUri;
     }
 
-    // Getters and Setters
     public String getVideoUri() {
         return videoUri;
     }
@@ -57,7 +55,7 @@ public class Datacls {
         return imageUri;
     }
 
-    public void setImageUri(String imageURL) {
-        this.imageUri = imageURL;
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 }
