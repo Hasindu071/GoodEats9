@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ public class recipeMain extends AppCompatActivity {
     // initialize the UI components in the xml file
     private Button procedureButton;
     private Button ingredientsButton;
+    private ProgressBar loadingSpinner;
     private TextView recipeNameText, descriptionText, userNameText;
     private VideoView recipeVideoView;
     private DatabaseReference recipeDatabaseReference;
@@ -70,9 +72,10 @@ public class recipeMain extends AppCompatActivity {
         ImageView starImage = findViewById(R.id.star);
         ImageView shareImage = findViewById(R.id.share);
         TextView textViewReviews = findViewById(R.id.reviews);
-        ProgressBar loadingSpinner = findViewById(R.id.loadingSpinner);
+        loadingSpinner = findViewById(R.id.loadingSpinner);
         save = findViewById(R.id.save);
         recipeVideoView = findViewById(R.id.videoView2);
+
 
 
 
@@ -109,6 +112,11 @@ public class recipeMain extends AppCompatActivity {
         descriptionText.setText(description);
         userNameText.setText(userName);
 
+        // Set video URI
+        currentVideoUri = Uri.parse(videoUri);
+        recipeVideoView.setVideoURI(currentVideoUri);
+
+
         // Make the "reviews" text look like a link
         textViewReviews.setPaintFlags(textViewReviews.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         textViewReviews.setOnClickListener(v -> {
@@ -142,6 +150,9 @@ public class recipeMain extends AppCompatActivity {
 
         // Get the video URL,load and run it
         recipeVideoView.setVideoURI(Uri.parse(videoUri));
+
+        // Back button functionality
+        backButton.setOnClickListener(v -> finish());
 
         // Add media controller to enable play/pause controls
         MediaController mediaController = new MediaController(this);

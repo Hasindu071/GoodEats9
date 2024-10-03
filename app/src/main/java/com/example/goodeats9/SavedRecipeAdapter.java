@@ -5,15 +5,13 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
-
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.ViewHolder> {
@@ -41,19 +39,50 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
         holder.recipeName.setText(recipe.getName());
         holder.userName.setText("Saved by: " + recipe.getUserName());
 
-        // Load the video or an image thumbnail
+        // Load the video
         holder.recipeVideoView.setVideoURI(Uri.parse(recipe.getVideoUri()));
-        holder.recipeVideoView.seekTo(1); // Display the first frame as a thumbnail
 
-        // If you have an imageUri, you can load it into an ImageView
+        // Load the thumbnail image if applicable
         if (!recipe.getImageUri().isEmpty()) {
-            Picasso.get().load(recipe.getImageUri()).into(holder.recipeImageView);
+            Picasso.get().load(recipe.getImageUri()).into(holder.recipeImage);
         }
 
-        // Play video when clicked (optional)
-        holder.itemView.setOnClickListener(view -> {
-            holder.recipeVideoView.setVisibility(View.VISIBLE);
+        // Set up play icon click listener
+        holder.playIcon.setOnClickListener(v -> {
             holder.recipeVideoView.start();
+            holder.playIcon.setVisibility(View.GONE);
+            holder.pauseIcon.setVisibility(View.VISIBLE);
+            holder.updateSeekBar(holder);
+        });
+
+        // Set up pause icon click listener
+        holder.pauseIcon.setOnClickListener(v -> {
+            holder.recipeVideoView.pause();
+            holder.playIcon.setVisibility(View.VISIBLE);
+            holder.pauseIcon.setVisibility(View.GONE);
+        });
+
+        // Handle seek bar changes
+        holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    holder.recipeVideoView.seekTo(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        // Handle video completion
+        holder.recipeVideoView.setOnCompletionListener(mediaPlayer -> {
+            holder.recipeVideoView.stopPlayback();
+            holder.playIcon.setVisibility(View.VISIBLE);
+            holder.pauseIcon.setVisibility(View.GONE);
         });
     }
 
@@ -66,14 +95,25 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
 
         TextView recipeName, userName;
         VideoView recipeVideoView;
-        ImageView recipeImageView;
+        ImageView recipeImage, playIcon, pauseIcon;
+        SeekBar seekBar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeName = itemView.findViewById(R.id.recipeName);
             userName = itemView.findViewById(R.id.userName);
             recipeVideoView = itemView.findViewById(R.id.recipeVideoView);
-            recipeImageView = itemView.findViewById(R.id.recipeImage);
+            recipeImage = itemView.findViewById(R.id.recipeImage);
+            playIcon = itemView.findViewById(R.id.playIcon);
+            pauseIcon = itemView.findViewById(R.id.pauseIcon);
+            seekBar = itemView.findViewById(R.id.seekBar);
+        }
+
+        public void updateSeekBar(ViewHolder holder) {
+            holder.seekBar.setProgress(holder.recipeVideoView.getCurrentPosition());
+            if (holder.recipeVideoView.isPlaying()) {
+                holder.seekBar.postDelayed(() -> updateSeekBar(holder), 1000);
+            }
         }
     }
 }
