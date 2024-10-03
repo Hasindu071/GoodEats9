@@ -26,8 +26,7 @@ public class saveFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private SavedRecipeAdapter adapter;
-    private List<Datacls> savedRecipesList; // Use Datacls for saved recipes
-    private FirebaseAuth auth;
+    private List<Datacls> savedRecipesList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,8 +39,7 @@ public class saveFragment extends Fragment {
         adapter = new SavedRecipeAdapter(getContext(), savedRecipesList);
         recyclerView.setAdapter(adapter);
 
-        // Load saved recipes
-        loadSavedRecipes();
+        loadSavedRecipes(); // Load saved recipes from Firebase
 
         return view;
     }
@@ -53,24 +51,24 @@ public class saveFragment extends Fragment {
             return;
         }
 
-        String userId = user.getUid(); // Get the current user's ID
+        String userId = user.getUid();
         DatabaseReference savedRecipesRef = FirebaseDatabase.getInstance().getReference("saved_recipes").child(userId);
         savedRecipesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                savedRecipesList.clear(); // Clear the list before adding new items
+                savedRecipesList.clear();
                 for (DataSnapshot recipeSnapshot : dataSnapshot.getChildren()) {
-                    Datacls recipe = recipeSnapshot.getValue(Datacls.class); // Get Datacls object
-                    if (recipe != null) {
-                        savedRecipesList.add(recipe); // Add recipe to the list
+                    Datacls savedRecipe = recipeSnapshot.getValue(Datacls.class);
+                    if (savedRecipe != null) {
+                        savedRecipesList.add(savedRecipe);
                     }
                 }
-                adapter.notifyDataSetChanged(); // Notify adapter of data change
+                adapter.notifyDataSetChanged(); // Update RecyclerView
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Failed to load saved recipes: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed to load saved recipes.", Toast.LENGTH_SHORT).show();
             }
         });
     }
