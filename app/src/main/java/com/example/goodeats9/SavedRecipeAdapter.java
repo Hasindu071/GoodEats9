@@ -52,6 +52,7 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
             holder.recipeVideoView.start();
             holder.playIcon.setVisibility(View.GONE);
             holder.pauseIcon.setVisibility(View.VISIBLE);
+            holder.recipeVideoView.setVisibility(View.VISIBLE); // Show VideoView
             holder.updateSeekBar(holder);
         });
 
@@ -60,6 +61,14 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
             holder.recipeVideoView.pause();
             holder.playIcon.setVisibility(View.VISIBLE);
             holder.pauseIcon.setVisibility(View.GONE);
+        });
+
+        // Handle video completion
+        holder.recipeVideoView.setOnCompletionListener(mediaPlayer -> {
+            holder.recipeVideoView.stopPlayback();
+            holder.playIcon.setVisibility(View.VISIBLE);
+            holder.pauseIcon.setVisibility(View.GONE);
+            holder.recipeVideoView.setVisibility(View.GONE); // Hide VideoView
         });
 
         // Handle seek bar changes
@@ -76,13 +85,6 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        // Handle video completion
-        holder.recipeVideoView.setOnCompletionListener(mediaPlayer -> {
-            holder.recipeVideoView.stopPlayback();
-            holder.playIcon.setVisibility(View.VISIBLE);
-            holder.pauseIcon.setVisibility(View.GONE);
         });
     }
 
