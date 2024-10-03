@@ -17,9 +17,9 @@ import java.util.List;
 public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.ViewHolder> {
 
     private Context context;
-    private List<DataClass> savedRecipesList;
+    private List<Datacls> savedRecipesList;
 
-    public SavedRecipeAdapter(Context context, List<DataClass> savedRecipesList) {
+    public SavedRecipeAdapter(Context context, List<Datacls> savedRecipesList) {
         this.context = context;
         this.savedRecipesList = savedRecipesList;
     }
@@ -31,7 +31,7 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
 
         public ViewHolder(View itemView) {
             super(itemView);
-            recipeImage = itemView.findViewById(R.id.gridImage);
+            recipeImage = itemView.findViewById(R.id.recipeImage);
             recipeName = itemView.findViewById(R.id.recipeName);
             userName = itemView.findViewById(R.id.userName);
         }
@@ -40,24 +40,22 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the layout for each item
-        View view = LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recipe_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        DataClass recipe = savedRecipesList.get(position);
+        Datacls recipe = savedRecipesList.get(position);
 
-        // Set the recipe name and user name
         holder.recipeName.setText(recipe.getName());
         holder.userName.setText("Saved by: " + recipe.getUserName());
 
-        // Use Glide to load the recipe image
+        // Use Glide to load images
         Glide.with(context)
                 .load(recipe.getImageUri())
-                .placeholder(R.drawable.placeholder_image) // Placeholder image while loading
-                .error(R.drawable.error_image) // Error image if loading fails
+                .placeholder(R.drawable.placeholder_image)
+                .error(R.drawable.error_image)
                 .into(holder.recipeImage);
     }
 
