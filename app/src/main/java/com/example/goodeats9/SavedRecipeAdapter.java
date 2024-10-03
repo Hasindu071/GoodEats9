@@ -69,6 +69,7 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
             holder.playIcon.setVisibility(View.VISIBLE);
             holder.pauseIcon.setVisibility(View.GONE);
             holder.recipeVideoView.setVisibility(View.GONE); // Hide VideoView
+            holder.seekBar.setProgress(0); // Reset the seek bar
         });
 
         // Handle seek bar changes
@@ -85,6 +86,23 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        // Set up video preparation listener to set the maximum seek bar value
+        holder.recipeVideoView.setOnPreparedListener(mediaPlayer -> {
+            holder.seekBar.setMax(holder.recipeVideoView.getDuration());
+            holder.updateSeekBar(holder);
+        });
+
+        // Full-screen toggle listener
+        holder.recipeVideoView.setOnClickListener(v -> {
+            // Here you can implement the logic to toggle full screen
+            // For demonstration, just making it full screen
+            // You may create a separate activity or fragment for full screen
+            holder.recipeVideoView.setLayoutParams(new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+            ));
         });
     }
 
