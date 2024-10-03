@@ -52,6 +52,12 @@ dependencies {
     implementation ("com.squareup.picasso:picasso:2.71828")
     implementation ("androidx.cardview:cardview:1.0.0")
     implementation ("com.github.denzcoskun:ImageSlideshow:0.1.0")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0") // For annotation processing
+    implementation ("androidx.recyclerview:recyclerview:1.2.1")
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+    // For control over item selection of both touch and mouse driven selection
+    implementation ("androidx.recyclerview:recyclerview-selection:1.1.0")
 
 
 
