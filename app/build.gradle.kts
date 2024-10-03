@@ -58,6 +58,10 @@ dependencies {
     implementation ("androidx.recyclerview:recyclerview:1.3.2")
     // For control over item selection of both touch and mouse driven selection
     implementation ("androidx.recyclerview:recyclerview-selection:1.1.0")
+    implementation ("com.google.firebase:firebase-database:20.0.3")
+    implementation ("com.google.firebase:firebase-auth:21.0.1")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+
 
 
 
