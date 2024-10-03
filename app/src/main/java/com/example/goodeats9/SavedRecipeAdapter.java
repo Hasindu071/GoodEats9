@@ -24,43 +24,38 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
         this.savedRecipesList = savedRecipesList;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView recipeImage;
-        TextView recipeName;
-        TextView userName;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            recipeImage = itemView.findViewById(R.id.recipeImage);
-            recipeName = itemView.findViewById(R.id.recipeName);
-            userName = itemView.findViewById(R.id.userName);
-        }
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recipe_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.saved_recipe_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Datacls recipe = savedRecipesList.get(position);
-
         holder.recipeName.setText(recipe.getName());
         holder.userName.setText("Saved by: " + recipe.getUserName());
 
-        // Use Glide to load images
-        Glide.with(context)
-                .load(recipe.getImageUri())
-                .placeholder(R.drawable.placeholder_image)
-                .error(R.drawable.error_image)
-                .into(holder.recipeImage);
+        // Load the recipe image using an image loading library (optional)
+        // Example with Glide:
+        // Glide.with(context).load(recipe.getImageUri()).into(holder.recipeImage);
     }
 
     @Override
     public int getItemCount() {
         return savedRecipesList.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView recipeName, userName;
+        public ImageView recipeImage;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            recipeName = itemView.findViewById(R.id.recipeName);
+            userName = itemView.findViewById(R.id.userName);
+            recipeImage = itemView.findViewById(R.id.recipeImage);
+        }
     }
 }
