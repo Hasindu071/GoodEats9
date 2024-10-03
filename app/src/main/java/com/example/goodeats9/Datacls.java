@@ -7,12 +7,12 @@ public class Datacls {
     private String userName;
     private String imageUri;
 
-
     public Datacls() {
         // Default constructor required for calls to DataSnapshot.getValue(Datacls.class)
     }
 
-    public Datacls(String videoUri, String name, String description, String userName) {
+    // Update the constructor to include imageUri
+    public Datacls(String videoUri, String name, String description, String userName, String imageUri) {
         this.videoUri = videoUri;
         this.name = name;
         this.description = description;
