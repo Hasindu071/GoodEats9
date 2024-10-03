@@ -44,11 +44,7 @@ public class recipeMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_main);
 
-        // Initialize save button
-        save = findViewById(R.id.save);
 
-        // Handle click event for the save button
-        save.setOnClickListener(v -> saveRecipe());
 
         // Initialize Firebase Database reference
         recipeDatabaseReference = FirebaseDatabase.getInstance().getReference("recipes");
@@ -63,6 +59,10 @@ public class recipeMain extends AppCompatActivity {
         ImageView shareImage = findViewById(R.id.share);
         TextView textViewReviews = findViewById(R.id.reviews);
         ProgressBar loadingSpinner = findViewById(R.id.loadingSpinner);
+        save = findViewById(R.id.save);
+        recipeVideoView = findViewById(R.id.videoView2);
+
+
 
         // Show ProgressBar while the video is loading
         loadingSpinner.setVisibility(View.VISIBLE);
@@ -87,6 +87,8 @@ public class recipeMain extends AppCompatActivity {
 
         // Get the video URL from the intent
         String videoUri = intentRecipe.getStringExtra("videoUri");
+        currentVideoUri = Uri.parse(videoUri); // Store it in the member variable
+        recipeVideoView.setVideoURI(currentVideoUri); // Set it to the VideoView
         currentVideoUri = Uri.parse(videoUri); // Store it in the member variable
         recipeVideoView.setVideoURI(currentVideoUri); // Set it to the VideoView
 
@@ -134,6 +136,10 @@ public class recipeMain extends AppCompatActivity {
         mediaController.setAnchorView(recipeVideoView);  // Attach media controller to VideoView
         recipeVideoView.setMediaController(mediaController);
 
+        // Show ProgressBar while the video is loading
+        loadingSpinner.setVisibility(View.VISIBLE);
+
+
         // Set a listener to know when the video is ready. until it is ready there will be a progress bar
         recipeVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -146,8 +152,22 @@ public class recipeMain extends AppCompatActivity {
             }
         });
 
+
+        // Handle save button click
+        save.setOnClickListener(view -> {
+            Datacls recipeToSave = new Datacls(videoUri, name, description, userName, ""); // Create recipe object without imageUri
+            saveRecipe(recipeToSave); // Save to Firebase
+        });
+
+        // Handle star ImageView click to go to the rating class
+        starImage.setOnClickListener(v -> {
+            Intent intent = new Intent(recipeMain.this, rating.class);
+            startActivity(intent);
+        });
     }
-    private void saveRecipe() {
+
+    // Save the recipe to Firebase
+    private void saveRecipe(Datacls recipe) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             Toast.makeText(this, "Please log in to save recipes.", Toast.LENGTH_SHORT).show();
@@ -155,25 +175,13 @@ public class recipeMain extends AppCompatActivity {
         }
 
         String userId = user.getUid();
-        String recipeId = recipeDatabaseReference.child("saved_recipes").child(userId).push().getKey();
-        String name = recipeNameText.getText().toString();
-        String description = descriptionText.getText().toString();
-        String videoUri = (currentVideoUri != null) ? currentVideoUri.toString() : "";
+        DatabaseReference savedRecipesRef = FirebaseDatabase.getInstance().getReference("saved_recipes").child(userId);
 
-        Datacls recipe = new Datacls(videoUri, name, description, userNameText.getText().toString());
-
-        recipeDatabaseReference.child("saved_recipes").child(userId).child(recipeId).setValue(recipe)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Recipe saved successfully!", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to save recipe.", Toast.LENGTH_SHORT).show();
-                });
+        // Push the new recipe under the user's saved recipes
+        savedRecipesRef.push().setValue(recipe)
+                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Recipe saved successfully!", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to save recipe: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
-
-
-
-
 
     // Share recipe details via an Intent
     private void fetchAndShareRecipe() {
