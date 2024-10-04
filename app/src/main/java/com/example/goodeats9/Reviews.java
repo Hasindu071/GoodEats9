@@ -1,5 +1,6 @@
 package com.example.goodeats9;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,6 +33,7 @@ public class Reviews extends AppCompatActivity {
     private ReviewAdapter reviewAdapter;
     private List<Review> reviewList;
     private DatabaseReference databaseReference;
+    private String username; // To store the username
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,12 @@ public class Reviews extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(reviewAdapter);
 
+        // Initialize Firebase Database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("Reviews");
+
+        // Retrieve username from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
+        username = sharedPreferences.getString("UserName", "User"); // Default to "User" if not found
 
         loadReviews();
 
@@ -94,12 +101,12 @@ public class Reviews extends AppCompatActivity {
         }
 
         String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
-        String name = "Your Name"; // Replace with actual user name
 
-        Review review = new Review(name, comment, timestamp);
+        // Create a new Review object with the username, comment, and timestamp
+        Review review = new Review(username, comment, timestamp);
         databaseReference.push().setValue(review).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                inputComment.setText("");
+                inputComment.setText(""); // Clear input field after posting
                 Toast.makeText(Reviews.this, "Comment posted", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(Reviews.this, "Failed to post comment", Toast.LENGTH_SHORT).show();
