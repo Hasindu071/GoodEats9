@@ -1,42 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Layout for Recipe Name and User Name -->
-    <LinearLayout
+    <!-- Horizontal layout for Recipe Name and Delete Button -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <!-- Recipe Name -->
         <TextView
             android:id="@+id/recipeName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Recipe Name"
             android:textSize="18sp"
             android:textStyle="bold"
             android:fontFamily="@font/poppins"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintTop_toTopOf="parent"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:paddingEnd="8dp" />
 
-        <!-- User who saved the recipe -->
-        <TextView
-            android:id="@+id/userName"
+        <!-- Delete Button -->
+        <ImageButton
+            android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Saved by: User Name"
-            android:fontFamily="@font/poppins"
-            android:textColor="@color/green"/>
-    </LinearLayout>
+            app:srcCompat="@drawable/baseline_delete_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recipeName"
+            app:layout_constraintBottom_toBottomOf="@+id/recipeName" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- User who saved the recipe -->
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Saved by: User Name"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/green"
+        android:layout_marginTop="4dp" />
 
     <!-- Video and Thumbnail Frame -->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp">
 
         <!-- Video View for playing the video -->
         <VideoView
@@ -64,31 +81,26 @@
             android:visibility="visible" />
     </FrameLayout>
 
-    <!-- Pause Icon -->
+    <!-- Pause Icon (Hidden by default) -->
     <ImageView
         android:id="@+id/pauseIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_pause_circle_24"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_gravity="center" />
 
-    <!-- Horizontal layout for Delete and SeekBar -->
+    <!-- Horizontal layout for SeekBar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
-
-        <!-- Delete Button -->
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/baseline_delete_24" />
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp">
 
         <!-- Seek Bar for Video progress -->
         <SeekBar
-            android:id="@+id/seekBar"
+            android:id="@+id/videoSeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
