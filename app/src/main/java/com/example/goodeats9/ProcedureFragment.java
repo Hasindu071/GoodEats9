@@ -9,14 +9,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class StepListFragment extends Fragment {
+public class ProcedureFragment extends Fragment {
 
     private List<String> steps; // List to hold steps (can be any list)
     private RecyclerView recyclerView;
     private StepAdapter adapter;
 
-    public StepListFragment(List<String> steps) {
+    public ProcedureFragment(List<String> steps) {
         this.steps = steps; // Pass steps when initializing fragment
+    }
+
+    public ProcedureFragment() {
+
     }
 
     @Override
