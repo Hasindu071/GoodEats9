@@ -72,7 +72,7 @@ public class Forget_Password extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(Forget_Password.this, "Password reset email sent!", Toast.LENGTH_SHORT).show();
                                     // Move to forget_password_3 page after email is sent
-                                    Intent intent = new Intent(Forget_Password.this, forget_password_3.class);
+                                    Intent intent = new Intent(Forget_Password.this, forget_password_4.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
                                     finish();
