@@ -121,8 +121,7 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
 
         // Delete button click listener
         holder.deleteButton.setOnClickListener(v -> {
-            String videoUriToDelete = recipe.getVideoUri(); // Get the video URI to delete
-            deleteRecipeFromDatabase(videoUriToDelete); // Call the method to delete from the database
+            deleteRecipeFromDatabase(recipe.getVideoUri()); // Call method to delete from the database
 
             // Remove the item from the list and notify the adapter
             savedRecipes.remove(position);
@@ -137,17 +136,16 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
     }
 
     private void deleteRecipeFromDatabase(String videoUri) {
+        // Extract the unique identifier for deletion (assumed to be the same as videoUri)
+        String videoIdentifier = videoUri.replace(".", "_"); // Change this according to your unique identifier format
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("savedRecipes");
 
-        // Use the unique identifier of the video (modify according to your database structure)
-        databaseReference.child(videoUri)
+        databaseReference.child(videoIdentifier) // Use videoIdentifier for deletion
                 .removeValue()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Successfully deleted from database
                         Log.d("Delete Recipe", "Recipe deleted successfully");
                     } else {
-                        // Failed to delete from database
                         Log.e("Delete Recipe", "Failed to delete recipe", task.getException());
                     }
                 });
