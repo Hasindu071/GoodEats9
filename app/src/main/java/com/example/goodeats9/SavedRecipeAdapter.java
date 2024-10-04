@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,9 @@ import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.util.List;
@@ -115,19 +119,38 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
             holder.updateSeekBar(holder);
         });
 
-        // Delete button click listener (implement your own deletion logic)
+        // Delete button click listener
         holder.deleteButton.setOnClickListener(v -> {
+            String videoUriToDelete = recipe.getVideoUri(); // Get the video URI to delete
+            deleteRecipeFromDatabase(videoUriToDelete); // Call the method to delete from the database
+
+            // Remove the item from the list and notify the adapter
             savedRecipes.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, savedRecipes.size());
-
-            // Add Firebase or database deletion logic if required
         });
     }
 
     @Override
     public int getItemCount() {
         return savedRecipes.size();
+    }
+
+    private void deleteRecipeFromDatabase(String videoUri) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("savedRecipes");
+
+        // Use the unique identifier of the video (modify according to your database structure)
+        databaseReference.child(videoUri)
+                .removeValue()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Successfully deleted from database
+                        Log.d("Delete Recipe", "Recipe deleted successfully");
+                    } else {
+                        // Failed to delete from database
+                        Log.e("Delete Recipe", "Failed to delete recipe", task.getException());
+                    }
+                });
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
