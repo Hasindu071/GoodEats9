@@ -1,6 +1,7 @@
 package com.example.goodeats9;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -200,37 +201,60 @@ public class login extends AppCompatActivity {
         String userEmail = loginEmail.getText().toString().trim();
         String userPassword = loginPassword.getText().toString().trim();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        Query checkUserDatabase = reference.orderByChild("email").equalTo(userEmail);
+        // Firebase Authentication instance
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    loginEmail.setError(null);
+        // Authenticate the user using Firebase Authentication
+        mAuth.signInWithEmailAndPassword(userEmail, userPassword)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Get the currently logged-in user's UID
+                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                        if (currentUser != null) {
+                            String userID = currentUser.getUid();
 
-                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        String passwordFromDB = userSnapshot.child("password").getValue(String.class);
+                            // Now fetch the user's data from the Firebase Realtime Database
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child(userID);
+                            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()) {
+                                        String nameFromDB = snapshot.child("name").getValue(String.class);
+                                        String descFromDB = snapshot.child("description").getValue(String.class);
 
-                        if (Objects.equals(passwordFromDB, userPassword)) {
-                            loginPassword.setError(null);
-                            Intent intent = new Intent(login.this, menu_bar_main.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            loginPassword.setError("Invalid Credentials!");
-                            loginPassword.requestFocus();
+                                        // Save user's name and description in SharedPreferences
+                                        SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("UserName", nameFromDB);  // Store the username
+                                        editor.putString("UserDescription", descFromDB);  // Store the description
+                                        editor.apply();
+
+                                        // Successful login, redirect to MainActivity
+                                        Intent intent = new Intent(login.this, menu_bar_main.class);
+                                        startActivity(intent);
+                                        finish(); // Close the login activity
+                                    } else {
+                                        // Handle case where user data does not exist in Realtime Database
+                                        loginEmail.setError("User data not found!");
+                                        loginEmail.setBackgroundResource(R.drawable.input_error);
+                                        loginEmail.requestFocus();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    // Handle possible errors from Firebase
+                                    Toast.makeText(login.this, "Database error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
+                    } else {
+                        // Handle authentication failure
+                        loginPassword.setError("Invalid Credentials!");
+                        loginEmail.setBackgroundResource(R.drawable.input_error);
+                        loginPassword.requestFocus();
                     }
-                } else {
-                    loginEmail.setError("Email does not exist!");
-                    loginEmail.requestFocus();
-                }
-            }
+                });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
     }
 }
