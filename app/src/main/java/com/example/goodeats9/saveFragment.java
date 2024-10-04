@@ -25,54 +25,58 @@ import java.util.List;
 
 public class saveFragment extends Fragment {
 
-    private RecyclerView recyclerViewSavedRecipes;
-    private SavedRecipeAdapter savedRecipeAdapter;
-    private List<Datacls> savedRecipesList;
+    private RecyclerView recyclerView;
+    private SavedRecipeAdapter adapter;
+    private List<Datacls> savedRecipeList;
 
     private DatabaseReference savedRecipesRef;
+    private FirebaseAuth auth;
+    private FirebaseUser currentUser;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_save, container, false);
 
-        recyclerViewSavedRecipes = view.findViewById(R.id.recyclerViewSavedRecipes);
-        recyclerViewSavedRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
+        // Initialize Firebase auth and user
+        auth = FirebaseAuth.getInstance();
+        currentUser = auth.getCurrentUser();
 
-        savedRecipesList = new ArrayList<>();
-        savedRecipeAdapter = new SavedRecipeAdapter(getContext(), savedRecipesList);
-        recyclerViewSavedRecipes.setAdapter(savedRecipeAdapter);
+        // Initialize RecyclerView
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Fetch saved recipes from Firebase
-        fetchSavedRecipes();
+        savedRecipeList = new ArrayList<>();
+        adapter = new SavedRecipeAdapter(getContext(), savedRecipeList);
+        recyclerView.setAdapter(adapter);
+
+        if (currentUser != null) {
+            loadSavedRecipes();
+        } else {
+            Toast.makeText(getContext(), "Please log in to see saved recipes.", Toast.LENGTH_SHORT).show();
+        }
 
         return view;
     }
 
-    private void fetchSavedRecipes() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            Toast.makeText(getContext(), "Please log in to see saved recipes.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String userId = user.getUid();
+    private void loadSavedRecipes() {
+        String userId = currentUser.getUid();
         savedRecipesRef = FirebaseDatabase.getInstance().getReference("saved_recipes").child(userId);
 
         savedRecipesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                savedRecipesList.clear(); // Clear the list before adding new items
+                savedRecipeList.clear(); // Clear the list before adding new data
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Datacls recipe = snapshot.getValue(Datacls.class);
-                    savedRecipesList.add(recipe);
+                    savedRecipeList.add(recipe);
                 }
-                savedRecipeAdapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged(); // Notify adapter of data change
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Failed to load saved recipes: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed to load saved recipes.", Toast.LENGTH_SHORT).show();
             }
         });
     }
