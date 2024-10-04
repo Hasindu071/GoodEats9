@@ -11,9 +11,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -41,6 +43,8 @@ public class AddNew extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private StorageReference storageReference;
 
+    private Spinner categorySpinner;
+
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int PICK_VIDEO_REQUEST = 2;
 
@@ -61,6 +65,18 @@ public class AddNew extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new);
+
+        categorySpinner = findViewById(R.id.category_spinner);
+
+        // Example categories to populate the spinner
+        String[] categories = {"Breakfast", "Lunch", "Dinner", "Snack"};
+
+        // Creating an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Applying the adapter to the spinner
+        categorySpinner.setAdapter(adapter);
 
         ref = FirebaseDatabase.getInstance().getReference("recipes");
         mAuth = FirebaseAuth.getInstance();
@@ -130,6 +146,8 @@ public class AddNew extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void openImageChooser() {
         Intent intent = new Intent();

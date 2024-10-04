@@ -114,24 +114,34 @@
                 android:textSize="18dp"
                 app:cornerRadius="12dp"
                 />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_texbox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/category_label" />
+
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins"
             android:text="Title"
             android:textColor="@color/black"
             android:textSize="15dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.065"
+            app:layout_constraintHorizontal_bias="0.06"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="30dp"
-            app:layout_constraintTop_toBottomOf="@id/videotab"
+            app:layout_constraintTop_toBottomOf="@+id/category_spinner"
             tools:ignore="MissingConstraints" />
-
 
         <EditText
             android:id="@+id/entername"
@@ -445,6 +455,19 @@
             app:layout_constraintTop_toBottomOf="@id/MethodTab"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/category_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:text="Select Category"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/videotab"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="19dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
