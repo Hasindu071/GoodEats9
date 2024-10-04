@@ -1,3 +1,4 @@
+apply(plugin = "com.google.gms.google-services")
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
@@ -61,8 +62,10 @@ dependencies {
     implementation ("com.google.firebase:firebase-database:20.0.3")
     implementation ("com.google.firebase:firebase-auth:21.0.1")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
-
-
+    //For google authantication
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 
 
 
