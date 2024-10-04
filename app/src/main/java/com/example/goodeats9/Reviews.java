@@ -33,7 +33,7 @@ public class Reviews extends AppCompatActivity {
     private ReviewAdapter reviewAdapter;
     private List<Review> reviewList;
     private DatabaseReference databaseReference;
-    private String username; // To store the username
+     private String username; // To store the username
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
