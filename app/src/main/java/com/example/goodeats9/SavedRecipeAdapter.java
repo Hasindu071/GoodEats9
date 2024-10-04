@@ -51,19 +51,19 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
         // Load the thumbnail using MediaMetadataRetriever safely
         try {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.setDataSource(context, Uri.parse(recipe.getVideoUri()));
+            retriever.setDataSource(context, videoUri);
             Bitmap thumbnail = retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
 
             if (thumbnail != null) {
                 holder.thumbnailImageView.setImageBitmap(thumbnail);
             } else {
-                holder.thumbnailImageView.setImageResource(android.R.drawable.ic_media_play); // Placeholder if no thumbnail
+                holder.thumbnailImageView.setImageResource(R.drawable.placeholder_image); // Use your placeholder image
             }
 
             retriever.release(); // Release retriever after use
         } catch (IOException | IllegalArgumentException e) {
             e.printStackTrace();
-            holder.thumbnailImageView.setImageResource(android.R.drawable.ic_media_play); // Fallback if error occurs
+            holder.thumbnailImageView.setImageResource(R.drawable.placeholder_image); // Fallback if error occurs
         }
 
         // Play button click listener
