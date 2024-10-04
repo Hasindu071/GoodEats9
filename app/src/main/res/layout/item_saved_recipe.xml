@@ -38,7 +38,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:src="@drawable/image" /> <!-- Use your placeholder image here -->
 
         <!-- Play button overlay -->
         <ImageView
