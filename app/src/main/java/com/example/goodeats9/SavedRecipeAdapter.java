@@ -27,6 +27,7 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
 
     private Context context;
     private List<Datacls> savedRecipes;
+    private boolean isSeeking = false;
 
     public SavedRecipeAdapter(Context context, List<Datacls> savedRecipes) {
         this.context = context;
@@ -107,10 +108,15 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                isSeeking = true; // Disable auto-updating while user is seeking
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                isSeeking = false; // Re-enable auto-updating after seeking
+                holder.recipeVideoView.seekTo(seekBar.getProgress());
+            }
         });
 
         // Set up seek bar when video is prepared
@@ -167,12 +173,14 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
             thumbnailImageView = itemView.findViewById(R.id.thumbnailImageView); // Thumbnail ImageView
             playIcon = itemView.findViewById(R.id.playIcon);
             pauseIcon = itemView.findViewById(R.id.pauseIcon);
-            seekBar = itemView.findViewById(R.id.seekBar);
+            seekBar = itemView.findViewById(R.id.videoSeekBar); // Update with correct ID
             deleteButton = itemView.findViewById(R.id.imageButton); // Delete button
         }
 
         public void updateSeekBar(ViewHolder holder) {
-            holder.seekBar.setProgress(holder.recipeVideoView.getCurrentPosition());
+            if (!isSeeking) {
+                holder.seekBar.setProgress(holder.recipeVideoView.getCurrentPosition());
+            }
             if (holder.recipeVideoView.isPlaying()) {
                 holder.seekBar.postDelayed(() -> updateSeekBar(holder), 1000);
             }
