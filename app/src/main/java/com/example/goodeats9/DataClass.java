@@ -12,6 +12,23 @@ public class DataClass {
     private String UserName;
 
     private String videoUri;
+
+    public List<String> getStepList() {
+        return StepList;
+    }
+
+    public void setStepList(List<String> stepList) {
+        StepList = stepList;
+    }
+
+    public List<String> getIngredientList() {
+        return IngredientList;
+    }
+
+    public void setIngredientList(List<String> ingredientList) {
+        IngredientList = ingredientList;
+    }
+
     private List<String> StepList;
     private List<String> IngredientList;
 
