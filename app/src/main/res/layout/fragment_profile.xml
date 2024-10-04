@@ -83,6 +83,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.667" />
+
     </LinearLayout>
 
     <!-- Dynamic Recipe List -->
@@ -97,6 +98,7 @@
         android:layout_marginStart="16dp" />
 
     <!-- RecyclerView for displaying recipe list dynamically -->
+
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
