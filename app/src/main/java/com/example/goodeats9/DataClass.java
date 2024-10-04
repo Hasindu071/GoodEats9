@@ -1,6 +1,8 @@
 package com.example.goodeats9;
 
 
+import java.util.List;
+
 public class DataClass {
     private String imageUri;
     private String name;
@@ -10,6 +12,9 @@ public class DataClass {
     private String UserName;
 
     private String videoUri;
+    private List<String> StepList;
+    private List<String> IngredientList;
+
 
     public DataClass(String imageUri, String name, String cookTime, String description, String serves , String UserName , String videoUri) {
         this.imageUri = imageUri;
