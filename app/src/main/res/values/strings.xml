@@ -3,4 +3,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint"> * </string>
+    <string name="default_web_client_id">1061011943126-tjt5mbu9ddqoe0t9rdar587n0gn40052.apps.googleusercontent.com</string>
+
 </resources>

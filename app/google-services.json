@@ -13,7 +13,20 @@
           "package_name": "com.example.goodeats9"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1061011943126-oaueucleoc77lnhtbkk4l8talqisvj79.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.goodeats9",
+            "certificate_hash": "9334b01bd5a0b2238a8525a8aff4362871ed68d7"
+          }
+        },
+        {
+          "client_id": "1061011943126-tjt5mbu9ddqoe0t9rdar587n0gn40052.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCPD0YGKFk-j_Lz4leTVRmLOIvoH6P4vlQ"
@@ -21,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1061011943126-tjt5mbu9ddqoe0t9rdar587n0gn40052.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
