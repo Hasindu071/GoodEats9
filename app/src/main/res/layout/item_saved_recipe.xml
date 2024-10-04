@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -11,42 +12,72 @@
         android:layout_height="wrap_content"
         android:text="Recipe Name"
         android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Saved by: User Name"/>
+        android:text="Saved by: User Name" />
 
-    <ImageView
-        android:id="@+id/recipeImage"
+    <!-- Video and Thumbnail Frame -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="Recipe Image"/>
+        android:layout_height="200dp">
 
-    <VideoView
-        android:id="@+id/recipeVideoView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:visibility="gone"/> <!-- Initially hidden -->
+        <!-- Video View for playing the video -->
+        <VideoView
+            android:id="@+id/recipeVideoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/playIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/baseline_play_circle_24" />
+        <!-- ImageView to show the thumbnail -->
+        <ImageView
+            android:id="@+id/thumbnailImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="visible" />
 
+        <!-- Play button overlay -->
+        <ImageView
+            android:id="@+id/playIcon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:src="@drawable/baseline_play_circle_24"
+            android:visibility="visible" />
+    </FrameLayout>
+
+    <!-- Pause Icon -->
     <ImageView
         android:id="@+id/pauseIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_pause_circle_24"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
-    <SeekBar
-        android:id="@+id/seekBar"
+    <!-- Horizontal layout for Delete and SeekBar -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Delete Button -->
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/baseline_delete_24" />
+
+        <!-- Seek Bar for Video progress -->
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
 </LinearLayout>
