@@ -1,6 +1,7 @@
 package com.example.goodeats9;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,8 +39,8 @@ import java.util.Objects;
 public class login extends AppCompatActivity {
 
     EditText loginEmail, loginPassword;
-    Button signupButton, googleButton, facebookButton;
-    TextView signupRedirectText;
+    Button signinButton, googleButton, facebookButton;
+    TextView signupRedirectText, forgotPasswordText;
     FirebaseAuth auth;
     FirebaseDatabase database;
     GoogleSignInClient mGoogleSignInClient;
@@ -53,12 +54,22 @@ public class login extends AppCompatActivity {
         loginEmail = findViewById(R.id.Email);
         loginPassword = findViewById(R.id.Password);
         signupRedirectText = findViewById(R.id.textViewSignUp);
-        signupButton = findViewById(R.id.buttonSignIN);
+        signinButton = findViewById(R.id.buttonSignIN);
         googleButton = findViewById(R.id.buttonGoogle);
+        forgotPasswordText = findViewById(R.id.textViewForgotPassword);
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
-        signupButton.setOnClickListener(new View.OnClickListener() {
+        forgotPasswordText.setPaintFlags(forgotPasswordText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(login.this, Forget_Password.class);
+                startActivity(intent);
+            }
+        });
+
+        signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!validateEmail() | !validatePassword()) {
@@ -82,6 +93,7 @@ public class login extends AppCompatActivity {
             }
         });
 
+        signupRedirectText.setPaintFlags(signupRedirectText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         signupRedirectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,7 +162,7 @@ public class login extends AppCompatActivity {
                                 database.getReference().child("users").child(user.getUid()).setValue(map);
 
                                 Log.d("SignIn", "Navigating to MainActivity.");
-                                Intent intent = new Intent(login.this, MainActivity.class);
+                                Intent intent = new Intent(login.this, menu_bar_main.class);
                                 startActivity(intent);
                                 finish();
                             }
