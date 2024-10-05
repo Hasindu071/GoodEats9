@@ -44,7 +44,7 @@ public class MyRecipies extends AppCompatActivity {
 
         // Initialize Data List and Adapter with click listener
         dataList = new ArrayList<>();
-        adapter = new MyrecipeAdapter(this, dataList, this::onItemClick, this::onDeleteClick); // Pass the delete handler
+        adapter = new MyrecipeAdapter(this, dataList, this::onItemClick, this::onDeleteClick,this::onEditClick); // Pass the delete handler
         recyclerView.setAdapter(adapter);
 
         // Fetch the user's recipes
@@ -142,5 +142,19 @@ public class MyRecipies extends AppCompatActivity {
                         Toast.makeText(MyRecipies.this, "Failed to delete recipe", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    // Handle delete clicks
+    public void onEditClick(DataClass selectedRecipe) {
+        // Handle edit icon click
+        Intent intent = new Intent(this,UpdateRecipe.class);
+
+        // Pass the data from the selected recipe to the edit activity
+        intent.putExtra("recipeID", selectedRecipe.getRecipeId());
+        intent.putExtra("recipeName", selectedRecipe.getName());
+        intent.putExtra("recipeImage", selectedRecipe.getImageUri());
+
+        // Start the new activity for editing
+        startActivity(intent);
     }
 }
