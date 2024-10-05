@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,6 +55,11 @@ public class searchFragment extends Fragment {
                 // Get the selected recipe
                 DataClass selectedRecipe = (DataClass) parent.getItemAtPosition(position);
 
+                // Get the current user
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                String userEmail = currentUser != null ? currentUser.getEmail() : null;
+                String sanitizedEmail = userEmail != null ? userEmail.replace(".", "_") : null;
+
                 // Create an intent to open the RecipeDetailsActivity
                 Intent intent = new Intent(getActivity(), recipeMain.class);
 
@@ -64,6 +71,9 @@ public class searchFragment extends Fragment {
                 intent.putExtra("serves", selectedRecipe.getServes());
                 intent.putExtra("username", selectedRecipe.getUserName());
                 intent.putExtra("videoUri", selectedRecipe.getVideoUri());
+
+                intent.putExtra("recipeID", selectedRecipe.getRecipeId());//Send recipe ID
+                intent.putExtra("currentUserEmail", selectedRecipe.getUserEmail());// Send currunt Email
 
                 // Start the new activity
                 startActivity(intent);
@@ -89,8 +99,13 @@ public class searchFragment extends Fragment {
                 // Iterate through all users' recipes nodes in the database
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
 
+                    String userEmail = userSnapshot.getKey(); // Get the user's email
+
                     // For each user, get their recipes and details
                     for (DataSnapshot recipeSnapshot : userSnapshot.getChildren()) {
+
+                        String recipeId = recipeSnapshot.getKey(); // Get the recipe ID
+
                         String imageUri = recipeSnapshot.child("imageUri").getValue(String.class);
                         String name = recipeSnapshot.child("name").getValue(String.class);
                         String description = recipeSnapshot.child("description").getValue(String.class);
@@ -100,7 +115,7 @@ public class searchFragment extends Fragment {
                         String videoUri = recipeSnapshot.child("videoUri").getValue(String.class);
 
                         if (imageUri != null && name != null) {
-                            DataClass dataClass = new DataClass(imageUri, name, cookTime, description, serves, username, videoUri); // Create a new DataClass object
+                            DataClass dataClass = new DataClass(imageUri, name, cookTime, description, serves, username, videoUri,recipeId,userEmail); // Create a new DataClass object
                             dataList.add(dataClass);  // Add the recipe data to the list
                         }
                     }

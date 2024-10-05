@@ -12,8 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,61 +21,68 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class saveFragment extends Fragment {
+public class saveFragment extends Fragment implements SavedRecipeAdapter.OnRecipeDeleteListener {
 
     private RecyclerView recyclerView;
     private SavedRecipeAdapter adapter;
-    private List<Datacls> savedRecipeList;
+    private List<Datacls> savedRecipes; // List to hold saved recipes
+    private DatabaseReference databaseReference; // Reference to Firebase database
 
-    private DatabaseReference savedRecipesRef;
-    private FirebaseAuth auth;
-    private FirebaseUser currentUser;
-
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_save, container, false);
 
-        // Initialize Firebase auth and user
-        auth = FirebaseAuth.getInstance();
-        currentUser = auth.getCurrentUser();
-
-        // Initialize RecyclerView
+        // Initialize RecyclerView and savedRecipes list
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        savedRecipes = new ArrayList<>();
 
-        savedRecipeList = new ArrayList<>();
-        adapter = new SavedRecipeAdapter(getContext(), savedRecipeList);
+        // Initialize the adapter with the saved recipes list and set it to the RecyclerView
+        adapter = new SavedRecipeAdapter(savedRecipes, this);
         recyclerView.setAdapter(adapter);
 
-        if (currentUser != null) {
-            loadSavedRecipes();
-        } else {
-            Toast.makeText(getContext(), "Please log in to see saved recipes.", Toast.LENGTH_SHORT).show();
-        }
+        // Load saved recipes from Firebase
+        loadSavedRecipes();
 
-        return view;
+        return view; // Return the inflated view
     }
 
     private void loadSavedRecipes() {
-        String userId = currentUser.getUid();
-        savedRecipesRef = FirebaseDatabase.getInstance().getReference("saved_recipes").child(userId);
-
-        savedRecipesRef.addValueEventListener(new ValueEventListener() {
+        databaseReference = FirebaseDatabase.getInstance().getReference("saved_recipes");
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                savedRecipeList.clear(); // Clear the list before adding new data
+                savedRecipes.clear(); // Clear the previous recipes
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Datacls recipe = snapshot.getValue(Datacls.class);
-                    savedRecipeList.add(recipe);
+                    if (recipe != null) {
+                        savedRecipes.add(recipe); // Add each recipe to the list
+                    }
                 }
                 adapter.notifyDataSetChanged(); // Notify adapter of data change
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Failed to load saved recipes.", Toast.LENGTH_SHORT).show();
+                // Handle possible errors.
+                Toast.makeText(getContext(), "Failed to load recipes", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onRecipeDelete(Datacls recipe) {
+        // Remove recipe from savedRecipes list
+        savedRecipes.remove(recipe);
+
+        // Optionally, remove recipe from Firebase as well
+        databaseReference.child(recipe.getId()).removeValue();
+
+        // Notify adapter about the change
+        adapter.notifyDataSetChanged();
+
+        // Show a confirmation message
+        Toast.makeText(getContext(), "Recipe deleted", Toast.LENGTH_SHORT).show();
     }
 }
