@@ -44,7 +44,7 @@ public class MyRecipies extends AppCompatActivity {
 
         // Initialize Data List and Adapter with click listener
         dataList = new ArrayList<>();
-        adapter = new MyrecipeAdapter(this, dataList, this::onItemClick); // Pass the click handler
+        adapter = new MyrecipeAdapter(this, dataList, this::onItemClick, this::onDeleteClick); // Pass the delete handler
         recyclerView.setAdapter(adapter);
 
         // Fetch the user's recipes
@@ -99,13 +99,11 @@ public class MyRecipies extends AppCompatActivity {
         }
     }
 
-
     // Handle item clicks
     private void onItemClick(DataClass selectedRecipe) {
         // Get the current user
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String userEmail = currentUser != null ? currentUser.getEmail() : null;
-        String sanitizedEmail = userEmail != null ? userEmail.replace(".", "_") : null;
 
         // Create an intent
         Intent intent = new Intent(this, recipeMain.class);
@@ -121,9 +119,28 @@ public class MyRecipies extends AppCompatActivity {
 
         // Pass recipe ID and current user email
         intent.putExtra("recipeID", selectedRecipe.getRecipeId());
-        intent.putExtra("currentUserEmail",selectedRecipe.getUserEmail());
+        intent.putExtra("currentUserEmail", selectedRecipe.getUserEmail());
 
         // Start the new activity
         startActivity(intent);
+    }
+
+    // Handle delete clicks
+    private void onDeleteClick(DataClass recipeToDelete) {
+        String recipeId = recipeToDelete.getRecipeId();
+        String userEmail = recipeToDelete.getUserEmail();
+
+        // Delete recipe from Firebase
+        DatabaseReference recipeRef = FirebaseDatabase.getInstance().getReference("recipes").child(userEmail).child(recipeId);
+        recipeRef.removeValue()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(MyRecipies.this, "Recipe deleted successfully", Toast.LENGTH_SHORT).show();
+                        // Optionally refresh the list
+                        fetchAllRecipes(); // This will re-fetch the updated list
+                    } else {
+                        Toast.makeText(MyRecipies.this, "Failed to delete recipe", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
