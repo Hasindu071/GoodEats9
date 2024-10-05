@@ -3,7 +3,6 @@ package com.example.goodeats9;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class recipeMain extends AppCompatActivity {
 
@@ -226,38 +227,87 @@ public class recipeMain extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> Toast.makeText(this, "Recipe saved successfully!", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to save recipe: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
-
+    // Merhod to share an recipe
     private void fetchAndShareRecipe() {
-        String userId = "jagath@gmail_com";
-        String recipeId = "-O8C8BCQipBiXFRF6MFf";
+        // Get the current user
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        recipeDatabaseReference.child(userId).child(recipeId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String recipeName = dataSnapshot.child("recipeName").getValue(String.class);
-                    String description = dataSnapshot.child("description").getValue(String.class);
-                    String videoUri = dataSnapshot.child("videoUri").getValue(String.class);
+        if (currentUser != null) {
+            String userId = currentUser.getEmail().replace(".", "_");
 
-                    shareRecipe(recipeName, description, videoUri);
-                } else {
-                    Toast.makeText(recipeMain.this, "Recipe not found", Toast.LENGTH_SHORT).show();
+            recipeDatabaseReference.child(userId).child(recipeId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        // Fetch recipe details
+                        String recipeName = dataSnapshot.child("name").getValue(String.class);
+                        String description = dataSnapshot.child("description").getValue(String.class);
+                        String serves = dataSnapshot.child("serves").getValue(String.class);
+                        String category = dataSnapshot.child("category").getValue(String.class);
+                        String cookTime = dataSnapshot.child("cookTime").getValue(String.class);
+
+                        // Initialize ArrayLists to store the ingredients and methods
+                        ArrayList<String> ingredientList = new ArrayList<>();
+                        ArrayList<String> methodList = new ArrayList<>();
+
+                        // Retrieve ingredients
+                        for (DataSnapshot ingredientSnapshot : dataSnapshot.child("ingredients").getChildren()) {
+                            String ingredient = ingredientSnapshot.getValue(String.class);
+                            if (ingredient != null) {
+                                ingredientList.add(ingredient);
+                            }
+                        }
+
+                        // Retrieve cooking methods
+                        for (DataSnapshot methodSnapshot : dataSnapshot.child("methods").getChildren()) {
+                            String method = methodSnapshot.getValue(String.class);
+                            if (method != null) {
+                                methodList.add(method);
+                            }
+                        }
+
+                        // Convert ingredient list to a string for sharing
+                        StringBuilder ingredientsBuilder = new StringBuilder();
+                        for (String ingredient : ingredientList) {
+                            ingredientsBuilder.append(ingredient).append("\n");
+                        }
+
+                        // Convert method list to a string for sharing
+                        StringBuilder stepsBuilder = new StringBuilder();
+                        for (String method : methodList) {
+                            stepsBuilder.append(method).append("\n");
+                        }
+
+                        // Create sharing intent
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setType("text/plain");
+
+                        // Combine subject and message
+                        String message = "Check out this recipe! On Goodeats app\n\n"
+                                + "Recipe Name: " + recipeName
+                                + "\nDescription: " + description
+                                + "\nServes: " + serves
+                                + "\nCategory: " + category
+                                + "\nCook Time: " + cookTime
+                                + "\n\nIngredients:\n" + ingredientsBuilder
+                                + "\n\nSteps:\n" + stepsBuilder.toString();
+
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+                        startActivity(Intent.createChooser(shareIntent, "Share via"));
+                    } else {
+                        Toast.makeText(recipeMain.this, "Recipe not found!", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(recipeMain.this, "Failed to fetch recipe", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void shareRecipe(String recipeName, String description, String videoUri) {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        String shareMessage = "Check out this recipe!\n\nRecipe: " + recipeName + "\nDescription: " + description + "\nWatch it here: " + videoUri;
-        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-        startActivity(Intent.createChooser(shareIntent, "Share Recipe via"));
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Handle possible errors.
+                    Toast.makeText(recipeMain.this, "Error fetching recipe: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(recipeMain.this, "User not authenticated!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadFragment(Fragment fragment) {
