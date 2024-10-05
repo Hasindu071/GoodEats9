@@ -151,8 +151,12 @@ public class MyRecipies extends AppCompatActivity {
 
         // Pass the data from the selected recipe to the edit activity
         intent.putExtra("recipeID", selectedRecipe.getRecipeId());
-        intent.putExtra("recipeName", selectedRecipe.getName());
-        intent.putExtra("recipeImage", selectedRecipe.getImageUri());
+        intent.putExtra("title", selectedRecipe.getName());
+        intent.putExtra("Image", selectedRecipe.getImageUri());
+        intent.putExtra("cookTime", selectedRecipe.getCookTime());
+        intent.putExtra("serves", selectedRecipe.getServes());
+        intent.putExtra("video", selectedRecipe.getVideoUri());
+
 
         // Start the new activity for editing
         startActivity(intent);
