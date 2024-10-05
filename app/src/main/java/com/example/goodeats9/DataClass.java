@@ -10,8 +10,24 @@ public class DataClass {
     private String description;
     private String serves ;
     private String UserName;
+    private String userEmail;
+
+    public String getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(String recipeId) {
+        this.recipeId = recipeId;
+    }
+
+    private String recipeId;
 
     private String videoUri;
+
+    public DataClass(String imageUri, String name) {
+        this.imageUri = imageUri;
+        this.name = name;
+    }
 
     public List<String> getStepList() {
         return StepList;
@@ -41,6 +57,27 @@ public class DataClass {
         this.serves = serves;
         this.UserName = UserName;
         this.videoUri = videoUri;
+    }
+
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public DataClass(String imageUri, String name, String cookTime, String description, String serves, String username, String videoUri, String recipeId , String email) {
+        this.imageUri = imageUri;
+        this.name = name;
+        this.cookTime = cookTime;
+        this.description = description;
+        this.serves = serves;
+        this.UserName = username;
+        this.videoUri = videoUri;
+        this.recipeId = recipeId;
+        this.userEmail = email;
     }
 
     public String getCookTime() {

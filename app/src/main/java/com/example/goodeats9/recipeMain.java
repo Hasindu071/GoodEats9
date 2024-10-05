@@ -1,5 +1,6 @@
 package com.example.goodeats9;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
@@ -34,19 +35,18 @@ public class recipeMain extends AppCompatActivity {
     private Button procedureButton;
     private Button ingredientsButton;
     private ProgressBar loadingSpinner;
-    private TextView recipeNameText, descriptionText, userNameText;
+    private TextView recipeNameText, descriptionText, userNameText ,Email , RecID;
     private VideoView recipeVideoView;
     private DatabaseReference recipeDatabaseReference;
     private ImageView save;
     private Uri currentVideoUri;
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_main);
-
-
 
         // Find the ImageView for the back button
         ImageView backButton = findViewById(R.id.backbtn);
@@ -76,13 +76,11 @@ public class recipeMain extends AppCompatActivity {
         save = findViewById(R.id.save);
         recipeVideoView = findViewById(R.id.videoView2);
 
-
-
+        Email = findViewById(R.id.email);
+        RecID = findViewById(R.id.ID);
 
         // Show ProgressBar while the video is loading
         loadingSpinner.setVisibility(View.VISIBLE);
-
-
 
         // Initialize VideoView
         recipeVideoView = findViewById(R.id.videoView2);
@@ -99,8 +97,10 @@ public class recipeMain extends AppCompatActivity {
         String name = intentRecipe.getStringExtra("name");
         String description = intentRecipe.getStringExtra("description");
         String userName = intentRecipe.getStringExtra("username");
+        String email = intentRecipe.getStringExtra("currentUserEmail");
+        String ID = intentRecipe.getStringExtra("recipeID");
 
-        // Get the video URL from the intent
+// Get the video URL from the intent
         String videoUri = intentRecipe.getStringExtra("videoUri");
         currentVideoUri = Uri.parse(videoUri); // Store it in the member variable
         recipeVideoView.setVideoURI(currentVideoUri); // Set it to the VideoView
@@ -111,6 +111,8 @@ public class recipeMain extends AppCompatActivity {
         recipeNameText.setText(name);
         descriptionText.setText(description);
         userNameText.setText(userName);
+        Email.setText(email);
+        RecID.setText(ID);
 
         // Set video URI
         currentVideoUri = Uri.parse(videoUri);
@@ -128,21 +130,37 @@ public class recipeMain extends AppCompatActivity {
         setButtonActive(procedureButton);
         setButtonInactive(ingredientsButton);
 
+
         // Load the Procedure fragment by default
-        loadFragment(new ProcedureFragment());
+        Bundle args = new Bundle();
+        args.putString("email", email); // Pass email
+        args.putString("recipeID", ID); // Pass recipeID
+        ProcedureFragment procedureFragment = new ProcedureFragment();
+        procedureFragment.setArguments(args);
+        loadFragment(procedureFragment);
+
 
         // when click the procedure button go that fragment
         procedureButton.setOnClickListener(view -> {
             setButtonActive(procedureButton);
             setButtonInactive(ingredientsButton);
-            loadFragment(new ProcedureFragment());
+
+            // Create a new instance of ProcedureFragment with the arguments
+            procedureFragment.setArguments(args);
+            loadFragment(procedureFragment);
         });
 
-        // when click the ingredient button go that fragment
+// when click the ingredient button go that fragment
         ingredientsButton.setOnClickListener(view -> {
             setButtonActive(ingredientsButton);
             setButtonInactive(procedureButton);
-            loadFragment(new IngredientsFragment());
+
+            // Create a new instance of IngredientsFragment (if needed)
+            IngredientsFragment ingredientsFragment = new IngredientsFragment();
+
+            // Pass the necessary arguments (if any)
+            ingredientsFragment.setArguments(args);
+            loadFragment(ingredientsFragment);
         });
 
         // Set click listener for shareImage
@@ -182,7 +200,7 @@ public class recipeMain extends AppCompatActivity {
             saveRecipe(recipeToSave); // Save to Firebase
         });
 
-        // Handle star ImageView click to go to the rating class
+// Handle star ImageView click to go to the rating class
         starImage.setOnClickListener(v -> {
             Intent intent = new Intent(recipeMain.this, rating.class);
             startActivity(intent);
