@@ -48,7 +48,7 @@
                         android:id="@+id/imageView7"
                         android:layout_width="50dp"
                         android:layout_height="42dp"
-                        app:srcCompat="@drawable/delete_icon"/>
+                        app:srcCompat="@drawable/ndlt"/>
                 </LinearLayout>
 
             </FrameLayout>
