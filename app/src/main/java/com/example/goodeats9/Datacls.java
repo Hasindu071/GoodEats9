@@ -1,24 +1,32 @@
 package com.example.goodeats9;
 
 public class Datacls {
-
+    private String id; // Declare the id variable
     private String videoUri;
     private String name;
     private String description;
     private String userName;
-    private String imageUri;
+    private String imageUri; // Assuming you still want to include this field
 
-    // Empty constructor required for Firebase
-    public Datacls() {}
-
+    // Constructor
     public Datacls(String videoUri, String name, String description, String userName, String imageUri) {
         this.videoUri = videoUri;
         this.name = name;
         this.description = description;
         this.userName = userName;
-        this.imageUri = imageUri;
+        this.imageUri = imageUri; // This field can be empty if not used
     }
 
+    // Getter and setter for id
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    // Getters and setters for other fields
     public String getVideoUri() {
         return videoUri;
     }
