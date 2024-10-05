@@ -156,7 +156,11 @@ public class MyRecipies extends AppCompatActivity {
         intent.putExtra("cookTime", selectedRecipe.getCookTime());
         intent.putExtra("serves", selectedRecipe.getServes());
         intent.putExtra("video", selectedRecipe.getVideoUri());
+        intent.putExtra("description", selectedRecipe.getDescription());
 
+        // Pass the lists (convert List to ArrayList)
+        //intent.putStringArrayListExtra("stepList", new ArrayList<>(selectedRecipe.getStepList()));
+        //intent.putStringArrayListExtra("ingredientList", new ArrayList<>(selectedRecipe.getIngredientList()));
 
         // Start the new activity for editing
         startActivity(intent);
