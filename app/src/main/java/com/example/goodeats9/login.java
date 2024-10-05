@@ -131,7 +131,7 @@ public class login extends AppCompatActivity {
                 firebaseAuth(account.getIdToken());
             } catch (ApiException e) {
                 Log.e("SignIn", "Google Sign-In failed: " + e.getMessage());
-                Toast.makeText(getApplicationContext(), "Something went wrong1", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
     }
