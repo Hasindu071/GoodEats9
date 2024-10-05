@@ -200,25 +200,6 @@
             app:layout_constraintVertical_bias="0.818"
             tools:ignore="TextSizeCheck" />
 
-        <Button
-            android:id="@+id/buttonFacebook"
-            android:layout_width="304dp"
-            android:layout_height="55dp"
-            android:layout_marginStart="52dp"
-            android:backgroundTint="#F1F5F9"
-            android:drawableLeft="@drawable/facebook1"
-            android:fontFamily="@font/inter"
-            android:text="Continue with Facebook"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="14dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.912"
-            tools:ignore="TextSizeCheck" />
-
         <TextView
             android:id="@+id/textViewDontHaveAcc"
             android:layout_width="wrap_content"
@@ -231,7 +212,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.977"
+            app:layout_constraintVertical_bias="0.904"
             tools:ignore="TextSizeCheck" />
 
         <TextView
@@ -247,7 +228,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.977"
+            app:layout_constraintVertical_bias="0.904"
             tools:ignore="TouchTargetSizeCheck,TextSizeCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
