@@ -86,17 +86,16 @@ public class profileFragment extends Fragment {
         });
 
 
+        /////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
         // View recipe button click listener
         Button UpdateRecipeButton = view.findViewById(R.id.UpdateRecipeButton);
-        UpdateRecipeButton.setOnClickListener(v -> startActivity(new Intent(getActivity(), UpdateRecipe.class)));
+        UpdateRecipeButton.setOnClickListener(v -> startActivity(new Intent(getActivity(), MyRecipies.class)));
 
         return view;
     }
-
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
