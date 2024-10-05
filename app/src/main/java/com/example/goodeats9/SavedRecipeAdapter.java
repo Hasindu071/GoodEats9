@@ -1,8 +1,10 @@
 package com.example.goodeats9;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,102 +17,123 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.IOException;
 import java.util.List;
 
-public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.SavedRecipeViewHolder> {
+public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.ViewHolder> {
 
+    private Context context;
     private List<Datacls> savedRecipes;
-    private OnRecipeDeleteListener deleteListener;
-    private Handler handler = new Handler();  // To handle seek bar updates
+    private boolean isSeeking = false;
 
-    public SavedRecipeAdapter(List<Datacls> savedRecipes, OnRecipeDeleteListener deleteListener) {
+    public SavedRecipeAdapter(Context context, List<Datacls> savedRecipes) {
+        this.context = context;
         this.savedRecipes = savedRecipes;
-        this.deleteListener = deleteListener;
     }
 
     @NonNull
     @Override
-    public SavedRecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_saved_recipe, parent, false);
-        return new SavedRecipeViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_saved_recipe, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SavedRecipeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Datacls recipe = savedRecipes.get(position);
+
+        // Set recipe name and user name
         holder.recipeName.setText(recipe.getName());
         holder.userName.setText("Saved by: " + recipe.getUserName());
 
-        // Set the thumbnail for the video
-        holder.thumbnailImageView.setImageURI(Uri.parse(recipe.getImageUri()));
+        // Load the video URI
+        Uri videoUri = Uri.parse(recipe.getVideoUri());
+        holder.recipeVideoView.setVideoURI(videoUri);
 
-        // Handle play button click
+        // Load the thumbnail using MediaMetadataRetriever safely
+        try {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(context, videoUri);
+            Bitmap thumbnail = retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+
+            if (thumbnail != null) {
+                holder.thumbnailImageView.setImageBitmap(thumbnail);
+            } else {
+                holder.thumbnailImageView.setImageResource(R.drawable.placeholder_image); // Use your placeholder image
+            }
+
+            retriever.release(); // Release retriever after use
+        } catch (IOException | IllegalArgumentException e) {
+            e.printStackTrace();
+            holder.thumbnailImageView.setImageResource(R.drawable.placeholder_image); // Fallback if error occurs
+        }
+
+        // Play button click listener
         holder.playIcon.setOnClickListener(v -> {
-            holder.thumbnailImageView.setVisibility(View.GONE);
-            holder.playIcon.setVisibility(View.GONE);
-            holder.recipeVideoView.setVisibility(View.VISIBLE);
-            holder.pauseIcon.setVisibility(View.VISIBLE);
-            holder.recipeVideoView.setVideoURI(Uri.parse(recipe.getVideoUri()));
-            holder.recipeVideoView.start();
-            holder.videoSeekBar.setMax(holder.recipeVideoView.getDuration()); // Set max value for SeekBar
-
-            // Update seekbar as the video plays
-            updateSeekBar(holder);
-
-            // Pause button click logic
-            holder.pauseIcon.setOnClickListener(pauseView -> {
-                if (holder.recipeVideoView.isPlaying()) {
-                    holder.recipeVideoView.pause();
-                    holder.pauseIcon.setImageResource(R.drawable.baseline_play_circle_24); // Change to play icon
-                } else {
-                    holder.recipeVideoView.start();
-                    holder.pauseIcon.setImageResource(R.drawable.baseline_pause_circle_24); // Change to pause icon
-                    updateSeekBar(holder); // Continue updating seekbar
-                }
-            });
+            holder.thumbnailImageView.setVisibility(View.GONE); // Hide thumbnail
+            holder.playIcon.setVisibility(View.GONE); // Hide play button
+            holder.recipeVideoView.setVisibility(View.VISIBLE); // Show VideoView
+            holder.recipeVideoView.start(); // Start video
+            holder.pauseIcon.setVisibility(View.VISIBLE); // Show pause button
+            holder.updateSeekBar(holder); // Update seek bar progress
         });
 
-        // Handle delete button click
-        holder.deleteButton.setOnClickListener(v -> {
-            deleteListener.onRecipeDelete(recipe); // Pass the recipe to be deleted to the listener
+        // Pause button click listener
+        holder.pauseIcon.setOnClickListener(v -> {
+            holder.recipeVideoView.pause();
+            holder.playIcon.setVisibility(View.VISIBLE); // Show play button
+            holder.pauseIcon.setVisibility(View.GONE); // Hide pause button
         });
 
-        // SeekBar change listener
-        holder.videoSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        // Video completion listener
+        holder.recipeVideoView.setOnCompletionListener(mediaPlayer -> {
+            holder.recipeVideoView.stopPlayback();
+            holder.playIcon.setVisibility(View.VISIBLE); // Show play button
+            holder.pauseIcon.setVisibility(View.GONE); // Hide pause button
+            holder.recipeVideoView.setVisibility(View.GONE); // Hide VideoView
+            holder.thumbnailImageView.setVisibility(View.VISIBLE); // Show thumbnail again
+            holder.seekBar.setProgress(0); // Reset seek bar progress
+        });
+
+        // Handle seek bar changes
+        holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-                    holder.recipeVideoView.seekTo(progress); // Manually adjust video time
+                    holder.recipeVideoView.seekTo(progress);
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // Pause the video when the user is adjusting the SeekBar
-                holder.recipeVideoView.pause();
+                isSeeking = true; // Disable auto-updating while user is seeking
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                // Resume the video after the user has adjusted the SeekBar
-                holder.recipeVideoView.start();
+                isSeeking = false; // Re-enable auto-updating after seeking
+                holder.recipeVideoView.seekTo(seekBar.getProgress());
             }
         });
-    }
 
-    private void updateSeekBar(SavedRecipeViewHolder holder) {
-        // Update the SeekBar according to video progress
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (holder.recipeVideoView.isPlaying()) {
-                    int currentPosition = holder.recipeVideoView.getCurrentPosition();
-                    holder.videoSeekBar.setMax(holder.recipeVideoView.getDuration());
-                    holder.videoSeekBar.setProgress(currentPosition);
-                    updateSeekBar(holder); // Recursive call to keep updating
-                }
-            }
-        }, 1000); // Update every second
+        // Set up seek bar when video is prepared
+        holder.recipeVideoView.setOnPreparedListener(mediaPlayer -> {
+            holder.seekBar.setMax(holder.recipeVideoView.getDuration());
+            holder.updateSeekBar(holder);
+        });
+
+        // Delete button click listener
+        holder.deleteButton.setOnClickListener(v -> {
+            deleteRecipeFromDatabase(recipe.getVideoUri()); // Call method to delete from the database
+
+            // Remove the item from the list and notify the adapter
+            savedRecipes.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, savedRecipes.size());
+        });
     }
 
     @Override
@@ -118,27 +141,49 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
         return savedRecipes.size();
     }
 
-    public static class SavedRecipeViewHolder extends RecyclerView.ViewHolder {
+    private void deleteRecipeFromDatabase(String videoUri) {
+        // Extract the unique identifier for deletion (assumed to be the same as videoUri)
+        String videoIdentifier = videoUri.replace(".", "_"); // Change this according to your unique identifier format
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("savedRecipes");
+
+        databaseReference.child(videoIdentifier) // Use videoIdentifier for deletion
+                .removeValue()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Delete Recipe", "Recipe deleted successfully");
+                    } else {
+                        Log.e("Delete Recipe", "Failed to delete recipe", task.getException());
+                    }
+                });
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView recipeName, userName;
         VideoView recipeVideoView;
         ImageView thumbnailImageView, playIcon, pauseIcon;
-        SeekBar videoSeekBar;
+        SeekBar seekBar;
         ImageButton deleteButton;
 
-        public SavedRecipeViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeName = itemView.findViewById(R.id.recipeName);
             userName = itemView.findViewById(R.id.userName);
             recipeVideoView = itemView.findViewById(R.id.recipeVideoView);
-            thumbnailImageView = itemView.findViewById(R.id.thumbnailImageView);
+            thumbnailImageView = itemView.findViewById(R.id.thumbnailImageView); // Thumbnail ImageView
             playIcon = itemView.findViewById(R.id.playIcon);
             pauseIcon = itemView.findViewById(R.id.pauseIcon);
-            videoSeekBar = itemView.findViewById(R.id.videoSeekBar);
-            deleteButton = itemView.findViewById(R.id.imageButton);
+            seekBar = itemView.findViewById(R.id.videoSeekBar); // Update with correct ID
+            deleteButton = itemView.findViewById(R.id.imageButton); // Delete button
         }
-    }
 
-    public interface OnRecipeDeleteListener {
-        void onRecipeDelete(Datacls recipe);
+        public void updateSeekBar(ViewHolder holder) {
+            if (!isSeeking) {
+                holder.seekBar.setProgress(holder.recipeVideoView.getCurrentPosition());
+            }
+            if (holder.recipeVideoView.isPlaying()) {
+                holder.seekBar.postDelayed(() -> updateSeekBar(holder), 1000);
+            }
+        }
     }
 }

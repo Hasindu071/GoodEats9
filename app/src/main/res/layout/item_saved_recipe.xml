@@ -34,11 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/baseline_delete_24"
-            android:contentDescription="Delete Recipe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/recipeName"
             app:layout_constraintBottom_toBottomOf="@+id/recipeName" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- User who saved the recipe -->
@@ -107,4 +105,5 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>
+
 </LinearLayout>

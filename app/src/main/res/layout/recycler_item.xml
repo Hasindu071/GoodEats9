@@ -37,7 +37,7 @@
 
                     <!-- Edit Icon -->
                     <ImageView
-                        android:id="@+id/imageView6"
+                        android:id="@+id/editbtn"
                         android:layout_width="50dp"
                         android:layout_height="42dp"
                         app:srcCompat="@drawable/edit"

@@ -20,14 +20,18 @@ public class MyrecipeAdapter extends RecyclerView.Adapter<MyrecipeAdapter.MyView
     private Context context;
     private OnItemClickListener onItemClickListener; // Interface for handling item clicks
     private OnDeleteClickListener onDeleteClickListener; // Interface for handling delete clicks
+    private OnEditClickListener onEditClickListener; // Interface for handling edit clicks
 
     // Constructor with click listeners
     public MyrecipeAdapter(Context context, ArrayList<DataClass> dataList,
-                           OnItemClickListener onItemClickListener, OnDeleteClickListener onDeleteClickListener) {
+                           OnItemClickListener onItemClickListener,
+                           OnDeleteClickListener onDeleteClickListener,
+                           OnEditClickListener onEditClickListener) {
         this.context = context;
         this.dataList = dataList;
         this.onItemClickListener = onItemClickListener;
-        this.onDeleteClickListener = onDeleteClickListener; // Initialize delete listener
+        this.onDeleteClickListener = onDeleteClickListener;
+        this.onEditClickListener = onEditClickListener; // Initialize edit listener
     }
 
     @NonNull
@@ -56,6 +60,13 @@ public class MyrecipeAdapter extends RecyclerView.Adapter<MyrecipeAdapter.MyView
                 onDeleteClickListener.onDeleteClick(dataList.get(position)); // Pass the item to delete
             }
         });
+
+        // Set edit icon click listener
+        holder.editIcon.setOnClickListener(v -> {
+            if (onEditClickListener != null) {
+                onEditClickListener.onEditClick(dataList.get(position)); // Pass the item to edit
+            }
+        });
     }
 
     @Override
@@ -68,13 +79,15 @@ public class MyrecipeAdapter extends RecyclerView.Adapter<MyrecipeAdapter.MyView
 
         ImageView recyclerImage;
         TextView recyclerCaption;
-        ImageView deleteIcon; // Add delete icon reference
+        ImageView deleteIcon; // Delete icon reference
+        ImageView editIcon; // Edit icon reference
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             recyclerImage = itemView.findViewById(R.id.recyclerImage);
             recyclerCaption = itemView.findViewById(R.id.recyclerCaption);
             deleteIcon = itemView.findViewById(R.id.deletebtn); // Initialize delete icon
+            editIcon = itemView.findViewById(R.id.editbtn); // Initialize edit icon
         }
     }
 
@@ -86,5 +99,10 @@ public class MyrecipeAdapter extends RecyclerView.Adapter<MyrecipeAdapter.MyView
     // Interface for handling delete clicks
     public interface OnDeleteClickListener {
         void onDeleteClick(DataClass data); // Method to pass the data item to delete
+    }
+
+    // Interface for handling edit clicks
+    public interface OnEditClickListener {
+        void onEditClick(DataClass data); // Method to pass the data item to edit
     }
 }
