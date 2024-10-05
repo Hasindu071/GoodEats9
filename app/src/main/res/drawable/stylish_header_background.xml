@@ -1,0 +1,11 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Set background color (green in this case) -->
+    <solid android:color="@color/green" />
+
+    <!-- Define the corner curve for the top-right side -->
+    <corners
+        android:topRightRadius="0dp"
+        android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="100dp"
+        android:topLeftRadius="0dp" />
+</shape>

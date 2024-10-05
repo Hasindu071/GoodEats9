@@ -7,11 +7,39 @@
     android:background="@color/white"
     android:padding="16dp">
 
+    <!-- Stylish Green Header Section with Curved Background -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/stylish_header_background"
+        android:orientation="vertical"
+        android:padding="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Eat Well, Live Well"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Cook delicious meals with fresh ingredients."
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:padding="16dp">
 
         <RelativeLayout
@@ -48,18 +76,18 @@
                 android:layout_marginTop="30dp"
                 android:padding="16dp">
 
-            <TextView
-                android:id="@+id/text_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/text_hello"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="32dp"
-                android:layout_alignBaseline="@id/text_hello"
-                android:fontFamily="@font/poppins"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/text_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/text_hello"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_alignBaseline="@id/text_hello"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
