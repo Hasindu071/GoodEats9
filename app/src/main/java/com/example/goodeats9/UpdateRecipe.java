@@ -52,33 +52,20 @@ public class UpdateRecipe extends AppCompatActivity {
         ArrayList<String> stepList = intent.getStringArrayListExtra("stepList");
         ArrayList<String> ingredientList = intent.getStringArrayListExtra("ingredientList");
 
+        // Log the received data
+        System.out.println("Received Steps: " + (stepList != null ? stepList : "null"));
+        System.out.println("Received Ingredients: " + (ingredientList != null ? ingredientList : "null"));
+
         // Use Glide or any image loading library to set the image in the ImageView
         Glide.with(this).load(imageUri).into(recipeImageView);
-
-        // Ensure lists are not null
-        if (stepList == null) {
-            stepList = new ArrayList<>(); // Initialize an empty list if null
-        }
-        if (ingredientList == null) {
-            ingredientList = new ArrayList<>(); // Initialize an empty list if null
-        }
-
-        // Example: Log the steps and ingredients (optional debugging)
-        for (String step : stepList) {
-            System.out.println("Step: " + step);
-        }
-
-        for (String ingredient : ingredientList) {
-            System.out.println("Ingredient: " + ingredient);
-        }
 
         // Initialize ListViews
         ListView stepListView = findViewById(R.id.stepListView);
         ListView ingredientListView = findViewById(R.id.ingredientListView);
 
         // Set up adapter for the steps and ingredients
-        ArrayAdapter<String> stepAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, stepList);
-        ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, ingredientList);
+        ArrayAdapter<String> stepAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, stepList != null ? stepList : new ArrayList<>());
+        ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, ingredientList != null ? ingredientList : new ArrayList<>());
 
         // Set the adapter to the ListViews
         stepListView.setAdapter(stepAdapter);
