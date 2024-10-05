@@ -198,7 +198,7 @@ public class recipeMain extends AppCompatActivity {
                     ratingBar.setRating(averageRating);
 
                     // Update TextView with formatted rating
-                    totalRatingTextView.setText(String.format("%.1f (%d reviews)", averageRating, ratingCount));
+                    totalRatingTextView.setText(String.format("%.1f (%d ratings)", averageRating, ratingCount));
                 } else {
                     totalRatingTextView.setText("No ratings yet");
 
