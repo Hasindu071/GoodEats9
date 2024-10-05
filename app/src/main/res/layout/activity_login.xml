@@ -78,16 +78,16 @@
             android:layout_height="56dp"
             android:layout_marginStart="36dp"
             android:background="@drawable/rounded_textbox"
-            android:hint="Enter email"
-            android:textSize="15dp"
-            android:padding="12dp"
             android:fontFamily="@font/poppins"
+            android:hint="Enter email"
             android:inputType="textEmailAddress"
+            android:padding="12dp"
             android:textColorHint="#D9D9D9"
+            android:textSize="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.29"
+            app:layout_constraintVertical_bias="0.297"
             tools:ignore="TextSizeCheck" />
 
         <TextView
@@ -123,12 +123,12 @@
                 android:id="@+id/Password"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:hint="Enter password"
-                android:textColorHint="#D9D9D9"
                 android:background="@drawable/rounded_textbox"
                 android:fontFamily="@font/poppins"
+                android:hint="Enter password"
                 android:inputType="textPassword"
                 android:padding="12dp"
+                android:textColorHint="#D9D9D9"
                 android:textSize="15dp"
                 tools:ignore="TextSizeCheck" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -137,41 +137,41 @@
             android:id="@+id/textViewForgotPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="268dp"
+            android:layout_marginStart="244dp"
             android:clickable="true"
+            android:fontFamily="@font/poppins"
             android:text="Forgot password?"
             android:textColor="@color/black"
             android:textSize="12sp"
-            android:fontFamily="@font/poppins"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.562"
+            app:layout_constraintVertical_bias="0.556"
             tools:ignore="TouchTargetSizeCheck" />
 
         <Button
             android:id="@+id/buttonSignIN"
             android:layout_width="268dp"
             android:layout_height="60dp"
-            android:layout_marginStart="68dp"
-            app:cornerRadius="12dp"
+            android:layout_marginStart="52dp"
             android:backgroundTint="#129575"
+            android:fontFamily="@font/poppins"
             android:text="Sign In"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="18dp"
-            android:fontFamily="@font/poppins"
             android:textStyle="bold"
+            app:cornerRadius="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.667" />
+            app:layout_constraintVertical_bias="0.655" />
 
         <TextView
             android:id="@+id/textViewSignInWith"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="124dp"
+            android:layout_marginStart="96dp"
             android:fontFamily="@font/poppins"
             android:text="____Or Sign in with____"
             android:textColor="#D9D9D9"
@@ -179,13 +179,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.727" />
+            app:layout_constraintVertical_bias="0.724" />
 
         <Button
             android:id="@+id/buttonGoogle"
             android:layout_width="304dp"
             android:layout_height="55dp"
-            android:layout_marginStart="52dp"
+            android:layout_marginStart="36dp"
             android:backgroundTint="#F1F5F9"
             android:drawableLeft="@drawable/google1"
             android:fontFamily="@font/inter"
@@ -197,14 +197,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.818"
+            app:layout_constraintVertical_bias="0.82"
             tools:ignore="TextSizeCheck" />
 
         <TextView
             android:id="@+id/textViewDontHaveAcc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="112dp"
+            android:layout_marginStart="76dp"
             android:fontFamily="@font/poppins"
             android:text="Don't have an account?"
             android:textColor="@color/black"
@@ -219,7 +219,7 @@
             android:id="@+id/textViewSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="268dp"
+            android:layout_marginStart="236dp"
             android:clickable="true"
             android:fontFamily="@font/poppins"
             android:text="Sign up"
