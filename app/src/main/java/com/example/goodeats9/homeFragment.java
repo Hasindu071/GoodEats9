@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import static android.content.Context.MODE_PRIVATE;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 public class homeFragment extends Fragment {
 
@@ -58,27 +58,45 @@ public class homeFragment extends Fragment {
         // Initialize Firebase reference for the user data
         reference = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
-        // Access SharedPreferences to get user data
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("loginDetails", MODE_PRIVATE);
-        String username = sharedPreferences.getString("UserName", "User"); // If no name is found, default to "User"
-
-        // Set the welcome text with the username
-        TextView welcomeTextView = view.findViewById(R.id.text_name);
-        welcomeTextView.setText(username);
-
         // Find the ImageView for the profile image
         ImageView profileImageView = view.findViewById(R.id.profile_pic);
+        TextView welcomeTextView = view.findViewById(R.id.text_name);
 
-        // Load profile photo from Firebase
-        loadProfilePhoto(profileImageView);
+        // Check if the user is signed in with Google
+        if (currentUser.getDisplayName() != null) {
+            // Google Sign-In User: Display name and profile picture from FirebaseUser
+            String googleName = currentUser.getDisplayName();
+            String googlePhotoUrl = Objects.requireNonNull(currentUser.getPhotoUrl()).toString();
+
+            // Set the welcome text with the Google username
+            welcomeTextView.setText(googleName);
+
+            // Load Google profile photo using Glide
+            Glide.with(this)
+                    .load(googlePhotoUrl)
+                    .placeholder(R.drawable.placeholder_image)
+                    .error(R.drawable.error_image)
+                    .circleCrop()
+                    .into(profileImageView);
+        } else {
+            // Normal Sign-In: Access SharedPreferences to get user data
+            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("loginDetails", MODE_PRIVATE);
+            String username = sharedPreferences.getString("UserName", "User"); // If no name is found, default to "User"
+
+            // Set the welcome text with the username
+            welcomeTextView.setText(username);
+
+            // Load profile photo from Firebase for normal sign-in
+            loadProfilePhoto(profileImageView);
+        }
 
         // Configure the ImageSlider
         configureImageSlider(view);
     }
 
-    // Method to load profile photo from Firebase using UID
+    // Method to load profile photo from Firebase using UID for normal sign-in users
     private void loadProfilePhoto(ImageView profileImageView) {
-        reference.child("profilePhotoUrl").addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child("profile").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -125,6 +143,6 @@ public class homeFragment extends Fragment {
         slideModels.add(new SlideModel(R.drawable.image6, ScaleTypes.FIT));
 
         // Set the image list to the slider
-        imageSlider.setImageList(slideModels,ScaleTypes.FIT);
+        imageSlider.setImageList(slideModels, ScaleTypes.FIT);
     }
 }
