@@ -18,10 +18,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="Eat Well, Live Well"
             android:textColor="@color/white"
-            android:textSize="22sp"
+            android:textSize="27sp"
             android:textStyle="bold" />
 
         <TextView
