@@ -121,6 +121,8 @@ public class recipeMain extends AppCompatActivity {
         textViewReviews.setPaintFlags(textViewReviews.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         textViewReviews.setOnClickListener(v -> {
             Intent intent = new Intent(recipeMain.this, Reviews.class);
+            intent.putExtra("recipeId", recipeId);
+            intent.putExtra("userEmail", userEmail);
             startActivity(intent);
         });
 

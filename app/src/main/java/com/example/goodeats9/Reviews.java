@@ -33,7 +33,8 @@ public class Reviews extends AppCompatActivity {
     private ReviewAdapter reviewAdapter;
     private List<Review> reviewList;
     private DatabaseReference databaseReference;
-     private String username; // To store the username
+    private String username;
+    private String recipeId,email;  // To store the unique recipe ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +51,16 @@ public class Reviews extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(reviewAdapter);
 
+        // Assume recipeId is passed via intent when opening the reviews activity
+        recipeId = getIntent().getStringExtra("recipeId");
+        email = getIntent().getStringExtra("userEmail");
+
         // Initialize Firebase Database reference
-        databaseReference = FirebaseDatabase.getInstance().getReference("Reviews");
+        databaseReference = FirebaseDatabase.getInstance().getReference("recipes").child(email).child(recipeId).child("reviews");
 
         // Retrieve username from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
-        username = sharedPreferences.getString("UserName", "User"); // Default to "User" if not found
+        username = sharedPreferences.getString("UserName", "User");
 
         loadReviews();
 
@@ -75,15 +80,21 @@ public class Reviews extends AppCompatActivity {
     }
 
     private void loadReviews() {
+        // Listen for changes in the reviews for the specific recipe
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 reviewList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    // Retrieve the review object
                     Review review = snapshot.getValue(Review.class);
-                    reviewList.add(review);
+
+                    // Check if the review is not null before adding it to the list
+                    if (review != null) {
+                        reviewList.add(review);
+                    }
                 }
-                reviewAdapter.notifyDataSetChanged();
+                reviewAdapter.notifyDataSetChanged(); // Notify adapter after changes
             }
 
             @Override
