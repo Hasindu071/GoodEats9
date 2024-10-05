@@ -23,9 +23,17 @@
                 android:id="@+id/recyclerImage"
                 android:scaleType="centerCrop"/>
 
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="51dp"
+                android:paddingLeft="300dp"
+                app:srcCompat="@drawable/add_icon" />
+
         </androidx.cardview.widget.CardView>
 
-        <TextView
+
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="caption"
