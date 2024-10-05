@@ -20,6 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import android.widget.ImageView;
+
 
 public class MyRecipies extends AppCompatActivity {
 
@@ -28,6 +30,8 @@ public class MyRecipies extends AppCompatActivity {
     private MyrecipeAdapter adapter;
     private FirebaseAuth auth;
     private DatabaseReference databaseReference;
+
+    ImageView backbutn;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -46,6 +50,10 @@ public class MyRecipies extends AppCompatActivity {
         dataList = new ArrayList<>();
         adapter = new MyrecipeAdapter(this, dataList, this::onItemClick, this::onDeleteClick,this::onEditClick); // Pass the delete handler
         recyclerView.setAdapter(adapter);
+
+        // Initialize back button
+        backbutn = findViewById(R.id.backbutn);
+        backbutn.setOnClickListener(v -> finish()); // Close the current activity
 
         // Fetch the user's recipes
         fetchAllRecipes();
