@@ -8,9 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -31,16 +31,16 @@ import com.google.firebase.database.ValueEventListener;
 
 public class recipeMain extends AppCompatActivity {
 
-    // initialize the UI components in the xml file
     private Button procedureButton;
     private Button ingredientsButton;
     private ProgressBar loadingSpinner;
-    private TextView recipeNameText, descriptionText, userNameText;
+    private TextView recipeNameText, descriptionText, userNameText, totalRatingTextView;
     private VideoView recipeVideoView;
     private DatabaseReference recipeDatabaseReference;
     private ImageView save;
     private Uri currentVideoUri;
-
+    private String recipeId;
+    private String userEmail;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -50,15 +50,7 @@ public class recipeMain extends AppCompatActivity {
 
         // Find the ImageView for the back button
         ImageView backButton = findViewById(R.id.backbtn);
-
-        // Set click listener on the back button
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Finish the activity and return to the previous screen
-                finish();
-            }
-        });
+        backButton.setOnClickListener(v -> finish());
 
         // Initialize Firebase Database reference
         recipeDatabaseReference = FirebaseDatabase.getInstance().getReference("recipes");
@@ -75,19 +67,10 @@ public class recipeMain extends AppCompatActivity {
         loadingSpinner = findViewById(R.id.loadingSpinner);
         save = findViewById(R.id.save);
         recipeVideoView = findViewById(R.id.videoView2);
+        totalRatingTextView = findViewById(R.id.totalRating); // Initialize totalRatingTextView
 
         // Show ProgressBar while the video is loading
         loadingSpinner.setVisibility(View.VISIBLE);
-
-        // Initialize VideoView
-        recipeVideoView = findViewById(R.id.videoView2);
-
-        // Handle star ImageView click to go to the rating class
-        starImage.setOnClickListener(v -> {
-            Intent intent = new Intent(recipeMain.this, rating.class);
-            startActivity(intent);
-        });
-
 
         // Get the intent passed by the previous page
         Intent intentRecipe = getIntent();
@@ -95,26 +78,43 @@ public class recipeMain extends AppCompatActivity {
         String description = intentRecipe.getStringExtra("description");
         String userName = intentRecipe.getStringExtra("username");
         String email = intentRecipe.getStringExtra("currentUserEmail");
-        String ID = intentRecipe.getStringExtra("recipeID");
-
-
-
-        // Get the video URL from the intent
         String videoUri = intentRecipe.getStringExtra("videoUri");
-        currentVideoUri = Uri.parse(videoUri); // Store it in the member variable
-        recipeVideoView.setVideoURI(currentVideoUri); // Set it to the VideoView
-        currentVideoUri = Uri.parse(videoUri); // Store it in the member variable
-        recipeVideoView.setVideoURI(currentVideoUri); // Set it to the VideoView
+        recipeId = intentRecipe.getStringExtra("recipeID");
+        userEmail = intentRecipe.getStringExtra("currentUserEmail");
+
+        if (recipeId == null || userEmail == null) {
+            Toast.makeText(this, "Error: Missing recipeId or userEmail", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        // Set video URI and initialize VideoView
+        currentVideoUri = Uri.parse(videoUri);
+        recipeVideoView.setVideoURI(currentVideoUri);
+
+        // Set up media controller
+        MediaController mediaController = new MediaController(this);
+        mediaController.setAnchorView(recipeVideoView);
+        recipeVideoView.setMediaController(mediaController);
+
+        // Set a listener to know when the video is ready
+        recipeVideoView.setOnPreparedListener(mp -> {
+            loadingSpinner.setVisibility(View.GONE);
+            recipeVideoView.start();
+        });
+
+        // Handle star ImageView click to go to the rating class
+        starImage.setOnClickListener(v -> {
+            Intent intent = new Intent(recipeMain.this, rating.class);
+            intent.putExtra("recipeId", recipeId);
+            intent.putExtra("userEmail", userEmail);
+            startActivity(intent);
+        });
 
         // Set received data to views
         recipeNameText.setText(name);
         descriptionText.setText(description);
         userNameText.setText(userName);
-
-        // Set video URI
-        currentVideoUri = Uri.parse(videoUri);
-        recipeVideoView.setVideoURI(currentVideoUri);
-
 
         // Make the "reviews" text look like a link
         textViewReviews.setPaintFlags(textViewReviews.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -123,39 +123,30 @@ public class recipeMain extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Initially set the Procedure button as the selected one
+        // Set initial fragment (Procedure)
         setButtonActive(procedureButton);
         setButtonInactive(ingredientsButton);
-
-
-        // Load the Procedure fragment by default
         Bundle args = new Bundle();
-        args.putString("email", email); // Pass email
-        args.putString("recipeID", ID); // Pass recipeID
+        args.putString("email", email);
+        args.putString("recipeID", recipeId);
         ProcedureFragment procedureFragment = new ProcedureFragment();
         procedureFragment.setArguments(args);
         loadFragment(procedureFragment);
 
-
-        // when click the procedure button go that fragment
+        // When clicking procedure button
         procedureButton.setOnClickListener(view -> {
             setButtonActive(procedureButton);
             setButtonInactive(ingredientsButton);
-
-            // Create a new instance of ProcedureFragment with the arguments
-            procedureFragment.setArguments(args);
-            loadFragment(procedureFragment);
+            ProcedureFragment newProcedureFragment = new ProcedureFragment();
+            newProcedureFragment.setArguments(args);
+            loadFragment(newProcedureFragment);
         });
 
-// when click the ingredient button go that fragment
+        // When clicking ingredients button
         ingredientsButton.setOnClickListener(view -> {
             setButtonActive(ingredientsButton);
             setButtonInactive(procedureButton);
-
-            // Create a new instance of IngredientsFragment (if needed)
             IngredientsFragment ingredientsFragment = new IngredientsFragment();
-
-            // Pass the necessary arguments (if any)
             ingredientsFragment.setArguments(args);
             loadFragment(ingredientsFragment);
         });
@@ -163,48 +154,64 @@ public class recipeMain extends AppCompatActivity {
         // Set click listener for shareImage
         shareImage.setOnClickListener(v -> fetchAndShareRecipe());
 
-        // Get the video URL,load and run it
-        recipeVideoView.setVideoURI(Uri.parse(videoUri));
-
-        // Back button functionality
-        backButton.setOnClickListener(v -> finish());
-
-        // Add media controller to enable play/pause controls
-        MediaController mediaController = new MediaController(this);
-        mediaController.setAnchorView(recipeVideoView);  // Attach media controller to VideoView
-        recipeVideoView.setMediaController(mediaController);
-
-        // Show ProgressBar while the video is loading
-        loadingSpinner.setVisibility(View.VISIBLE);
-
-
-        // Set a listener to know when the video is ready. until it is ready there will be a progress bar
-        recipeVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                // Hide ProgressBar once the video is ready
-                loadingSpinner.setVisibility(View.GONE);
-
-                // Start the video
-                recipeVideoView.start();
-            }
-        });
-
-
         // Handle save button click
         save.setOnClickListener(view -> {
-            Datacls recipeToSave = new Datacls(videoUri, name, description, userName, ""); // Create recipe object without imageUri
+            Datacls recipeToSave = new Datacls(videoUri, name, description, userName, "");
             saveRecipe(recipeToSave); // Save to Firebase
         });
 
-        // Handle star ImageView click to go to the rating class
-        starImage.setOnClickListener(v -> {
-            Intent intent = new Intent(recipeMain.this, rating.class);
-            startActivity(intent);
+        // Call method to calculate and display rating
+        calculateAndDisplayRating();
+    }
+
+    private void calculateAndDisplayRating() {
+        String formattedUserEmail = userEmail.replace(".", "_");
+
+        DatabaseReference ratingsRef = FirebaseDatabase.getInstance()
+                .getReference("recipes")
+                .child(formattedUserEmail)
+                .child(recipeId)
+                .child("ratings");
+
+        ratingsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                float totalRating = 0;
+                int ratingCount = 0;
+
+                for (DataSnapshot ratingSnapshot : dataSnapshot.getChildren()) {
+                    Float rating = ratingSnapshot.getValue(Float.class);
+                    if (rating != null) {
+                        totalRating += rating;
+                        ratingCount++;
+                    }
+                }
+
+                if (ratingCount > 0) {
+                    float averageRating = totalRating / ratingCount;
+
+                    // Update RatingBar
+                    RatingBar ratingBar = findViewById(R.id.recipeRatingBar);
+                    ratingBar.setRating(averageRating);
+
+                    // Update TextView with formatted rating
+                    totalRatingTextView.setText(String.format("%.1f (%d reviews)", averageRating, ratingCount));
+                } else {
+                    totalRatingTextView.setText("No ratings yet");
+
+                    // Set RatingBar to 0 if no ratings
+                    RatingBar ratingBar = findViewById(R.id.recipeRatingBar);
+                    ratingBar.setRating(0);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(recipeMain.this, "Failed to load ratings", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    // Save the recipe to Firebase
     private void saveRecipe(Datacls recipe) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
@@ -215,33 +222,26 @@ public class recipeMain extends AppCompatActivity {
         String userId = user.getUid();
         DatabaseReference savedRecipesRef = FirebaseDatabase.getInstance().getReference("saved_recipes").child(userId);
 
-        // Push the new recipe under the user's saved recipes
         savedRecipesRef.push().setValue(recipe)
                 .addOnSuccessListener(aVoid -> Toast.makeText(this, "Recipe saved successfully!", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to save recipe: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
-    // Share recipe details via an Intent
     private void fetchAndShareRecipe() {
-        String userId = "jagath@gmail_com";  // User's ID
-        String recipeId = "-O8C8BCQipBiXFRF6MFf"; // Recipe ID
+        String userId = "jagath@gmail_com";
+        String recipeId = "-O8C8BCQipBiXFRF6MFf";
 
         recipeDatabaseReference.child(userId).child(recipeId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Fetch recipe details
-                    String recipeName = dataSnapshot.child("name").getValue(String.class);
+                    String recipeName = dataSnapshot.child("recipeName").getValue(String.class);
                     String description = dataSnapshot.child("description").getValue(String.class);
+                    String videoUri = dataSnapshot.child("videoUri").getValue(String.class);
 
-                    // Create sharing intent
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                    shareIntent.setType("text/plain");
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Check out this recipe!");
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, "Recipe Name: " + recipeName + "\nDescription: " + description);
-                    startActivity(Intent.createChooser(shareIntent, "Share via"));
+                    shareRecipe(recipeName, description, videoUri);
                 } else {
-                    Toast.makeText(recipeMain.this, "Recipe not found!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(recipeMain.this, "Recipe not found", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -252,7 +252,21 @@ public class recipeMain extends AppCompatActivity {
         });
     }
 
-    // Helper methods to set button states
+    private void shareRecipe(String recipeName, String description, String videoUri) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        String shareMessage = "Check out this recipe!\n\nRecipe: " + recipeName + "\nDescription: " + description + "\nWatch it here: " + videoUri;
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+        startActivity(Intent.createChooser(shareIntent, "Share Recipe via"));
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer, fragment);
+        fragmentTransaction.commit();
+    }
+
     private void setButtonActive(Button button) {
         button.setBackgroundTintList(getResources().getColorStateList(R.color.green));
         button.setTextColor(getResources().getColor(R.color.white));
@@ -263,11 +277,13 @@ public class recipeMain extends AppCompatActivity {
         button.setTextColor(getResources().getColor(R.color.green));
     }
 
-    // Load fragment into container
-    private void loadFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainer, fragment);
-        fragmentTransaction.commit();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Cleanup MediaController if needed
+        if (recipeVideoView != null) {
+            recipeVideoView.suspend();
+        }
     }
 }

@@ -7,6 +7,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class rating extends AppCompatActivity {
 
     private RatingBar ratingBar;
@@ -24,9 +29,27 @@ public class rating extends AppCompatActivity {
         // Handle the Submit Rating button click
         submitRatingButton.setOnClickListener(v -> {
             float rating = ratingBar.getRating();
-            Toast.makeText(rating.this, "Rating submitted: " + rating, Toast.LENGTH_SHORT).show();
-            // After submitting the rating, you can either save it or navigate back
-            finish();  // Close the activity and go back to the recipe screen
+            submitRatingToFirebase(rating);  // Call this method to store the rating
         });
+    }
+
+    // Store rating to Firebase
+    private void submitRatingToFirebase(float rating) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String userId = user.getUid();
+            String recipeId = getIntent().getStringExtra("recipeId");  // Pass the recipeId from the intent
+            String userEmail = getIntent().getStringExtra("userEmail");  // Get the email associated with the recipe
+            DatabaseReference ratingRef = FirebaseDatabase.getInstance().getReference("recipes").child(userEmail).child(recipeId).child("ratings").child(userId);
+            ratingRef.setValue(rating)  // Store the rating under the recipe and user ID
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(rating.this, "Rating submitted: " + rating, Toast.LENGTH_SHORT).show();
+                        finish();  // Close the activity and return to recipeMain
+                    })
+                    .addOnFailureListener(e ->
+                            Toast.makeText(rating.this, "Failed to submit rating: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        } else {
+            Toast.makeText(rating.this, "Please log in to submit a rating.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
