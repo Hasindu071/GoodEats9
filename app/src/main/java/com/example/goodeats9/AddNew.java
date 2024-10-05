@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,6 +75,22 @@ public class AddNew extends AppCompatActivity {
         // Creating an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // Retrieve the selected item
+                String selectedCategory = parentView.getItemAtPosition(position).toString();
+
+                // Do something with the selected value, for example, log it or display it
+                System.out.println("Selected Category: " + selectedCategory);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // This can be left empty if you do not need to handle the case of nothing being selected
+            }
+        });
 
         // Applying the adapter to the spinner
         categorySpinner.setAdapter(adapter);
@@ -193,6 +210,7 @@ public class AddNew extends AppCompatActivity {
         String description = enterdiscription.getText().toString().trim();
         String serves = enterserves.getText().toString().trim();
         String cookTime = entertime.getText().toString().trim();
+        String selectedCategory = categorySpinner.getSelectedItem().toString();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
@@ -212,6 +230,7 @@ public class AddNew extends AppCompatActivity {
             recipeData.put("cookTime", cookTime);
             recipeData.put("ingredients", ListI);
             recipeData.put("methods", ListM);
+            recipeData.put("category",selectedCategory);
 
             if (imageUri != null) {
                 uploadImage(userRef, recipeData);

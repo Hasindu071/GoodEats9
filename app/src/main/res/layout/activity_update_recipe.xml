@@ -295,12 +295,10 @@
                 android:layout_marginBottom="16dp"
                 android:orientation="horizontal"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/ingredientsList"
+            <ListView
+                android:id="@+id/stepListView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/border" />
+                android:layout_height="wrap_content" /> />
         </LinearLayout>
 
         <LinearLayout
@@ -338,12 +336,10 @@
                 android:layout_marginBottom="5dp"
                 android:orientation="horizontal"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/methodList"
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/border" />
+        <ListView
+            android:id="@+id/ingredientListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
