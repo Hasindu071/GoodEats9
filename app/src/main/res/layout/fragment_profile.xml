@@ -44,9 +44,10 @@
             android:id="@+id/profileImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:scaleType="centerCrop"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/circle_background"/>
+            android:background="@drawable/circle_background"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/userName"
@@ -68,17 +69,18 @@
 
         <Button
             android:id="@+id/UpdateRecipeButton"
-            android:layout_width="114dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_width="320dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:backgroundTint="#129575"
             android:padding="8dp"
-            android:text="Update recipes"
+            android:text="View my recipes"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="12dp"
+            android:textSize="18dp"
             app:cornerRadius="12dp"
+            android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -86,16 +88,7 @@
 
     </LinearLayout>
 
-    <!-- Dynamic Recipe List -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="My Recipes"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp" />
+
 
     <!-- RecyclerView for displaying recipe list dynamically -->
 
