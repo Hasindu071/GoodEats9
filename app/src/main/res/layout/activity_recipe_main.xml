@@ -67,7 +67,7 @@
 
             <ImageView
                 android:id="@+id/save"
-                android:layout_width="45dp"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 app:srcCompat="@drawable/baseline_bookmark_24" /></LinearLayout>
