@@ -66,7 +66,7 @@
                 tools:ignore="MissingConstraints" />
 
             <Button
-                android:id="@+id/addImage_button"
+                android:id="@+id/updateImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -101,7 +101,7 @@
                 tools:ignore="MissingConstraints" />
 
             <Button
-                android:id="@+id/view_video_button"
+                android:id="@+id/updateVideo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -344,7 +344,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/addrecipebtn"
+            android:id="@+id/updatebtn"
             android:layout_width="300dp"
             android:layout_height="58dp"
             android:layout_marginTop="15dp"
