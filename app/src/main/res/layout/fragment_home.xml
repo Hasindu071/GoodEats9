@@ -10,7 +10,7 @@
     <!-- Stylish Green Header Section with Curved Background -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="188dp"
         android:background="@drawable/stylish_header_background"
         android:orientation="vertical"
         android:padding="40dp">
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="2dp"
         android:padding="16dp">
 
         <RelativeLayout
@@ -109,7 +109,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="20dp"
@@ -118,7 +118,7 @@
         <com.denzcoskun.imageslider.ImageSlider
             android:id="@+id/imageSlider"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
             app:iss_auto_cycle="true"
             app:iss_corner_radius="20"
             app:iss_delay="500"
