@@ -35,7 +35,7 @@ public class recipeMain extends AppCompatActivity {
     private Button procedureButton;
     private Button ingredientsButton;
     private ProgressBar loadingSpinner;
-    private TextView recipeNameText, descriptionText, userNameText ,Email , RecID;
+    private TextView recipeNameText, descriptionText, userNameText;
     private VideoView recipeVideoView;
     private DatabaseReference recipeDatabaseReference;
     private ImageView save;
@@ -76,9 +76,6 @@ public class recipeMain extends AppCompatActivity {
         save = findViewById(R.id.save);
         recipeVideoView = findViewById(R.id.videoView2);
 
-        Email = findViewById(R.id.email);
-        RecID = findViewById(R.id.ID);
-
         // Show ProgressBar while the video is loading
         loadingSpinner.setVisibility(View.VISIBLE);
 
@@ -113,8 +110,6 @@ public class recipeMain extends AppCompatActivity {
         recipeNameText.setText(name);
         descriptionText.setText(description);
         userNameText.setText(userName);
-        Email.setText(email);
-        RecID.setText(ID);
 
         // Set video URI
         currentVideoUri = Uri.parse(videoUri);
