@@ -28,11 +28,12 @@ public class IngredientsFragment extends Fragment {
     public IngredientsFragment() {
         // Required empty public constructor
     }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
-
-        recyclerView = view.findViewById(R.id.recycler_view_ingredients); // Make sure this ID matches your XML
+        recyclerView = view.findViewById(R.id.recycler_view_ingredients); // Ensure you have a RecyclerView in your fragment layout
         ingredientList = new ArrayList<>();
         ingredientAdapter = new IngredientAdapter(ingredientList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -48,7 +49,6 @@ public class IngredientsFragment extends Fragment {
 
         return view;
     }
-
 
     private void fetchIngredients(String email, String recipeID) {
         recipesDatabaseReference = FirebaseDatabase.getInstance().getReference("recipes")

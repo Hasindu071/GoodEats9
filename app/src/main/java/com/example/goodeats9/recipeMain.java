@@ -100,7 +100,9 @@ public class recipeMain extends AppCompatActivity {
         String email = intentRecipe.getStringExtra("currentUserEmail");
         String ID = intentRecipe.getStringExtra("recipeID");
 
-// Get the video URL from the intent
+
+
+        // Get the video URL from the intent
         String videoUri = intentRecipe.getStringExtra("videoUri");
         currentVideoUri = Uri.parse(videoUri); // Store it in the member variable
         recipeVideoView.setVideoURI(currentVideoUri); // Set it to the VideoView
@@ -200,7 +202,7 @@ public class recipeMain extends AppCompatActivity {
             saveRecipe(recipeToSave); // Save to Firebase
         });
 
-// Handle star ImageView click to go to the rating class
+        // Handle star ImageView click to go to the rating class
         starImage.setOnClickListener(v -> {
             Intent intent = new Intent(recipeMain.this, rating.class);
             startActivity(intent);
