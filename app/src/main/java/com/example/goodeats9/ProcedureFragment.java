@@ -1,6 +1,5 @@
 package com.example.goodeats9;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,7 @@ public class ProcedureFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_procedure, container, false);
-        recyclerView = view.findViewById(R.id.recyclerView); // Ensure you have a RecyclerView in your fragment layout
+        recyclerView = view.findViewById(R.id.step_recycler_view); // Ensure you have a RecyclerView in your fragment layout
         methodStepList = new ArrayList<>();
         methodAdapter = new StepAdapter(methodStepList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
