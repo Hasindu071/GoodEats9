@@ -1,9 +1,16 @@
 package com.example.goodeats9;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import android.content.pm.PackageManager;
+
+
+import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,6 +29,8 @@ import com.google.firebase.storage.StorageReference;
 
 public class edit_profile extends AppCompatActivity {
 
+    private static final int REQUEST_CODE = 101; // Define a request code for storage permission
+
     EditText editName, editDescription;
     Button saveButton;
     String nameUser, descriptionUser;
@@ -38,11 +47,15 @@ public class edit_profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        // Check for permissions to read external storage
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE);
+        }
+
         // Get current user from FirebaseAuth
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             userId = currentUser.getUid();  // Use the UID as a unique identifier for the user
-
         } else {
             Toast.makeText(this, "No authenticated user found", Toast.LENGTH_SHORT).show();
             finish();  // Close activity if no user is logged in
@@ -53,7 +66,7 @@ public class edit_profile extends AppCompatActivity {
 
         // Initialize EditTexts and Button
         editName = findViewById(R.id.editName);
-        editDescription = findViewById(R.id.editDescription); // Add this line
+        editDescription = findViewById(R.id.editDescription);
         saveButton = findViewById(R.id.buttonUpdate);
 
         // Initialize ImageView for profile photo
@@ -75,16 +88,13 @@ public class edit_profile extends AppCompatActivity {
 
         // Handle save button click
         saveButton.setOnClickListener(view -> {
-            boolean isUpdated = false;
-            if (isNameChanged()) isUpdated = true;
-            if (isDescriptionChanged()) isUpdated = true;
-
-            if (isUpdated) {
+            if (isDataChanged()) {
                 Toast.makeText(edit_profile.this, "Profile Updated", Toast.LENGTH_SHORT).show();
-                this.finish();
+                this.finish(); // Close the activity if update was successful
 
+                // Upload new profile image if one was selected
                 if (selectedImageUri != null) {
-                    uploadProfileImage(selectedImageUri, userId); // Upload new profile image if selected
+                    uploadProfileImage(selectedImageUri, userId);
                 }
             } else {
                 Toast.makeText(edit_profile.this, "No changes detected", Toast.LENGTH_SHORT).show();
@@ -105,7 +115,10 @@ public class edit_profile extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             selectedImageUri = data.getData();  // Get the selected image URI
-            profilePhoto.setImageURI(selectedImageUri); // Set image in ImageView
+            if (selectedImageUri != null) {
+                profilePhoto.setImageURI(selectedImageUri); // Set image in ImageView
+                Log.d("ImageUri", "Selected Image URI: " + selectedImageUri.toString()); // Log URI for debugging
+            }
         }
     }
 
@@ -171,28 +184,28 @@ public class edit_profile extends AppCompatActivity {
         }
     }
 
-    // Check if name has changed
-    private boolean isNameChanged() {
+    // Check if data has changed
+    private boolean isDataChanged() {
+        boolean isChanged = false;
+
         String newName = editName.getText().toString().trim();
+        String newDescription = editDescription.getText().toString().trim();
+
+        Log.d("ProfileUpdate", "Current Name: " + nameUser + ", New Name: " + newName);
+        Log.d("ProfileUpdate", "Current Description: " + descriptionUser + ", New Description: " + newDescription);
+
         if (!newName.equals(nameUser)) {
             reference.child("name").setValue(newName);
             nameUser = newName;  // Update local variable
-            return true;
+            isChanged = true;
         }
-        return false;
-    }
 
-
-
-
-    // Check if description has changed
-    private boolean isDescriptionChanged() {
-        String newDescription = editDescription.getText().toString().trim();
         if (!newDescription.equals(descriptionUser)) {
             reference.child("description").setValue(newDescription);
             descriptionUser = newDescription;  // Update local variable
-            return true;
+            isChanged = true;
         }
-        return false;
+
+        return isChanged;
     }
 }
