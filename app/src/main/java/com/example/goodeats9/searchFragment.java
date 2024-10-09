@@ -1,5 +1,6 @@
 package com.example.goodeats9;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -10,12 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +32,10 @@ public class searchFragment extends Fragment {
     private AdaptorSearch adapter;
     private DatabaseReference databaseReference;
     private EditText searchBar;
+    private Button btnAll, btnBreakfast, btnLunch, btnDinner, btnSnack; // Category buttons
+    private String selectedCategory = ""; // Store the selected category
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -41,6 +44,12 @@ public class searchFragment extends Fragment {
         // Initialize UI components
         gridView = view.findViewById(R.id.gridView);
         searchBar = view.findViewById(R.id.searchBar);
+        btnAll = view.findViewById(R.id.all);
+        btnBreakfast = view.findViewById(R.id.breakfast);
+        btnLunch = view.findViewById(R.id.lunch);
+        btnDinner = view.findViewById(R.id.dinner);
+        btnSnack = view.findViewById(R.id.snack);
+
         dataList = new ArrayList<>();
         filteredList = new ArrayList<>();
         adapter = new AdaptorSearch(getContext(), filteredList); // Set adapter with the filtered data
@@ -55,11 +64,6 @@ public class searchFragment extends Fragment {
                 // Get the selected recipe
                 DataClass selectedRecipe = (DataClass) parent.getItemAtPosition(position);
 
-                // Get the current user
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                String userEmail = currentUser != null ? currentUser.getEmail() : null;
-                String sanitizedEmail = userEmail != null ? userEmail.replace(".", "_") : null;
-
                 // Create an intent to open the RecipeDetailsActivity
                 Intent intent = new Intent(getActivity(), recipeMain.class);
 
@@ -71,9 +75,8 @@ public class searchFragment extends Fragment {
                 intent.putExtra("serves", selectedRecipe.getServes());
                 intent.putExtra("username", selectedRecipe.getUserName());
                 intent.putExtra("videoUri", selectedRecipe.getVideoUri());
-
-                intent.putExtra("recipeID", selectedRecipe.getRecipeId());//Send recipe ID
-                intent.putExtra("currentUserEmail", selectedRecipe.getUserEmail());// Send currunt Email
+                intent.putExtra("recipeID", selectedRecipe.getRecipeId()); // Send recipe ID
+                intent.putExtra("currentUserEmail", selectedRecipe.getUserEmail()); // Send current Email
 
                 // Start the new activity
                 startActivity(intent);
@@ -86,6 +89,9 @@ public class searchFragment extends Fragment {
         // Setup search functionality
         setupSearch();
 
+        // Setup category button functionality
+        setupCategoryButtons();
+
         return view;
     }
 
@@ -95,17 +101,10 @@ public class searchFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 dataList.clear();
-
-                // Iterate through all users' recipes nodes in the database
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-
                     String userEmail = userSnapshot.getKey(); // Get the user's email
-
-                    // For each user, get their recipes and details
                     for (DataSnapshot recipeSnapshot : userSnapshot.getChildren()) {
-
                         String recipeId = recipeSnapshot.getKey(); // Get the recipe ID
-
                         String imageUri = recipeSnapshot.child("imageUri").getValue(String.class);
                         String name = recipeSnapshot.child("name").getValue(String.class);
                         String description = recipeSnapshot.child("description").getValue(String.class);
@@ -113,9 +112,11 @@ public class searchFragment extends Fragment {
                         String cookTime = recipeSnapshot.child("cookTime").getValue(String.class);
                         String username = recipeSnapshot.child("username").getValue(String.class);
                         String videoUri = recipeSnapshot.child("videoUri").getValue(String.class);
+                        String category = recipeSnapshot.child("category").getValue(String.class); // Fetch category
 
                         if (imageUri != null && name != null) {
-                            DataClass dataClass = new DataClass(imageUri, name, cookTime, description, serves, username, videoUri,recipeId,userEmail); // Create a new DataClass object
+                            DataClass dataClass = new DataClass(imageUri, name, cookTime, description, serves, username, videoUri, recipeId, userEmail);
+                            dataClass.setCategory(category); // Set the category for the DataClass object
                             dataList.add(dataClass);  // Add the recipe data to the list
                         }
                     }
@@ -129,7 +130,6 @@ public class searchFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle any errors
                 Toast.makeText(getContext(), "Failed to load images: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -145,7 +145,7 @@ public class searchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // Filter recipes as the user types
-                filterRecipes(s.toString());
+                filterRecipes(s.toString(), selectedCategory);
             }
 
             @Override
@@ -155,15 +155,47 @@ public class searchFragment extends Fragment {
         });
     }
 
-    private void filterRecipes(String query) {
+    private void setupCategoryButtons() {
+        btnAll.setOnClickListener(v -> {
+            selectedCategory = ""; // Show all categories
+            filterRecipes(searchBar.getText().toString(), selectedCategory);
+        });
+
+        btnBreakfast.setOnClickListener(v -> {
+            selectedCategory = "Breakfast";
+            filterRecipes(searchBar.getText().toString(), selectedCategory);
+        });
+
+        btnLunch.setOnClickListener(v -> {
+            selectedCategory = "Lunch";
+            filterRecipes(searchBar.getText().toString(), selectedCategory);
+        });
+
+        btnDinner.setOnClickListener(v -> {
+            selectedCategory = "Dinner";
+            filterRecipes(searchBar.getText().toString(), selectedCategory);
+        });
+
+        btnSnack.setOnClickListener(v -> {
+            selectedCategory = "Snack";
+            filterRecipes(searchBar.getText().toString(), selectedCategory);
+        });
+    }
+
+    private void filterRecipes(String query, String category) {
         filteredList.clear();
-        if (query.isEmpty()) {
-            filteredList.addAll(dataList); // Show all recipes when query is empty
+        String lowerCaseQuery = query.toLowerCase();
+
+        if (query.isEmpty() && category.isEmpty()) {
+            // Show all recipes when no query or category is selected
+            filteredList.addAll(dataList);
         } else {
-            String lowerCaseQuery = query.toLowerCase();
             for (DataClass recipe : dataList) {
-                if (recipe.getName().toLowerCase().contains(lowerCaseQuery)) {
-                    filteredList.add(recipe); // Add recipe if it matches the query
+                boolean matchesQuery = recipe.getName().toLowerCase().contains(lowerCaseQuery);
+                boolean matchesCategory = category.isEmpty() || recipe.getCategory().equalsIgnoreCase(category); // Compare categories
+
+                if (matchesQuery && matchesCategory) {
+                    filteredList.add(recipe);
                 }
             }
         }

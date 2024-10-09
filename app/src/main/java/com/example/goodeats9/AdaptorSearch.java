@@ -9,70 +9,74 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-
 import java.util.ArrayList;
 
 public class AdaptorSearch extends BaseAdapter {
 
-    private ArrayList<DataClass> dataList;
-    private Context context;
-    private LayoutInflater layoutInflater;
+    private final ArrayList<DataClass> dataList; // List of recipe data
+    private final LayoutInflater layoutInflater; // LayoutInflater for inflating views
 
     // Constructor
     public AdaptorSearch(Context context, ArrayList<DataClass> dataList) {
-        this.context = context;
         this.dataList = dataList;
-        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
     // ViewHolder pattern to improve performance
-    static class ViewHolder {
-        ImageView gridImage;
-        TextView RecipeName,Profile;
+    private static class ViewHolder {
+        ImageView gridImage; // ImageView for the recipe image
+        TextView recipeName; // TextView for the recipe name
     }
 
     @Override
     public int getCount() {
-        return dataList.size();
+        return dataList.size(); // Return the number of items in the list
     }
 
     @Override
     public Object getItem(int position) {
-        return dataList.get(position);
+        return dataList.get(position); // Return the item at the specified position
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return position; // Return the item ID (position) for the item
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
+        // Check if the view needs to be created or reused
         if (convertView == null) {
+            // Inflate the layout for the grid item
             convertView = layoutInflater.inflate(R.layout.grid_item, parent, false);
             holder = new ViewHolder();
 
+            // Initialize the views from the layout
             holder.gridImage = convertView.findViewById(R.id.gridImage);
-            holder.RecipeName = convertView.findViewById(R.id.RecipeName);
+            holder.recipeName = convertView.findViewById(R.id.RecipeName);
 
+            // Tag the holder for future recycling
             convertView.setTag(holder);
         } else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag(); // Reuse the existing holder
         }
 
-        // Set caption
-        holder.RecipeName.setText(dataList.get(position).getName());
+        // Get the current recipe data
+        DataClass currentRecipe = dataList.get(position);
 
-        // Use Glide to load images with error handling and placeholders
-        Glide.with(context)
-                .load(dataList.get(position).getImageUri())
+        // Set the recipe name
+        holder.recipeName.setText(currentRecipe.getName());
+
+        // Load the image using Glide with placeholder and error image handling
+        Glide.with(convertView.getContext())
+                .load(currentRecipe.getImageUri())
                 .apply(new RequestOptions()
-                        .placeholder(R.drawable.placeholder_image) // Placeholder image while loading
-                        .error(R.drawable.error_image))     // Error image if URL fails
+                        .placeholder(R.drawable.placeholder_image)  // Placeholder while loading
+                        .error(R.drawable.error_image))             // Error image if loading fails
                 .into(holder.gridImage);
 
-        return convertView;
+        return convertView; // Return the completed view to render on screen
     }
 }
