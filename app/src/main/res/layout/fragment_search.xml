@@ -51,9 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
+            tools:ignore="MissingConstraints">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -70,18 +68,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:contentDescription="Image"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/allrecipe" />
+                        android:orientation="vertical">
 
 
                         <Button
+                            android:id="@+id/all"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -106,18 +97,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:contentDescription="Image"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/breakfast" />
+                        android:orientation="vertical">
 
 
                         <Button
+                            android:id="@+id/breakfast"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -142,18 +126,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:contentDescription="Image"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/lunch" />
+                        android:orientation="vertical">
 
 
                         <Button
+                            android:id="@+id/lunch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -177,18 +154,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:contentDescription="Image"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/dinner" />
+                        android:orientation="vertical">
 
 
                         <Button
+                            android:id="@+id/dinner"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -212,18 +182,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:contentDescription="Image"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/snak" />
+                        android:orientation="vertical">
 
 
                         <Button
+                            android:id="@+id/snack"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
