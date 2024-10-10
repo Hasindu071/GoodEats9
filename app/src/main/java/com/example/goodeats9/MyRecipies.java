@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -136,22 +137,36 @@ public class MyRecipies extends AppCompatActivity {
 
     // Handle delete clicks
     private void onDeleteClick(DataClass recipeToDelete) {
-        String recipeId = recipeToDelete.getRecipeId();
-        String userEmail = recipeToDelete.getUserEmail();
+        // Show confirmation dialog
+        new AlertDialog.Builder(MyRecipies.this)
+                .setTitle("Delete Confirmation")
+                .setMessage("Are you sure you want to delete this recipe?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // If the user confirms, proceed with deletion
+                    String recipeId = recipeToDelete.getRecipeId();
+                    String userEmail = recipeToDelete.getUserEmail();
 
-        // Delete recipe from Firebase
-        DatabaseReference recipeRef = FirebaseDatabase.getInstance().getReference("recipes").child(userEmail).child(recipeId);
-        recipeRef.removeValue()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(MyRecipies.this, "Recipe deleted successfully", Toast.LENGTH_SHORT).show();
-                        // Optionally refresh the list
-                        fetchAllRecipes(); // This will re-fetch the updated list
-                    } else {
-                        Toast.makeText(MyRecipies.this, "Failed to delete recipe", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    // Delete recipe from Firebase
+                    DatabaseReference recipeRef = FirebaseDatabase.getInstance().getReference("recipes")
+                            .child(userEmail).child(recipeId);
+                    recipeRef.removeValue()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(MyRecipies.this, "Recipe deleted successfully", Toast.LENGTH_SHORT).show();
+                                    // Optionally refresh the list
+                                    fetchAllRecipes(); // This will re-fetch the updated list
+                                } else {
+                                    Toast.makeText(MyRecipies.this, "Failed to delete recipe", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    // User canceled, dismiss the dialog
+                    dialog.dismiss();
+                })
+                .show();
     }
+
 
     // Handle delete clicks
     public void onEditClick(DataClass selectedRecipe) {
