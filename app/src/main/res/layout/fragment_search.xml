@@ -50,159 +50,69 @@
             app:layout_constraintTop_toBottomOf="@id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="0dp"
+            android:visibility="visible"
             tools:ignore="MissingConstraints">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:radius="16dp"
-                    app:cardElevation="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-
                         <Button
                             android:id="@+id/all"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_gravity="center"
                             android:backgroundTint="#129575"
                             android:padding="10dp"
+                            android:layout_margin="10dp"
                             android:text="all"
                             android:textColor="@android:color/white" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Card 1 -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:radius="16dp"
-                    app:cardElevation="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
 
                         <Button
                             android:id="@+id/breakfast"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_gravity="center"
                             android:backgroundTint="#129575"
                             android:padding="10dp"
+                            android:layout_margin="10dp"
                             android:text="Breakfast"
                             android:textColor="@android:color/white" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Card 2 -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:radius="16dp"
-                    app:cardElevation="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
 
                         <Button
                             android:id="@+id/lunch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_gravity="center"
                             android:backgroundTint="#129575"
                             android:padding="10dp"
+                            android:layout_margin="10dp"
                             android:text="Lunch"
                             android:textColor="@android:color/white" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:radius="16dp"
-                    app:cardElevation="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
 
 
                         <Button
                             android:id="@+id/dinner"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_gravity="center"
                             android:backgroundTint="#129575"
                             android:padding="10dp"
+                            android:layout_margin="10dp"
                             android:text="Dinner"
                             android:textColor="@android:color/white" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:radius="16dp"
-                    app:cardElevation="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
 
                         <Button
                             android:id="@+id/snack"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_gravity="center"
                             android:backgroundTint="#129575"
                             android:padding="10dp"
+                            android:layout_margin="10dp"
                             android:text="Snack"
                             android:textColor="@android:color/white" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-
-
-                <!-- Card 3 (Repeat or add more cards as needed) -->
 
             </LinearLayout>
         </HorizontalScrollView>

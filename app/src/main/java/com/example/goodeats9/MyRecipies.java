@@ -81,12 +81,13 @@ public class MyRecipies extends AppCompatActivity {
                         String cookTime = recipeSnapshot.child("cookTime").getValue(String.class);
                         String username = recipeSnapshot.child("username").getValue(String.class);
                         String videoUri = recipeSnapshot.child("videoUri").getValue(String.class);
+                        String category = recipeSnapshot.child("category").getValue(String.class);
                         String recipeId = recipeSnapshot.getKey();  // Use recipeSnapshot key as recipeId
 
                         // Add the recipe data to the list if imageUri and name are available
                         if (imageUri != null && name != null) {
                             // Populate DataClass with all necessary fields
-                            DataClass dataClass = new DataClass(imageUri, name, cookTime, description, serves, username, videoUri, recipeId, userEmail);
+                            DataClass dataClass = new DataClass(imageUri, name, cookTime, description, serves, username, videoUri, recipeId, userEmail,category);
                             dataList.add(dataClass);
                         }
                     }

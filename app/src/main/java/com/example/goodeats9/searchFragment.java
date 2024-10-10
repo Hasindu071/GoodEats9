@@ -58,29 +58,26 @@ public class searchFragment extends Fragment {
         // Firebase database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("recipes");
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Get the selected recipe
-                DataClass selectedRecipe = (DataClass) parent.getItemAtPosition(position);
+        gridView.setOnItemClickListener((parent, view1, position, id) -> {
+            // Get the selected recipe
+            DataClass selectedRecipe = (DataClass) parent.getItemAtPosition(position);
 
-                // Create an intent to open the RecipeDetailsActivity
-                Intent intent = new Intent(getActivity(), recipeMain.class);
+            // Create an intent to open the RecipeDetailsActivity
+            Intent intent = new Intent(getActivity(), recipeMain.class);
 
-                // Pass the recipe data to the new activity
-                intent.putExtra("imageUri", selectedRecipe.getImageUri());
-                intent.putExtra("name", selectedRecipe.getName());
-                intent.putExtra("description", selectedRecipe.getDescription());
-                intent.putExtra("cookTime", selectedRecipe.getCookTime());
-                intent.putExtra("serves", selectedRecipe.getServes());
-                intent.putExtra("username", selectedRecipe.getUserName());
-                intent.putExtra("videoUri", selectedRecipe.getVideoUri());
-                intent.putExtra("recipeID", selectedRecipe.getRecipeId()); // Send recipe ID
-                intent.putExtra("currentUserEmail", selectedRecipe.getUserEmail()); // Send current Email
+            // Pass the recipe data to the new activity
+            intent.putExtra("imageUri", selectedRecipe.getImageUri());
+            intent.putExtra("name", selectedRecipe.getName());
+            intent.putExtra("description", selectedRecipe.getDescription());
+            intent.putExtra("cookTime", selectedRecipe.getCookTime());
+            intent.putExtra("serves", selectedRecipe.getServes());
+            intent.putExtra("username", selectedRecipe.getUserName());
+            intent.putExtra("videoUri", selectedRecipe.getVideoUri());
+            intent.putExtra("recipeID", selectedRecipe.getRecipeId()); // Send recipe ID
+            intent.putExtra("currentUserEmail", selectedRecipe.getUserEmail()); // Send current Email
 
-                // Start the new activity
-                startActivity(intent);
-            }
+            // Start the new activity
+            startActivity(intent);
         });
 
         // Fetch all recipes from Firebase
@@ -115,8 +112,7 @@ public class searchFragment extends Fragment {
                         String category = recipeSnapshot.child("category").getValue(String.class); // Fetch category
 
                         if (imageUri != null && name != null) {
-                            DataClass dataClass = new DataClass(imageUri, name, cookTime, description, serves, username, videoUri, recipeId, userEmail);
-                            dataClass.setCategory(category); // Set the category for the DataClass object
+                            DataClass dataClass = new DataClass(imageUri, name, cookTime, description, serves, username, videoUri, recipeId, userEmail, category);
                             dataList.add(dataClass);  // Add the recipe data to the list
                         }
                     }
@@ -155,50 +151,68 @@ public class searchFragment extends Fragment {
         });
     }
 
+    // Setup category buttons to filter recipes based on the selected category
     private void setupCategoryButtons() {
-        btnAll.setOnClickListener(v -> {
-            selectedCategory = ""; // Show all categories
-            filterRecipes(searchBar.getText().toString(), selectedCategory);
-        });
+        // Common method to handle category filtering to reduce redundancy
+        View.OnClickListener categoryClickListener = v -> {
+            // Set the selected category based on the button clicked
+            if (v.getId() == R.id.all) {
+                selectedCategory = ""; // Show all categories
+            } else if (v.getId() == R.id.breakfast) {
+                selectedCategory = "Breakfast";
+            } else if (v.getId() == R.id.lunch) {
+                selectedCategory = "Lunch";
+            } else if (v.getId() == R.id.dinner) {
+                selectedCategory = "Dinner";
+            } else if (v.getId() == R.id.snack) {
+                selectedCategory = "Snack";
+            }
 
-        btnBreakfast.setOnClickListener(v -> {
-            selectedCategory = "Breakfast";
-            filterRecipes(searchBar.getText().toString(), selectedCategory);
-        });
+            // Call the filter method, ensuring the search bar is not null
+            if (searchBar != null) {
+                filterRecipes(searchBar.getText().toString(), selectedCategory);
+            }
+        };
 
-        btnLunch.setOnClickListener(v -> {
-            selectedCategory = "Lunch";
-            filterRecipes(searchBar.getText().toString(), selectedCategory);
-        });
-
-        btnDinner.setOnClickListener(v -> {
-            selectedCategory = "Dinner";
-            filterRecipes(searchBar.getText().toString(), selectedCategory);
-        });
-
-        btnSnack.setOnClickListener(v -> {
-            selectedCategory = "Snack";
-            filterRecipes(searchBar.getText().toString(), selectedCategory);
-        });
+        // Assign the common click listener to all buttons
+        btnAll.setOnClickListener(categoryClickListener);
+        btnBreakfast.setOnClickListener(categoryClickListener);
+        btnLunch.setOnClickListener(categoryClickListener);
+        btnDinner.setOnClickListener(categoryClickListener);
+        btnSnack.setOnClickListener(categoryClickListener);
     }
 
+    // Method to filter recipes based on the search query and selected category
     private void filterRecipes(String query, String category) {
-        filteredList.clear();
-        String lowerCaseQuery = query.toLowerCase();
+        // Initialize or clear the filteredList before filtering
+        if (filteredList == null) {
+            filteredList = new ArrayList<>();
+        } else {
+            filteredList.clear();
+        }
 
-        if (query.isEmpty() && category.isEmpty()) {
-            // Show all recipes when no query or category is selected
+        String lowerCaseQuery = query != null ? query.toLowerCase() : "";
+
+        if (lowerCaseQuery.isEmpty() && category.isEmpty()) {
+            // Show all recipes if no query or category is selected
             filteredList.addAll(dataList);
         } else {
+            // Iterate through the original list and filter based on query and category
             for (DataClass recipe : dataList) {
-                boolean matchesQuery = recipe.getName().toLowerCase().contains(lowerCaseQuery);
-                boolean matchesCategory = category.isEmpty() || recipe.getCategory().equalsIgnoreCase(category); // Compare categories
+                if (recipe != null) {
+                    boolean matchesQuery = recipe.getName() != null && recipe.getName().toLowerCase().contains(lowerCaseQuery);
+                    boolean matchesCategory = category.isEmpty() || (recipe.getCategory() != null && recipe.getCategory().equalsIgnoreCase(category));
 
-                if (matchesQuery && matchesCategory) {
-                    filteredList.add(recipe);
+                    if (matchesQuery && matchesCategory) {
+                        filteredList.add(recipe);
+                    }
                 }
             }
         }
-        adapter.notifyDataSetChanged(); // Notify the adapter of the changes
+
+        // Notify the adapter that the data has changed to update the UI
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 }
