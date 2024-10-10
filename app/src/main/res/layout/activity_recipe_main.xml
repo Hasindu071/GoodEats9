@@ -25,7 +25,7 @@
     <FrameLayout
         android:id="@+id/videoSpace"
         android:layout_width="0dp"
-        android:layout_height="210dp"
+        android:layout_height="200dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,18 +48,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="160dp">
+            android:layout_marginTop="160dp"
+            android:background="#80000000">
 
             <ImageView
                 android:id="@+id/star"
-                android:layout_width="38dp"
+                android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 app:srcCompat="@drawable/baseline_star_rate_24" />
 
             <ImageView
                 android:id="@+id/share"
-                android:layout_width="37dp"
+                android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 app:srcCompat="@drawable/baseline_share_24"
@@ -67,21 +68,17 @@
 
             <ImageView
                 android:id="@+id/save"
-                android:layout_width="40dp"
+                android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 app:srcCompat="@drawable/baseline_bookmark_24" /></LinearLayout>
     </FrameLayout>
 
-
-
-    <!-- Recipe Name TextView (Below the video) -->
-
     <TextView
         android:id="@+id/recipeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:text="Recipe Name"
         android:textColor="@android:color/black"
@@ -100,9 +97,8 @@
         android:textSize="15dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipeName"
+        app:layout_constraintTop_toBottomOf="@+id/recipeRatingBar"
         tools:ignore="TextSizeCheck" />
-
 
     <!-- Profile Image -->
 
@@ -118,7 +114,7 @@
         android:scaleY="0.4"
         android:stepSize="0.1"
         android:transformPivotX="120dp"
-        android:transformPivotY="30dp"
+        android:transformPivotY="23dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -137,6 +133,7 @@
         android:text="No ratings yet"
         android:textColor="@color/black"
         android:textSize="14sp"
+        android:layout_marginTop="-10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.646"
@@ -213,7 +210,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/procedureButton"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:id="@+id/profileName"
