@@ -35,7 +35,7 @@ public class recipeMain extends AppCompatActivity {
     private Button procedureButton;
     private Button ingredientsButton;
     private ProgressBar loadingSpinner;
-    private TextView recipeNameText, descriptionText, userNameText, totalRatingTextView;
+    private TextView recipeNameText, descriptionText, userNameText, totalRatingTextView,CooktimeText;
     private VideoView recipeVideoView;
     private DatabaseReference recipeDatabaseReference;
     private ImageView save;
@@ -60,6 +60,7 @@ public class recipeMain extends AppCompatActivity {
         recipeNameText = findViewById(R.id.recipeName);
         descriptionText = findViewById(R.id.Recipedescription);
         userNameText = findViewById(R.id.profileName);
+        CooktimeText = findViewById(R.id.cookTimeText);
         procedureButton = findViewById(R.id.procedureButton);
         ingredientsButton = findViewById(R.id.ingredientsButton);
         ImageView starImage = findViewById(R.id.star);
@@ -80,6 +81,7 @@ public class recipeMain extends AppCompatActivity {
         String userName = intentRecipe.getStringExtra("username");
         String email = intentRecipe.getStringExtra("currentUserEmail");
         String videoUri = intentRecipe.getStringExtra("videoUri");
+        String cookTime = intentRecipe.getStringExtra("cookTime");
         recipeId = intentRecipe.getStringExtra("recipeID");
         userEmail = intentRecipe.getStringExtra("currentUserEmail");
 
@@ -116,6 +118,7 @@ public class recipeMain extends AppCompatActivity {
         recipeNameText.setText(name);
         descriptionText.setText(description);
         userNameText.setText(userName);
+        CooktimeText.setText(cookTime);
 
         // Make the "reviews" text look like a link
         textViewReviews.setPaintFlags(textViewReviews.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

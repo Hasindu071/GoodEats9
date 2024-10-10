@@ -9,7 +9,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
@@ -29,11 +29,17 @@
 
                 <!-- Icons in the bottom-right corner -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#80FFFFFF"
                     android:layout_gravity="bottom|end"
-                    android:orientation="horizontal"
-                    android:layout_margin="10dp">
+                    android:orientation="horizontal">
+
+                    <!-- Spacer to push icons to the right -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
                     <!-- Edit Icon -->
                     <ImageView
@@ -41,15 +47,18 @@
                         android:layout_width="50dp"
                         android:layout_height="42dp"
                         app:srcCompat="@drawable/edit"
-                        android:layout_marginEnd="5dp"/>
+                        android:layout_gravity="bottom"
+                        android:layout_marginEnd="5dp" />
 
                     <!-- Delete Icon -->
                     <ImageView
                         android:id="@+id/deletebtn"
                         android:layout_width="50dp"
                         android:layout_height="42dp"
-                        app:srcCompat="@drawable/ndlt"/>
+                        android:layout_gravity="bottom"
+                        app:srcCompat="@drawable/ndlt" />
                 </LinearLayout>
+
 
             </FrameLayout>
 
