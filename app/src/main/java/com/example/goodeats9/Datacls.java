@@ -2,6 +2,7 @@ package com.example.goodeats9;
 
 public class Datacls {
 
+    private String recipeId; // New field for recipe ID
     private String videoUri;
     private String name;
     private String description;
@@ -11,12 +12,21 @@ public class Datacls {
     // Empty constructor required for Firebase
     public Datacls() {}
 
-    public Datacls(String videoUri, String name, String description, String userName, String imageUri) {
+    public Datacls(String recipeId, String videoUri, String name, String description, String userName, String imageUri) {
+        this.recipeId = recipeId; // Add recipe ID to the constructor
         this.videoUri = videoUri;
         this.name = name;
         this.description = description;
         this.userName = userName;
         this.imageUri = imageUri;
+    }
+
+    public String getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(String recipeId) {
+        this.recipeId = recipeId;
     }
 
     public String getVideoUri() {
