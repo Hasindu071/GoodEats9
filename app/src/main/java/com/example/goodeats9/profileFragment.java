@@ -50,6 +50,7 @@ public class profileFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
 
         // Find views by ID
+        ImageButton logOutButton = view.findViewById(R.id.logOutButton);
         ImageButton editProfileButton = view.findViewById(R.id.editProfileButton);
         profileImage = view.findViewById(R.id.profileImage);
         TextView userNameText = view.findViewById(R.id.userName);
@@ -111,6 +112,25 @@ public class profileFragment extends Fragment {
             Log.e("ProfileFragment", "User not authenticated");
             Toast.makeText(getActivity(), "User not authenticated", Toast.LENGTH_SHORT).show();
         }
+
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Sign out from Firebase
+                FirebaseAuth.getInstance().signOut();
+
+                // Clear login state from SharedPreferences
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginDetails", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+
+                // Redirect to Login page
+                Intent intent = new Intent(getActivity(), login.class);
+                startActivity(intent);
+                getActivity().finish(); // Close the current activity
+            }
+        });
 
         // Edit profile button click listener
         editProfileButton.setOnClickListener(v -> {
