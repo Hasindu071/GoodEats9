@@ -157,8 +157,9 @@ public class login extends AppCompatActivity {
                                 HashMap<String, Object> map = new HashMap<>();
                                 map.put("id", user.getUid());
                                 map.put("name", user.getDisplayName());
-                                map.put("profile", user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "");
+                                map.put("profilePhotoUrl", user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "");
                                 map.put("email", user.getEmail());
+                                map.put("description", ""); // Default blank description for Google users
 
                                 database.getReference().child("users").child(user.getUid()).setValue(map);
 
