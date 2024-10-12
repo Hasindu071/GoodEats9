@@ -68,7 +68,18 @@ public class saveFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 savedRecipeList.clear(); // Clear the list before adding new data
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Datacls recipe = snapshot.getValue(Datacls.class);
+                    // Get the unique recipe ID (key)
+                    String recipeId = snapshot.getKey();
+
+                    // Get other recipe details from Firebase
+                    String videoUri = snapshot.child("videoUri").getValue(String.class);
+                    String name = snapshot.child("name").getValue(String.class);
+                    String description = snapshot.child("description").getValue(String.class);
+                    String userName = snapshot.child("userName").getValue(String.class);
+                    String imageUri = snapshot.child("imageUri").getValue(String.class);
+
+                    // Create a Datacls object with recipeId
+                    Datacls recipe = new Datacls(recipeId, videoUri, name, description, userName, imageUri);
                     savedRecipeList.add(recipe);
                 }
                 adapter.notifyDataSetChanged(); // Notify adapter of data change
