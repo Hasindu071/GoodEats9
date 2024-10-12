@@ -17,6 +17,7 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -127,7 +128,8 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
 
         // Delete button click listener
         holder.deleteButton.setOnClickListener(v -> {
-            deleteRecipeFromDatabase(recipe.getVideoUri()); // Call method to delete from the database
+            // Pass the unique recipe ID to the delete method
+            deleteRecipeFromDatabase(recipe.getRecipeId());
 
             // Remove the item from the list and notify the adapter
             savedRecipes.remove(position);
@@ -141,13 +143,16 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
         return savedRecipes.size();
     }
 
-    private void deleteRecipeFromDatabase(String videoUri) {
-        // Extract the unique identifier for deletion (assumed to be the same as videoUri)
-        String videoIdentifier = videoUri.replace(".", "_"); // Change this according to your unique identifier format
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("savedRecipes");
+    private void deleteRecipeFromDatabase(String recipeId) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid(); // Get current user's UID
 
-        databaseReference.child(videoIdentifier) // Use videoIdentifier for deletion
-                .removeValue()
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference("saved_recipes")
+                .child(userId) // Target the user's saved recipes
+                .child(recipeId); // Target the specific recipe ID
+
+        // Remove the recipe
+        databaseReference.removeValue()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("Delete Recipe", "Recipe deleted successfully");
