@@ -166,7 +166,7 @@ public class recipeMain extends AppCompatActivity {
 
         // Handle save button click
         save.setOnClickListener(view -> {
-            Datacls recipeToSave = new Datacls(videoUri, name, description, userName, "");
+            Datacls recipeToSave = new Datacls(recipeId, videoUri, name, description, userName, "");
             saveRecipe(recipeToSave); // Save to Firebase
         });
 
