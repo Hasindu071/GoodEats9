@@ -70,7 +70,43 @@ public class profileFragment extends Fragment {
         if (currentUser != null) {
             userId = currentUser.getUid();
             reference = FirebaseDatabase.getInstance().getReference("users").child(userId);
-            loadProfileImage(); // Fetch profile image from Firebase
+
+            // Fetch user data from Firebase Realtime Database
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        // Fetch and set the user's name
+                        String name = snapshot.child("name").getValue(String.class);
+                        if (name != null) {
+                            userNameText.setText(name);
+                        } else {
+                            userNameText.setText("User");
+                        }
+
+                        // Fetch and set the user's description (default if Google sign-in)
+                        String description = snapshot.child("description").getValue(String.class);
+                        if (description != null && !description.isEmpty()) {
+                            userBioText.setText(description);
+                        } else {
+                            userBioText.setText("No description provided");
+                        }
+
+                        // Load profile image
+                        loadProfileImage();
+                    } else {
+                        // Handle case where user data is not found
+                        Log.e("ProfileFragment", "User data not found in the database");
+                        Toast.makeText(getActivity(), "User data not found", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("ProfileFragment", "Database error: " + error.getMessage());
+                    Toast.makeText(getActivity(), "Error loading profile", Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
             Log.e("ProfileFragment", "User not authenticated");
             Toast.makeText(getActivity(), "User not authenticated", Toast.LENGTH_SHORT).show();
@@ -79,9 +115,8 @@ public class profileFragment extends Fragment {
         // Edit profile button click listener
         editProfileButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), edit_profile.class);
-            intent.putExtra("name", username);
-            intent.putExtra("email", email);
-            intent.putExtra("description", description);
+            intent.putExtra("name", userNameText.getText().toString());
+            intent.putExtra("description", userBioText.getText().toString());
             startActivity(intent);
         });
 
