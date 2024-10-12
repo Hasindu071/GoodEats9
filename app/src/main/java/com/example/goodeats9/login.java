@@ -163,6 +163,11 @@ public class login extends AppCompatActivity {
 
                                 database.getReference().child("users").child(user.getUid()).setValue(map);
 
+                                SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("isLoggedIn", true);
+                                editor.apply();
+
                                 Log.d("SignIn", "Navigating to MainActivity.");
                                 Intent intent = new Intent(login.this, menu_bar_main.class);
                                 startActivity(intent);
@@ -227,7 +232,8 @@ public class login extends AppCompatActivity {
                                         SharedPreferences sharedPreferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
                                         editor.putString("UserName", nameFromDB);  // Store the username
-                                        editor.putString("UserDescription", descFromDB);  // Store the description
+                                        editor.putString("UserDescription", descFromDB);
+                                        editor.putBoolean("isLoggedIn", true);// Store the description
                                         editor.apply();
 
                                         // Successful login, redirect to MainActivity
