@@ -11,6 +11,16 @@ public class DataClass {
     private String serves ;
     private String UserName;
     private String userEmail;
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
 
     public String getRecipeId() {
         return recipeId;
@@ -59,7 +69,6 @@ public class DataClass {
         this.videoUri = videoUri;
     }
 
-
     public String getUserEmail() {
         return userEmail;
     }
@@ -68,7 +77,7 @@ public class DataClass {
         this.userEmail = userEmail;
     }
 
-    public DataClass(String imageUri, String name, String cookTime, String description, String serves, String username, String videoUri, String recipeId , String email) {
+    public DataClass(String imageUri, String name, String cookTime, String description, String serves, String username, String videoUri, String recipeId , String email , String category) {
         this.imageUri = imageUri;
         this.name = name;
         this.cookTime = cookTime;
@@ -78,6 +87,7 @@ public class DataClass {
         this.videoUri = videoUri;
         this.recipeId = recipeId;
         this.userEmail = email;
+        this.category = category;
     }
 
     public String getCookTime() {

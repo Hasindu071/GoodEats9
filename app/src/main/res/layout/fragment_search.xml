@@ -46,6 +46,79 @@
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="33dp" />
 
+        <HorizontalScrollView
+            app:layout_constraintTop_toBottomOf="@id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:visibility="visible"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/all"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:backgroundTint="#129575"
+                            android:padding="10dp"
+                            android:layout_margin="10dp"
+                            android:text="all"
+                            android:textColor="@android:color/white" />
+
+                        <Button
+                            android:id="@+id/breakfast"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:backgroundTint="#129575"
+                            android:padding="10dp"
+                            android:layout_margin="10dp"
+                            android:text="Breakfast"
+                            android:textColor="@android:color/white" />
+
+                        <Button
+                            android:id="@+id/lunch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:backgroundTint="#129575"
+                            android:padding="10dp"
+                            android:layout_margin="10dp"
+                            android:text="Lunch"
+                            android:textColor="@android:color/white" />
+
+
+                        <Button
+                            android:id="@+id/dinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:backgroundTint="#129575"
+                            android:padding="10dp"
+                            android:layout_margin="10dp"
+                            android:text="Dinner"
+                            android:textColor="@android:color/white" />
+
+                        <Button
+                            android:id="@+id/snack"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:backgroundTint="#129575"
+                            android:padding="10dp"
+                            android:layout_margin="10dp"
+                            android:text="Snack"
+                            android:textColor="@android:color/white" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
@@ -54,11 +127,11 @@
         tools:context=".MainActivity">
 
         <GridView
+            android:id="@+id/gridView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="45dp"
-            android:id="@+id/gridView"
-            android:numColumns="2"/>
+            android:layout_marginBottom="55dp"
+            android:numColumns="2" />
 
     </RelativeLayout>
 

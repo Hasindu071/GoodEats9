@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -81,12 +82,13 @@ public class MyRecipies extends AppCompatActivity {
                         String cookTime = recipeSnapshot.child("cookTime").getValue(String.class);
                         String username = recipeSnapshot.child("username").getValue(String.class);
                         String videoUri = recipeSnapshot.child("videoUri").getValue(String.class);
+                        String category = recipeSnapshot.child("category").getValue(String.class);
                         String recipeId = recipeSnapshot.getKey();  // Use recipeSnapshot key as recipeId
 
                         // Add the recipe data to the list if imageUri and name are available
                         if (imageUri != null && name != null) {
                             // Populate DataClass with all necessary fields
-                            DataClass dataClass = new DataClass(imageUri, name, cookTime, description, serves, username, videoUri, recipeId, userEmail);
+                            DataClass dataClass = new DataClass(imageUri, name, cookTime, description, serves, username, videoUri, recipeId, userEmail,category);
                             dataList.add(dataClass);
                         }
                     }
@@ -135,22 +137,36 @@ public class MyRecipies extends AppCompatActivity {
 
     // Handle delete clicks
     private void onDeleteClick(DataClass recipeToDelete) {
-        String recipeId = recipeToDelete.getRecipeId();
-        String userEmail = recipeToDelete.getUserEmail();
+        // Show confirmation dialog
+        new AlertDialog.Builder(MyRecipies.this)
+                .setTitle("Delete Confirmation")
+                .setMessage("Are you sure you want to delete this recipe?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // If the user confirms, proceed with deletion
+                    String recipeId = recipeToDelete.getRecipeId();
+                    String userEmail = recipeToDelete.getUserEmail();
 
-        // Delete recipe from Firebase
-        DatabaseReference recipeRef = FirebaseDatabase.getInstance().getReference("recipes").child(userEmail).child(recipeId);
-        recipeRef.removeValue()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(MyRecipies.this, "Recipe deleted successfully", Toast.LENGTH_SHORT).show();
-                        // Optionally refresh the list
-                        fetchAllRecipes(); // This will re-fetch the updated list
-                    } else {
-                        Toast.makeText(MyRecipies.this, "Failed to delete recipe", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    // Delete recipe from Firebase
+                    DatabaseReference recipeRef = FirebaseDatabase.getInstance().getReference("recipes")
+                            .child(userEmail).child(recipeId);
+                    recipeRef.removeValue()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(MyRecipies.this, "Recipe deleted successfully", Toast.LENGTH_SHORT).show();
+                                    // Optionally refresh the list
+                                    fetchAllRecipes(); // This will re-fetch the updated list
+                                } else {
+                                    Toast.makeText(MyRecipies.this, "Failed to delete recipe", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    // User canceled, dismiss the dialog
+                    dialog.dismiss();
+                })
+                .show();
     }
+
 
     // Handle delete clicks
     public void onEditClick(DataClass selectedRecipe) {

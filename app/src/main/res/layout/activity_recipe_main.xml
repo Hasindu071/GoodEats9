@@ -25,7 +25,7 @@
     <FrameLayout
         android:id="@+id/videoSpace"
         android:layout_width="0dp"
-        android:layout_height="210dp"
+        android:layout_height="200dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,40 +48,68 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="160dp">
+            android:layout_marginTop="160dp"
+            android:background="#80000000"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <ImageView
-                android:id="@+id/star"
-                android:layout_width="38dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                app:srcCompat="@drawable/baseline_star_rate_24" />
+            <!-- Container for the image icons on the left -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/share"
-                android:layout_width="37dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                app:srcCompat="@drawable/baseline_share_24"
-                />
+                <ImageView
+                    android:id="@+id/star"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    app:srcCompat="@drawable/baseline_star_rate_24" />
 
-            <ImageView
-                android:id="@+id/save"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                app:srcCompat="@drawable/baseline_bookmark_24" /></LinearLayout>
+                <ImageView
+                    android:id="@+id/share"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    app:srcCompat="@drawable/baseline_share_24" />
+
+                <ImageView
+                    android:id="@+id/save"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    app:srcCompat="@drawable/baseline_bookmark_24" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <!-- Cooktime TextView aligned to the right -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_time"
+                android:layout_marginRight="5dp"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/cookTimeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_marginRight="20dp"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
     </FrameLayout>
-
-
-
-    <!-- Recipe Name TextView (Below the video) -->
 
     <TextView
         android:id="@+id/recipeName"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:text="Recipe Name"
         android:textColor="@android:color/black"
@@ -92,17 +120,16 @@
 
     <TextView
         android:id="@+id/Recipedescription"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_margin="16dp"
         android:text="Recipedescription"
         android:textColor="#7E7C7C"
         android:textSize="15dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipeName"
+        app:layout_constraintTop_toBottomOf="@+id/recipeRatingBar"
         tools:ignore="TextSizeCheck" />
-
 
     <!-- Profile Image -->
 
@@ -118,7 +145,7 @@
         android:scaleY="0.4"
         android:stepSize="0.1"
         android:transformPivotX="120dp"
-        android:transformPivotY="30dp"
+        android:transformPivotY="23dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -137,6 +164,7 @@
         android:text="No ratings yet"
         android:textColor="@color/black"
         android:textSize="14sp"
+        android:layout_marginTop="-10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.646"
@@ -146,8 +174,8 @@
 
     <ImageView
         android:id="@+id/profileImage"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:src="@drawable/user_icon"
         app:layout_constraintStart_toStartOf="parent"
@@ -204,6 +232,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintWidth_percent="0.4" />
 
+
+
     <!-- FragmentContainerView to switch content below Procedure/Ingredients -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainer"
@@ -213,19 +243,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/procedureButton"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="5dp" />
+
 
     <TextView
         android:id="@+id/profileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         android:text="Profile Name"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profileImage"
         app:layout_constraintTop_toTopOf="@+id/profileImage" />
+
+    <TextView
+        android:id="@+id/servesText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:drawableStart="@drawable/ic_serves"
+        android:drawablePadding="1dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.893"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileName"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/reviews"
@@ -240,5 +285,7 @@
         app:layout_constraintHorizontal_bias="0.904"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/videoSpace" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

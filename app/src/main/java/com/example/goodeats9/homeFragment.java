@@ -1,7 +1,9 @@
 package com.example.goodeats9;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +26,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import static android.content.Context.MODE_PRIVATE;
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -66,63 +70,79 @@ public class homeFragment extends Fragment {
         if (currentUser.getDisplayName() != null) {
             // Google Sign-In User: Display name and profile picture from FirebaseUser
             String googleName = currentUser.getDisplayName();
-            String googlePhotoUrl = Objects.requireNonNull(currentUser.getPhotoUrl()).toString();
+            Uri googlePhotoUri = currentUser.getPhotoUrl();
 
             // Set the welcome text with the Google username
             welcomeTextView.setText(googleName);
 
-            // Load Google profile photo using Glide
-            Glide.with(this)
-                    .load(googlePhotoUrl)
-                    .placeholder(R.drawable.placeholder_image)
-                    .error(R.drawable.error_image)
-                    .circleCrop()
-                    .into(profileImageView);
+            // Load Google profile photo using Glide if photo URL is not null
+            if (googlePhotoUri != null) {
+                Glide.with(this)
+                        .load(googlePhotoUri.toString())
+                        .placeholder(R.drawable.placeholder_image)
+                        .error(R.drawable.error_image)
+                        .circleCrop()
+                        .into(profileImageView);
+            }
         } else {
             // Normal Sign-In: Access SharedPreferences to get user data
-            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("loginDetails", MODE_PRIVATE);
+            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("loginDetails", Context.MODE_PRIVATE);
             String username = sharedPreferences.getString("UserName", "User"); // If no name is found, default to "User"
 
             // Set the welcome text with the username
             welcomeTextView.setText(username);
 
             // Load profile photo from Firebase for normal sign-in
-            loadProfilePhoto(profileImageView);
+            loadProfileImage(profileImageView);
         }
 
         // Configure the ImageSlider
         configureImageSlider(view);
     }
 
-    // Method to load profile photo from Firebase using UID for normal sign-in users
-    private void loadProfilePhoto(ImageView profileImageView) {
-        reference.child("profile").addListenerForSingleValueEvent(new ValueEventListener() {
+    // Upload profile image to Firebase Storage and save its URL in Realtime Database
+    private void uploadProfileImage(Uri imageUri, String userId) {
+        if (imageUri != null) {
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference("profile_images").child(userId + ".jpg");
+
+            storageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot ->
+                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        // Save image URL to Realtime Database
+                        reference.child("profilePhotoUrl").setValue(uri.toString());
+                        Toast.makeText(getActivity(), "Profile image uploaded successfully", Toast.LENGTH_SHORT).show();
+                    })
+            ).addOnFailureListener(e -> {
+                Log.e("homeFragment", "Image upload failed: " + e.getMessage());
+                Toast.makeText(getActivity(), "Failed to upload image", Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
+    // Load profile image from Firebase Database
+    private void loadProfileImage(ImageView profileImageView) {
+        reference.child("profilePhotoUrl").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String profilePhotoUrl = snapshot.getValue(String.class);
-                    if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
-                        // Load the profile photo using Glide
-                        Glide.with(homeFragment.this)
-                                .load(profilePhotoUrl)
-                                .placeholder(R.drawable.placeholder_image)  // Optional placeholder while loading
-                                .error(R.drawable.error_image)              // Optional error image if failed
-                                .circleCrop()                               // Optional circular crop
-                                .into(profileImageView);
-                    } else {
-                        // Set default image if profile photo URL is empty
-                        profileImageView.setImageResource(R.drawable.placeholder_image);
-                    }
+                String profilePhotoUrl = snapshot.getValue(String.class);
+
+                if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
+                    Glide.with(homeFragment.this)
+                            .load(profilePhotoUrl)
+                            .placeholder(R.drawable.placeholder_image)
+                            .error(R.drawable.error_image)
+                            .circleCrop()
+                            .into(profileImageView);
                 } else {
-                    // Set default image if no photo is found in the database
                     profileImageView.setImageResource(R.drawable.placeholder_image);
-                    Toast.makeText(requireContext(), "Profile photo not found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "No profile image available", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(requireContext(), "Failed to load profile photo: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("homeFragment", "Error loading profile image: " + error.getMessage());
+                profileImageView.setImageResource(R.drawable.error_image);
+                Toast.makeText(getActivity(), "Failed to load profile image", Toast.LENGTH_SHORT).show();
             }
         });
     }
