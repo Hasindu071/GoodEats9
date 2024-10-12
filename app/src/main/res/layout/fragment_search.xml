@@ -130,10 +130,6 @@
                 android:contentDescription="More options" />
 
         </FrameLayout>
-
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
