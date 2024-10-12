@@ -15,6 +15,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 import android.widget.MediaController;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -161,7 +162,7 @@ public class recipeMain extends AppCompatActivity {
         });
 
         // Set click listener for shareImage
-        shareImage.setOnClickListener(v -> fetchAndShareRecipe());
+        shareImage.setOnClickListener(v -> fetchAndShareRecipe(recipeId));
 
         // Handle save button click
         save.setOnClickListener(view -> {
@@ -235,31 +236,34 @@ public class recipeMain extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> Toast.makeText(this, "Recipe saved successfully!", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to save recipe: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
-    // Merhod to share an recipe
-    private void fetchAndShareRecipe() {
-        // Get the current user
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (currentUser != null) {
-            String userId = currentUser.getEmail().replace(".", "_");
+    private void fetchAndShareRecipe(String recipeId) {
+        recipeDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean recipeFound = false;
 
-            recipeDatabaseReference.child(userId).child(recipeId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
+                // Loop through all users
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    // Check if the user has the recipe with the given recipeId
+                    DataSnapshot recipeSnapshot = userSnapshot.child(recipeId);
+                    if (recipeSnapshot.exists()) {
+                        // Recipe found
+                        recipeFound = true;
+
                         // Fetch recipe details
-                        String recipeName = dataSnapshot.child("name").getValue(String.class);
-                        String description = dataSnapshot.child("description").getValue(String.class);
-                        String serves = dataSnapshot.child("serves").getValue(String.class);
-                        String category = dataSnapshot.child("category").getValue(String.class);
-                        String cookTime = dataSnapshot.child("cookTime").getValue(String.class);
+                        String recipeName = recipeSnapshot.child("name").getValue(String.class);
+                        String description = recipeSnapshot.child("description").getValue(String.class);
+                        String serves = recipeSnapshot.child("serves").getValue(String.class);
+                        String category = recipeSnapshot.child("category").getValue(String.class);
+                        String cookTime = recipeSnapshot.child("cookTime").getValue(String.class);
 
-                        // Initialize ArrayLists to store the ingredients and methods
+                        // Initialize ArrayLists to store ingredients and methods
                         ArrayList<String> ingredientList = new ArrayList<>();
                         ArrayList<String> methodList = new ArrayList<>();
 
                         // Retrieve ingredients
-                        for (DataSnapshot ingredientSnapshot : dataSnapshot.child("ingredients").getChildren()) {
+                        for (DataSnapshot ingredientSnapshot : recipeSnapshot.child("ingredients").getChildren()) {
                             String ingredient = ingredientSnapshot.getValue(String.class);
                             if (ingredient != null) {
                                 ingredientList.add(ingredient);
@@ -267,7 +271,7 @@ public class recipeMain extends AppCompatActivity {
                         }
 
                         // Retrieve cooking methods
-                        for (DataSnapshot methodSnapshot : dataSnapshot.child("methods").getChildren()) {
+                        for (DataSnapshot methodSnapshot : recipeSnapshot.child("methods").getChildren()) {
                             String method = methodSnapshot.getValue(String.class);
                             if (method != null) {
                                 methodList.add(method);
@@ -285,13 +289,9 @@ public class recipeMain extends AppCompatActivity {
                         for (String method : methodList) {
                             stepsBuilder.append(method).append("\n");
                         }
-
-                        // Create sharing intent
                         Intent shareIntent = new Intent(Intent.ACTION_SEND);
                         shareIntent.setType("text/plain");
-
-                        // Combine subject and message
-                        String message = "Check out this recipe! On Goodeats app\n\n"
+                        String message = "Check out this recipe on Goodeats app!\n\n"
                                 + "Recipe Name: " + recipeName
                                 + "\nDescription: " + description
                                 + "\nServes: " + serves
@@ -302,22 +302,21 @@ public class recipeMain extends AppCompatActivity {
 
                         shareIntent.putExtra(Intent.EXTRA_TEXT, message);
                         startActivity(Intent.createChooser(shareIntent, "Share via"));
-                    } else {
-                        Toast.makeText(recipeMain.this, "Recipe not found!", Toast.LENGTH_SHORT).show();
+                        break;
                     }
                 }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Handle possible errors.
-                    Toast.makeText(recipeMain.this, "Error fetching recipe: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                if (!recipeFound) {
+                    Toast.makeText(recipeMain.this, "Recipe not found!", Toast.LENGTH_SHORT).show();
                 }
-            });
-        } else {
-            Toast.makeText(recipeMain.this, "User not authenticated!", Toast.LENGTH_SHORT).show();
-        }
-    }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle possible errors.
+                Toast.makeText(recipeMain.this, "Error fetching recipe: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
