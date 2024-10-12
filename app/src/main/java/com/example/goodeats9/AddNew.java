@@ -23,6 +23,8 @@ import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -281,6 +283,12 @@ public class AddNew extends AppCompatActivity {
             if (task.isSuccessful()) {
                 Toast.makeText(AddNew.this, "Recipe saved successfully!", Toast.LENGTH_SHORT).show();
                 resetFields();
+                //close the add new page and go back
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentContainer, new homeFragment());
+                fragmentTransaction.commit();
+
             } else {
                 Toast.makeText(AddNew.this, "Failed to save recipe", Toast.LENGTH_SHORT).show();
             }

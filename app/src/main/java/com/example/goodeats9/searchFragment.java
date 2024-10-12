@@ -151,21 +151,52 @@ public class searchFragment extends Fragment {
         });
     }
 
-    // Setup category buttons to filter recipes based on the selected category
     private void setupCategoryButtons() {
-        // Common method to handle category filtering to reduce redundancy
+        // Defaultly make "All" button active
+        selectedCategory = "";
+        setButtonActive(btnAll);
+        setButtonInactive(btnBreakfast);
+        setButtonInactive(btnLunch);
+        setButtonInactive(btnDinner);
+        setButtonInactive(btnSnack);
+
         View.OnClickListener categoryClickListener = v -> {
             // Set the selected category based on the button clicked
             if (v.getId() == R.id.all) {
                 selectedCategory = ""; // Show all categories
+                setButtonActive(btnAll);
+                setButtonInactive(btnBreakfast);
+                setButtonInactive(btnLunch);
+                setButtonInactive(btnDinner);
+                setButtonInactive(btnSnack);
             } else if (v.getId() == R.id.breakfast) {
                 selectedCategory = "Breakfast";
+                setButtonActive(btnBreakfast);
+                setButtonInactive(btnAll);
+                setButtonInactive(btnLunch);
+                setButtonInactive(btnDinner);
+                setButtonInactive(btnSnack);
             } else if (v.getId() == R.id.lunch) {
                 selectedCategory = "Lunch";
+                setButtonActive(btnLunch);
+                setButtonInactive(btnAll);
+                setButtonInactive(btnBreakfast);
+                setButtonInactive(btnDinner);
+                setButtonInactive(btnSnack);
             } else if (v.getId() == R.id.dinner) {
                 selectedCategory = "Dinner";
+                setButtonActive(btnDinner);
+                setButtonInactive(btnAll);
+                setButtonInactive(btnBreakfast);
+                setButtonInactive(btnLunch);
+                setButtonInactive(btnSnack);
             } else if (v.getId() == R.id.snack) {
                 selectedCategory = "Snack";
+                setButtonActive(btnSnack);
+                setButtonInactive(btnAll);
+                setButtonInactive(btnBreakfast);
+                setButtonInactive(btnLunch);
+                setButtonInactive(btnDinner);
             }
 
             // Call the filter method, ensuring the search bar is not null
@@ -174,12 +205,23 @@ public class searchFragment extends Fragment {
             }
         };
 
-        // Assign the common click listener to all buttons
+        // Assign the listener to all category buttons
         btnAll.setOnClickListener(categoryClickListener);
         btnBreakfast.setOnClickListener(categoryClickListener);
         btnLunch.setOnClickListener(categoryClickListener);
         btnDinner.setOnClickListener(categoryClickListener);
         btnSnack.setOnClickListener(categoryClickListener);
+    }
+
+    // Methods to set buttons active or inactive
+    private void setButtonActive(Button button) {
+        button.setBackgroundTintList(getResources().getColorStateList(R.color.green));  // Change background color to green
+        button.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
+    }
+
+    private void setButtonInactive(Button button) {
+        button.setBackgroundTintList(getResources().getColorStateList(R.color.white));  // Change background color to white
+        button.setTextColor(getResources().getColor(R.color.green));  // Set text color to green
     }
 
     // Method to filter recipes based on the search query and selected category
