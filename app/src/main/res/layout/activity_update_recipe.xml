@@ -65,18 +65,20 @@
                 android:background="@drawable/image_back"
                 tools:ignore="MissingConstraints" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/updateImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 app:layout_constraintTop_toBottomOf="@id/addPic"
                 tools:ignore="MissingConstraints"
-                android:backgroundTint="#129575"
-                android:text="Update Recipe Photo"
+                app:strokeColor="@color/green"
+                app:strokeWidth="1dp"
+                android:backgroundTint="@color/white"
+                android:text="Choose new recipe photo"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="18dp"
+                android:textColor="@color/green"
+                android:textSize="15dp"
                 app:cornerRadius="12dp"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -94,7 +96,7 @@
             tools:ignore="DuplicateIds">
 
             <VideoView
-                android:id="@+id/videoView"
+                android:id="@+id/recipeVideo"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_weight="10"
@@ -105,13 +107,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                app:layout_constraintTop_toBottomOf="@id/videoView"
+                app:layout_constraintTop_toBottomOf="@id/recipeVideo"
                 tools:ignore="MissingConstraints"
-                android:backgroundTint="#129575"
-                android:text="update Recipe Video"
+                android:backgroundTint="@color/white"
+                app:strokeColor="@color/green"
+                app:strokeWidth="1dp"
+                android:text="Choose new Recipe Video"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="18dp"
+                android:textColor="@color/green"
+                android:textSize="15dp"
                 app:cornerRadius="12dp"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -359,6 +363,15 @@
             app:layout_constraintTop_toBottomOf="@id/MethodTab"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            tools:ignore="MissingConstraints" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

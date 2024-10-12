@@ -58,17 +58,6 @@ public class DataClass {
     private List<String> StepList;
     private List<String> IngredientList;
 
-
-    public DataClass(String imageUri, String name, String cookTime, String description, String serves , String UserName , String videoUri) {
-        this.imageUri = imageUri;
-        this.name = name;
-        this.cookTime = cookTime;
-        this.description = description;
-        this.serves = serves;
-        this.UserName = UserName;
-        this.videoUri = videoUri;
-    }
-
     public String getUserEmail() {
         return userEmail;
     }

@@ -204,6 +204,7 @@ public class MyRecipies extends AppCompatActivity {
         intent.putExtra("serves", selectedRecipe.getServes());
         intent.putExtra("video", selectedRecipe.getVideoUri());
         intent.putExtra("description", selectedRecipe.getDescription());
+        intent.putExtra("currentUserEmail", selectedRecipe.getUserEmail());
 
         if (selectedRecipe.getStepList() != null) {
             intent.putStringArrayListExtra("stepList", new ArrayList<>(selectedRecipe.getStepList()));
