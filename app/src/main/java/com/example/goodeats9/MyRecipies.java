@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import android.widget.ImageView;
@@ -135,36 +137,57 @@ public class MyRecipies extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // Handle delete clicks
     private void onDeleteClick(DataClass recipeToDelete) {
         // Show confirmation dialog
         new AlertDialog.Builder(MyRecipies.this)
                 .setTitle("Delete Confirmation")
                 .setMessage("Are you sure you want to delete this recipe?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    // If the user confirms, proceed with deletion
                     String recipeId = recipeToDelete.getRecipeId();
                     String userEmail = recipeToDelete.getUserEmail();
+                    String imageUri = recipeToDelete.getImageUri(); // Assuming this method exists
+                    String videoUri = recipeToDelete.getVideoUri(); // Assuming this method exists
 
-                    // Delete recipe from Firebase
+                    // Delete recipe from Firebase Database
                     DatabaseReference recipeRef = FirebaseDatabase.getInstance().getReference("recipes")
                             .child(userEmail).child(recipeId);
                     recipeRef.removeValue()
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
+                                    deleteFilesFromStorage(imageUri, videoUri);
                                     Toast.makeText(MyRecipies.this, "Recipe deleted successfully", Toast.LENGTH_SHORT).show();
-                                    // Optionally refresh the list
-                                    fetchAllRecipes(); // This will re-fetch the updated list
+                                    fetchAllRecipes();
                                 } else {
                                     Toast.makeText(MyRecipies.this, "Failed to delete recipe", Toast.LENGTH_SHORT).show();
                                 }
                             });
                 })
                 .setNegativeButton("No", (dialog, which) -> {
-                    // User canceled, dismiss the dialog
                     dialog.dismiss();
                 })
                 .show();
+    }
+
+    private void deleteFilesFromStorage(String imageUri, String videoUri) {
+        // delete image from storage
+        if (imageUri != null && !imageUri.isEmpty()) {
+            StorageReference imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(imageUri);
+            imageRef.delete().addOnSuccessListener(aVoid -> {
+                Log.d("DeleteFile", "Image deleted successfully");
+            }).addOnFailureListener(e -> {
+                Log.e("DeleteFile", "Failed to delete image: " + e.getMessage());
+            });
+        }
+
+        // Delete the video from storage
+        if (videoUri != null && !videoUri.isEmpty()) {
+            StorageReference videoRef = FirebaseStorage.getInstance().getReferenceFromUrl(videoUri);
+            videoRef.delete().addOnSuccessListener(aVoid -> {
+                Log.d("DeleteFile", "Video deleted successfully");
+            }).addOnFailureListener(e -> {
+                Log.e("DeleteFile", "Failed to delete video: " + e.getMessage());
+            });
+        }
     }
 
 
