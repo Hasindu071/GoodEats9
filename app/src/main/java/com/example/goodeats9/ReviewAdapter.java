@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+//-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
     private List<Review> reviewList;
@@ -49,3 +50,4 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         }
     }
 }
+//-----------------------------------------IM/2021/050 - Kavishi ---------------------------------------------------//

@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.goodeats9.sign_up;
 
+//------------------------------IM/2021/028 - Manditha -------------------------------------------------//
+
 public class start extends AppCompatActivity {
 
     @Override
@@ -41,3 +43,4 @@ public class start extends AppCompatActivity {
         });
     }
 }
+//----------------------------------IM/2021/028 - Manditha ---------------------------------//

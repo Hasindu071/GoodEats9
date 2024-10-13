@@ -28,6 +28,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class edit_profile extends AppCompatActivity {
+//-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//
 
     private static final int REQUEST_CODE = 101; // Define a request code for storage permission
 
@@ -209,3 +210,4 @@ public class edit_profile extends AppCompatActivity {
         return isChanged;
     }
 }
+//-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//

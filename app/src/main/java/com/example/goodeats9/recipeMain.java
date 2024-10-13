@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+//-----------------------------------------IM/2021/050 - kavishi ---------------------------------------------------//
 public class recipeMain extends AppCompatActivity {
 
     private Button procedureButton;
@@ -109,6 +110,8 @@ public class recipeMain extends AppCompatActivity {
             recipeVideoView.start();
         });
 
+        //-----------------------------------------IM/2021/028 - Manditha ---------------------------------------------------//
+
         // Handle star ImageView click to go to the rating class
         starImage.setOnClickListener(v -> {
             Intent intent = new Intent(recipeMain.this, rating.class);
@@ -116,6 +119,8 @@ public class recipeMain extends AppCompatActivity {
             intent.putExtra("userEmail", userEmail);
             startActivity(intent);
         });
+
+        //-----------------------------------------IM/2021/028 - Manditha ---------------------------------------------------//
 
         // Set received data to views
         recipeNameText.setText(name);
@@ -174,6 +179,8 @@ public class recipeMain extends AppCompatActivity {
         calculateAndDisplayRating();
     }
 
+    //-----------------------------------------IM/2021/028 - Manditha ---------------------------------------------------//
+
     private void calculateAndDisplayRating() {
         String formattedUserEmail = userEmail.replace(".", "_");
 
@@ -222,6 +229,10 @@ public class recipeMain extends AppCompatActivity {
         });
     }
 
+    //-----------------------------------------IM/2021/028 - Manditha ---------------------------------------------------//
+
+    //-----------------------------------------IM/2021/003 - Dulmi ---------------------------------------------------//
+
     private void saveRecipe(Datacls recipe) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
@@ -236,7 +247,9 @@ public class recipeMain extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> Toast.makeText(this, "Recipe saved successfully!", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to save recipe: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
+    //-----------------------------------------IM/2021/003 - Dulmi ---------------------------------------------------//
 
+    //-----------------------------------------IM/2021/094 - Sandani ---------------------------------------------------//
     private void fetchAndShareRecipe(String recipeId) {
         recipeDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -317,6 +330,8 @@ public class recipeMain extends AppCompatActivity {
             }
         });
     }
+    //-----------------------------------------IM/2021/094 - Sandani ---------------------------------------------------//
+
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -344,3 +359,4 @@ public class recipeMain extends AppCompatActivity {
         }
     }
 }
+//-----------------------------------------IM/2021/050 - Kavishi ---------------------------------------------------//

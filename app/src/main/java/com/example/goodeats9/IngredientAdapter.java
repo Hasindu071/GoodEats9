@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+//-----------------------------------------IM/2021/050 - Kavishi ---------------------------------------------------//
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
     private List<String> ingredientList;
@@ -42,3 +43,4 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         }
     }
 }
+//-----------------------------------------IM/2021/050 - Kavishi ---------------------------------------------------//

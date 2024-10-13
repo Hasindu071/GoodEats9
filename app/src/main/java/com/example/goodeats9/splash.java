@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.graphics.Insets;
 
+//-----------------------------IM/2021/062 - Hasindu -----------------------------------------------//
 public class splash extends AppCompatActivity {
 
     @Override
@@ -37,3 +38,4 @@ public class splash extends AppCompatActivity {
 
     }
 }
+//----------------------------------IM/2021/062 - Hasindu -----------------------------------------//

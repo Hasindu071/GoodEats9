@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.goodeats9.databinding.ActivityMenuBarBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+//-----------------------------------------IM/2021/011 - Tharushika ---------------------------------------------------//
 
 public class menu_bar_main extends AppCompatActivity {
 
@@ -52,3 +53,4 @@ public class menu_bar_main extends AppCompatActivity {
     }
 
 }
+//-----------------------------------------IM/2021/011 - Tharushika ---------------------------------------------------//

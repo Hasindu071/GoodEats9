@@ -32,7 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
+//-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//
 public class profileFragment extends Fragment {
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -72,6 +72,8 @@ public class profileFragment extends Fragment {
         if (currentUser != null) {
             userId = currentUser.getUid();
             reference = FirebaseDatabase.getInstance().getReference("users").child(userId);
+
+            //-----------------------------------------IM/2021/028 - Manditha ---------------------------------------------------//
 
             // Fetch user data from Firebase Realtime Database
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -143,6 +145,7 @@ public class profileFragment extends Fragment {
                         .show();
             }
         });
+//-----------------------------------------IM/2021/028 - Manditha ---------------------------------------------------//
 
         // Edit profile button click listener
         editProfileButton.setOnClickListener(v -> {
@@ -221,3 +224,4 @@ public class profileFragment extends Fragment {
         });
     }
 }
+//-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//

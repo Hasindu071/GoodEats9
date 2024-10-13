@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+//-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//
 public class Add_photo extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -145,3 +146,4 @@ public class Add_photo extends AppCompatActivity {
     }
 }
 
+//-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//

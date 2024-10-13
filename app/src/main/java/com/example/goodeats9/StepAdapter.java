@@ -12,6 +12,8 @@ import com.example.goodeats9.R;
 
 import java.util.List;
 
+//---------------------------IM/2021/050 - Kavishi -----------------------------------------//
+
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.MethodViewHolder> {
     private List<MethodStep> methodList;
 
@@ -49,3 +51,4 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.MethodViewHold
         }
     }
 }
+//----------------------------------IM/2021/050 - Kavishi-------------------------------------//

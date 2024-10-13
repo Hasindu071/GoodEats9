@@ -1,5 +1,6 @@
 package com.example.goodeats9;
 
+//-----------------------------------------IM/2021/0562 - Hasindu ---------------------------------------------------//
 public class Review {
     private String name;
     private String comment;
@@ -27,3 +28,4 @@ public class Review {
         return timestamp;
     }
 }
+//-----------------------------------------IM/2021/050 - Kavishi ---------------------------------------------------//

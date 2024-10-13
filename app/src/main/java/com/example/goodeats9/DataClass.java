@@ -1,6 +1,6 @@
 package com.example.goodeats9;
 
-
+//-----------------------------------------IM/2021/050 - Kavishi ---------------------------------------------------//
 import java.util.List;
 
 public class DataClass {
@@ -13,6 +13,7 @@ public class DataClass {
     private String userEmail;
     private String category;
 
+    //-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//
     public String getCategory() {
         return category;
     }
@@ -21,7 +22,7 @@ public class DataClass {
         this.category = category;
     }
 
-
+    //-----------------------------------------IM/2021/062 - Hasindu---------------------------------------------------//
     public String getRecipeId() {
         return recipeId;
     }
@@ -134,3 +135,4 @@ public class DataClass {
 
     public void setVideoUri(String videoUri) {this.videoUri = videoUri;}
 }
+//-----------------------------------------IM/2021/050 - Kavishi ---------------------------------------------------//

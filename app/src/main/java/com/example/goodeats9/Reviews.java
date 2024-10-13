@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+//-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//
 public class Reviews extends AppCompatActivity {
 
     private EditText inputComment;
@@ -125,3 +126,4 @@ public class Reviews extends AppCompatActivity {
         });
     }
 }
+//-----------------------------------------IM/2021/050 - Kavishi ---------------------------------------------------//

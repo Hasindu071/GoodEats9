@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.IOException;
 import java.util.List;
 
+//-----------------------------------------IM/2021/003 - Dulmi ---------------------------------------------------//
+
 public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.ViewHolder> {
 
     private Context context;
@@ -192,3 +194,4 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
         }
     }
 }
+//-----------------------------------------IM/2021/003 - Dulmi ---------------------------------------------------//

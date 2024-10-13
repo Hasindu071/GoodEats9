@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+//-----------------------IM/2021/062 - Hasindu---------------------------------------------------//
+
 public class sign_up extends AppCompatActivity {
 
     EditText signUpName, signUpEmail, signUpPassword, signUpConfirmPassword, signUpDescription;
@@ -49,10 +51,13 @@ public class sign_up extends AppCompatActivity {
         signUpDescription     = findViewById(R.id.inputDescription);
         backButton            = findViewById(R.id.backButton);
 
+        //-------------------IM/2021/028 - Manditha ---------------------------------//
+
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(sign_up.this, login.class);
             startActivity(intent);
         });
+        //-------------------IM/2021/028 - Manditha ---------------------------------//
 
         signUpButton.setOnClickListener(view -> {
 
@@ -150,3 +155,5 @@ public class sign_up extends AppCompatActivity {
         });
     }
 }
+
+//----------------------------------------IM/2021/062 - Hasindu --------------------------------------//

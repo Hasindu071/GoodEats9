@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
+//-----------------------------------------IM/2021/011 - Tharushika ---------------------------------------------------//
 
 public class AdaptorSearch extends BaseAdapter {
 
@@ -80,3 +81,4 @@ public class AdaptorSearch extends BaseAdapter {
         return convertView; // Return the completed view to render on screen
     }
 }
+

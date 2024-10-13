@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+//-----------------------------------------IM/2021/003 - Dulmi ---------------------------------------------------//
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,3 +62,5 @@ public class MainActivity extends AppCompatActivity {
         // Add your logic to load the video and its thumbnail here
     }
 }
+//-----------------------------------------IM/2021/003 - Dulmi ---------------------------------------------------//
+

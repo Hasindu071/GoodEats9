@@ -25,7 +25,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import android.widget.ImageView;
 
-
+//-----------------------------------------IM/2021/094 - Sandani ---------------------------------------------------//
 public class MyRecipies extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -136,7 +136,9 @@ public class MyRecipies extends AppCompatActivity {
         // Start the new activity
         startActivity(intent);
     }
+    //-----------------------------------------IM/2021/094 - Sandani ---------------------------------------------------//
 
+    //-----------------------------------------IM/2021/062 -Hasindu ---------------------------------------------------//
     private void onDeleteClick(DataClass recipeToDelete) {
         // Show confirmation dialog
         new AlertDialog.Builder(MyRecipies.this)
@@ -189,9 +191,10 @@ public class MyRecipies extends AppCompatActivity {
             });
         }
     }
+//-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//
 
+    //-----------------------------------------IM/2021/011 - Tharushika ---------------------------------------------------//
 
-    // Handle delete clicks
     public void onEditClick(DataClass selectedRecipe) {
         // Handle edit icon click
         Intent intent = new Intent(this,UpdateRecipe.class);
@@ -216,3 +219,4 @@ public class MyRecipies extends AppCompatActivity {
         startActivity(intent);
     }
 }
+//-----------------------------------------IM/2021/011 - Tharushika ---------------------------------------------------//

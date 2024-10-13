@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+//-----------------------------------------IM/2021/094 - Sandani ---------------------------------------------------//
 public class MyrecipeAdapter extends RecyclerView.Adapter<MyrecipeAdapter.MyViewHolder> {
 
     private ArrayList<DataClass> dataList;
@@ -106,3 +107,4 @@ public class MyrecipeAdapter extends RecyclerView.Adapter<MyrecipeAdapter.MyView
         void onEditClick(DataClass data); // Method to pass the data item to edit
     }
 }
+//-----------------------------------------IM/2021/094 - Sandani ---------------------------------------------------//

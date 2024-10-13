@@ -33,6 +33,7 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Objects;
+//-----------------------------------------IM/2021/011 - Tharushika ---------------------------------------------------//
 
 public class homeFragment extends Fragment {
 
@@ -166,3 +167,5 @@ public class homeFragment extends Fragment {
         imageSlider.setImageList(slideModels, ScaleTypes.FIT);
     }
 }
+//-----------------------------------------IM/2021/011 - Thrushika ---------------------------------------------------//
+

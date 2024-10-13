@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+//---------------------------IM/2021/011 - Tharushika --------------------------------------------//
 public class searchFragment extends Fragment {
 
     private GridView gridView;
@@ -151,6 +152,7 @@ public class searchFragment extends Fragment {
         });
     }
 
+    //-----------------------------IM/2021/062 - Hasindu -------------------------------------------------//
     private void setupCategoryButtons() {
         // Defaultly make "All" button active
         selectedCategory = "";
@@ -224,6 +226,8 @@ public class searchFragment extends Fragment {
         button.setTextColor(getResources().getColor(R.color.green));  // Set text color to green
     }
 
+    //-----------------------------------------IM/2021/062 - Hasindu---------------------------------------//
+
     // Method to filter recipes based on the search query and selected category
     private void filterRecipes(String query, String category) {
         // Initialize or clear the filteredList before filtering
@@ -258,3 +262,4 @@ public class searchFragment extends Fragment {
         }
     }
 }
+//----------------------------------------------IM/2021/011 Tharushika ----------------------------------------------------------//
