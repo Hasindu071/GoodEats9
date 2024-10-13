@@ -65,13 +65,13 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
             if (thumbnail != null) {
                 holder.thumbnailImageView.setImageBitmap(thumbnail);
             } else {
-                holder.thumbnailImageView.setImageResource(R.drawable.video); // Use your placeholder image
+                holder.thumbnailImageView.setImageResource(R.drawable.image); // Use your placeholder image
             }
 
             retriever.release(); // Release retriever after use
         } catch (IOException | IllegalArgumentException e) {
             e.printStackTrace();
-            holder.thumbnailImageView.setImageResource(R.drawable.video); // Fallback if error occurs
+            holder.thumbnailImageView.setImageResource(R.drawable.image); // Fallback if error occurs
         }
 
         // Play button click listener
