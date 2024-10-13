@@ -101,24 +101,6 @@ public class homeFragment extends Fragment {
         configureImageSlider(view);
     }
 
-    // Upload profile image to Firebase Storage and save its URL in Realtime Database
-    private void uploadProfileImage(Uri imageUri, String userId) {
-        if (imageUri != null) {
-            StorageReference storageRef = FirebaseStorage.getInstance().getReference("profile_images").child(userId + ".jpg");
-
-            storageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot ->
-                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        // Save image URL to Realtime Database
-                        reference.child("profilePhotoUrl").setValue(uri.toString());
-                        Toast.makeText(getActivity(), "Profile image uploaded successfully", Toast.LENGTH_SHORT).show();
-                    })
-            ).addOnFailureListener(e -> {
-                Log.e("homeFragment", "Image upload failed: " + e.getMessage());
-                Toast.makeText(getActivity(), "Failed to upload image", Toast.LENGTH_SHORT).show();
-            });
-        }
-    }
-
     // Load profile image from Firebase Database
     private void loadProfileImage(ImageView profileImageView) {
         reference.child("profilePhotoUrl").addListenerForSingleValueEvent(new ValueEventListener() {

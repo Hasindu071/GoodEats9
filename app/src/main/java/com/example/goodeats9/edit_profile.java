@@ -87,23 +87,23 @@ public class edit_profile extends AppCompatActivity {
         // Load profile photo from Firebase
         loadProfilePhoto();
 
-        // Handle save button click
         saveButton.setOnClickListener(view -> {
             if (isDataChanged()) {
                 Toast.makeText(edit_profile.this, "Profile Updated", Toast.LENGTH_SHORT).show();
-                this.finish(); // Close the activity if update was successful
-
-                // Upload new profile image if one was selected
-                if (selectedImageUri != null) {
-                    uploadProfileImage(selectedImageUri, userId);
-                }
-            } else {
+                this.finish(); // Close the activity if the update was successful
+            }
+            if (selectedImageUri != null) {
+                uploadProfileImage(selectedImageUri, userId);
+                Toast.makeText(edit_profile.this, "Profile image uploaded", Toast.LENGTH_SHORT).show();
+                this.finish();
+            }
+            if (!isDataChanged() && selectedImageUri == null) {
                 Toast.makeText(edit_profile.this, "No changes detected", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // Open image chooser to select a profile image
+        // Open image chooser to select a profile image
     private void openImageChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
