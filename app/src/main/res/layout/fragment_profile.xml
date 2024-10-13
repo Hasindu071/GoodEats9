@@ -56,6 +56,19 @@
                 android:src="@drawable/baseline_logout_24" />
 
             <TextView
+                android:id="@+id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/logOutButton"
+                android:layout_alignStart="@+id/logOutButton"
+                android:layout_marginStart="303dp"
+                android:layout_marginTop="-9dp"
+                android:text="Edit"
+                android:textColor="#129575"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
