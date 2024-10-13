@@ -120,23 +120,29 @@ public class profileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Show confirmation dialog
-                new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(requireActivity())
                         .setTitle("Logout")
                         .setMessage("Are you sure you want to logout?")
                         .setPositiveButton("Confirm", (dialog, which) -> {
                             // Sign out from Firebase
-                            FirebaseAuth.getInstance().signOut();
+                            FirebaseAuth auth = FirebaseAuth.getInstance();
+                            if (auth.getCurrentUser() != null) {
+                                auth.signOut();
 
-                            // Clear login state from SharedPreferences
-                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginDetails", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.clear();
-                            editor.apply();
+                                // Clear login state from SharedPreferences
+                                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("loginDetails", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.remove("isLoggedIn");  // Only remove login-related data
+                                editor.remove("UserName");
+                                editor.remove("UserDescription");
+                                editor.apply();
 
-                            // Redirect to Login page
-                            Intent intent = new Intent(getActivity(), login.class);
-                            startActivity(intent);
-                            getActivity().finish(); // Close the current activity
+                                // Redirect to Login page and finish the current activity
+                                Intent intent = new Intent(requireActivity(), login.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // Clear activity stack
+                                startActivity(intent);
+                            }
+
                         })
                         .setNegativeButton("Cancel", (dialog, which) -> {
                             // Dismiss the dialog and do nothing
@@ -146,6 +152,7 @@ public class profileFragment extends Fragment {
             }
         });
 //-----------------------------------------IM/2021/028 - Manditha ---------------------------------------------------//
+
 
         // Edit profile button click listener
         editProfileButton.setOnClickListener(v -> {
