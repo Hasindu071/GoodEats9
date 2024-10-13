@@ -129,6 +129,8 @@ public class recipeMain extends AppCompatActivity {
         CooktimeText.setText(cookTime);
         ServesText.setText(serves);
 
+        //-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//
+
         // Make the "reviews" text look like a link
         textViewReviews.setPaintFlags(textViewReviews.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         textViewReviews.setOnClickListener(v -> {
@@ -137,6 +139,7 @@ public class recipeMain extends AppCompatActivity {
             intent.putExtra("userEmail", userEmail);
             startActivity(intent);
         });
+        //-----------------------------------------IM/2021/062 - Hasindu ---------------------------------------------------//
 
         // Set initial fragment (Procedure)
         setButtonActive(procedureButton);
