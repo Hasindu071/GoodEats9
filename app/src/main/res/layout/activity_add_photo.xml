@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <!--IM/2021/062 - Hasindu -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -79,6 +78,5 @@
         app:layout_constraintTop_toBottomOf="@+id/upper"
         tools:ignore="MissingConstraints" />
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
     <!--IM/2021/062 - Hasindu -->
+</androidx.constraintlayout.widget.ConstraintLayout>
