@@ -60,7 +60,6 @@ public class profileFragment extends Fragment {
         // Get user details from SharedPreferences
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("loginDetails", MODE_PRIVATE);
         String username = sharedPreferences.getString("UserName", "User");
-        String email = sharedPreferences.getString("UserEmail", "Email");
         String description = sharedPreferences.getString("UserDescription", "Description");
 
         // Set the user name and bio
@@ -172,34 +171,6 @@ public class profileFragment extends Fragment {
         UpdateRecipeButton.setOnClickListener(v -> startActivity(new Intent(getActivity(), MyRecipies.class)));
 
         return view;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            profileImage.setImageURI(imageUri); // Temporarily display the selected image
-            uploadProfileImage(imageUri, userId); // Upload the selected image to Firebase
-        }
-    }
-
-    // Upload profile image to Firebase Storage and save its URL in Realtime Database
-    private void uploadProfileImage(Uri imageUri, String userId) {
-        if (imageUri != null) {
-            StorageReference storageRef = FirebaseStorage.getInstance().getReference("profile_images").child(userId + ".jpg");
-
-            storageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot ->
-                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        // Save image URL to Realtime Database
-                        reference.child("profilePhotoUrl").setValue(uri.toString());
-                        Toast.makeText(getActivity(), "Profile image uploaded successfully", Toast.LENGTH_SHORT).show();
-                    })
-            ).addOnFailureListener(e -> {
-                Log.e("ProfileFragment", "Image upload failed: " + e.getMessage());
-                Toast.makeText(getActivity(), "Failed to upload image", Toast.LENGTH_SHORT).show();
-            });
-        }
     }
 
     // Load profile image from Firebase Database
