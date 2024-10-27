@@ -22,7 +22,7 @@ GoodEats is a collaborative effort by our amazing team in mobile app development
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/GoodEats.git
+   git clone https://github.com/Hasindu071/GoodEats9.git
    ```
 
 2. **Open the project in Android Studio**.
