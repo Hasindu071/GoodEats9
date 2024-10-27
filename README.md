@@ -35,4 +35,3 @@ GoodEats is a collaborative effort by our amazing team in mobile app development
 ## Acknowledgements
 
 Thanks to our team members for their hard work and dedication!
-
